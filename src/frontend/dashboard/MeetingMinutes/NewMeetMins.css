@@ -1,0 +1,14 @@
+.FirstTH>th{
+    padding: 0.5rem;
+    /* width: 18rem; */
+    border: 1px gray solid;
+}
+td{
+    border: 1px gray solid;
+    padding: 1%;
+}
+
+td>input{
+    width: 90%;
+    margin: 1%;
+}
