@@ -7,11 +7,25 @@ import Main from './frontend/dashboard/Main';
 import Task from './frontend/dashboard/Task';
 import NewMeetMins from './frontend/dashboard/MeetingMinutes/NewMeetMins';
 import MeetHistory from './frontend/dashboard/MeetingMinutes/MeetHistory';
-
+import React from "react";
+// import SplashScreen from './frontend/utils/elements/withSplashScreen';
 
 function App() {
+
+  // const [loading, setLoading] = useState(true);
+
+  // useEffect(() => {
+  //   // Simulate loading time (you can replace this with your actual loading logic)
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 1000);
+  // }, []);
   return (
-    <><Routes>
+    <>
+    {/* {loading ? (
+        <SplashScreen />
+      ) : ( */}
+    <Routes>
       <Route path='/' element={<Login />} />
       <Route path='login' element={<Login />} />
       <Route path='home' element={<Home />} />
@@ -21,6 +35,7 @@ function App() {
       <Route path='meethistory' element={<MeetHistory/>}/>
 
     </Routes>
+          {/* )} */}
     </>
   );
 }

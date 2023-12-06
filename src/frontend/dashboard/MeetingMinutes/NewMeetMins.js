@@ -5,6 +5,10 @@ import { useEffect, useState } from 'react';
 import moment from 'moment';
 import SearchFilter from '../../utils/elements/SearchFilter';
 import './NewMeetMins.css'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+
 
 const NewMeetMins = () => {
     const [sessionStartTime] = useState(moment());
@@ -64,9 +68,10 @@ const NewMeetMins = () => {
     };
 
 
-    // New Line inputs for First Table
+    // New Line inputs for second Table
+    const defaultDate = new Date(); // Set your default date here
     const [table2Rows, setTable2Rows] = useState([
-        { uid: '', agenda: '', discussionPoints: '', actionBy: '', supporter: '', targetDate: '' },
+        { agenda: '', discussionPoints: '', actionBy: '', supporter: '', targetDate: defaultDate },
     ]);
 
     const handleInputChangeTable2 = (index, field, value) => {
@@ -77,18 +82,29 @@ const NewMeetMins = () => {
 
     const handleKeyDownTable2 = (event, index) => {
         if (event.key === 'Enter') {
-            // Check if the Enter key is pressed in the last "TARGET DATE" input
+            // Check if the Enter key is pressed in the last row
             if (index === table2Rows.length - 1) {
                 // Add a new empty row
-                setTable2Rows([
-                    ...table2Rows,
-                    { uid: '', agenda: '', discussionPoints: '', actionBy: '', supporter: '', targetDate: '' },
-                ]);
+                setTable2Rows([...table2Rows, { agenda: '', discussionPoints: '', actionBy: '', supporter: '', targetDate: defaultDate }]);
             }
         }
     };
 
-    // Render the formatted time
+
+    // Subtask New Line Creation
+    const [subtasks, setSubtasks] = useState([]);
+
+    const addSubtask = () => {
+        setSubtasks([...subtasks, '']);
+    };
+
+    const handleSubtaskChange = (index, value) => {
+        const updatedSubtasks = [...subtasks];
+        updatedSubtasks[index] = value;
+        setSubtasks(updatedSubtasks);
+    };
+
+
     return (
         <GlobalLayout>
             <div className="p-4">
@@ -158,18 +174,20 @@ const NewMeetMins = () => {
                     <table style={{ width: '100%' }}>
                         <thead>
                             <tr className='border border-gray-900 bg-slate-200 '>
-                                <th style={{width:'8%', padding:'1%'}}>U. ID</th>
-                                <th>AGENDA</th>
-                                <th>DISCUSSION POINTS</th>
-                                <th>ACTION BY</th>
-                                <th>SUPPORTER</th>
-                                <th>TARGET DATE</th>
+                                <th style={{ width: '10%', padding: '1%' }}>U. ID</th>
+                                <th style={{ width: '16%', padding: '1%' }}>AGENDA</th>
+                                <th style={{ width: '26%', padding: '1%' }}>DISCUSSION POINTS</th>
+                                <th style={{ width: '16%', padding: '1%' }}>ACTION BY</th>
+                                <th style={{ width: '16%', padding: '1%' }}>SUPPORTER</th>
+                                <th style={{ width: '16%', padding: '1%' }}>TARGET DATE</th>
                             </tr>
                         </thead>
                         <tbody>
                             {table2Rows.map((row, index) => (
                                 <tr key={index}>
-                                    <td><p className='text-sm'>PAPL512230{index + 1}</p></td>
+                                    <td>
+                                        <p className='text-sm'>PAPL512230{index + 1}</p>
+                                    </td>
                                     <td>
                                         <input
                                             className='border-b border-gray-900 p-2 focus:outline-none'
@@ -180,12 +198,38 @@ const NewMeetMins = () => {
                                         />
                                     </td>
                                     <td>
+                                        <p>Description:</p>
                                         <input
                                             className='border-b border-gray-900 p-2 focus:outline-none'
                                             type='text'
                                             value={row.discussionPoints}
                                             onChange={(e) => handleInputChangeTable2(index, 'discussionPoints', e.target.value)}
                                         />
+                                        <div className="border-b my-4 border-blue-800 relative">
+                                            <button onClick={addSubtask} className="absolute top-0 right-0 border rounded -mt-4 border-slate-900 bg-gray-100 px-3 py-1 text-sm font-bold">
+                                                Subtasks +
+                                            </button>
+                                        </div>
+                                        <ol><li key={index}>
+                                            <input
+                                                className='border-b border-gray-900 p-2 focus:outline-none'
+                                                type='text'
+                                                placeholder='Enter Subtask here'
+                                            />
+                                        </li>
+                                            {subtasks.map((subtask, index) => (
+                                                <li key={index}>
+                                                    <input
+                                                        className='border-b border-gray-900 p-2 focus:outline-none'
+                                                        type='text'
+                                                        placeholder='Enter Subtask here'
+                                                        value={subtask}
+                                                        onChange={(e) => handleSubtaskChange(index, e.target.value)}
+                                                    />
+                                                </li>
+                                            ))}
+                                        </ol>
+
                                     </td>
                                     <td>
                                         <input
@@ -204,12 +248,12 @@ const NewMeetMins = () => {
                                         />
                                     </td>
                                     <td>
-                                        <input
-                                            className='border-b border-gray-900 p-2 focus:outline-none'
-                                            type='text'
-                                            value={row.targetDate}
-                                            onChange={(e) => handleInputChangeTable2(index, 'targetDate', e.target.value)}
+                                        <DatePicker
+                                            showIcon
+                                            selected={row.targetDate}
+                                            onSelect={(date) => handleInputChangeTable2(index, 'targetDate', date)}
                                             onKeyDown={(e) => handleKeyDownTable2(e, index)}
+                                            onChange={(date) => handleInputChangeTable2(index, 'targetDate', date)}
                                         />
                                     </td>
                                 </tr>
