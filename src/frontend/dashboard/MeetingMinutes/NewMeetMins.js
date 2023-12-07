@@ -114,7 +114,7 @@ const NewMeetMins = () => {
   };
 
   // Subtask New Line Creation
-  const [setSubtasks] = useState([]);
+  const [subtasks, setSubtasks] = useState([]);
 
   const addSubtask = (index) => {
     const updatedSubtasks = [...table2Rows];
