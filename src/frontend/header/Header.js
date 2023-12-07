@@ -81,7 +81,7 @@ export default function Header() {
             <div className="user-name  bg-slate-200 text-black rounded-sm px-4 m-1">
               <p className="font-bold text-base">{"User Name"}</p>
             </div>
-            <div className="hidden group-hover:block absolute top-14 right-14 transition transform translate-y-8 ease-in-out">
+            <div className="hidden group-hover:block absolute z-50 top-14 right-14 transition transform translate-y-8 ease-in-out">
               <UserCard />
             </div>
           </div>

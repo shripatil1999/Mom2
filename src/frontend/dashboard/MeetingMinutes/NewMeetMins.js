@@ -134,8 +134,9 @@ const NewMeetMins = () => {
     PARTICULAR_OBJECT.subTasks[subIndex] = value
     updatedSubtasks[index] = PARTICULAR_OBJECT
     setSubtasks(updatedSubtasks);
+    console.log(subtasks)
   };
-
+  
   return (
     <GlobalLayout>
       <div className="p-4">
