@@ -37,7 +37,7 @@ const Navbar = () => {
         }`}
       >
         <div className="text-sky-500 text-xl">
-          <Link to='/home'
+          <div
             style={{
               backgroundImage: `url("/images/background2.png")`,
               backgroundRepeat: "no-repeat",
@@ -58,7 +58,7 @@ const Navbar = () => {
               className="bi bi-x cursor-pointer ml-28 lg:hidden"
               onClick={toggleSidebar}
             ></i>
-          </Link>
+          </div>
           <div className="mt-3 bg-gray-600 h-[1px]"></div>
         </div>
         {/* <div className="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-gray-700 text-white">

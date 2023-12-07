@@ -18,7 +18,7 @@ export default function Header() {
 
   return (
     <>
-      <div className="grid grid-cols-8 border-bottom gap-0">
+      <div style={{ boxShadow:'0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)'}} className="grid grid-cols-8 border-bottom gap-0">
         <div
           style={{
             backgroundImage: `url("/images/background.jpg")`,
