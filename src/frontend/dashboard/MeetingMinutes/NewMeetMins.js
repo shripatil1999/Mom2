@@ -184,7 +184,7 @@ const NewMeetMins = () => {
                   <td>
                     <input
                       className="border-b border-b-slate-950 focus:outline-none"
-                      type="text"
+                      type="textarea"
                       value={row.attendeeName}
                       onChange={(e) =>
                         handleInputChange(index, "attendeeName", e.target.value)

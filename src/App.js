@@ -8,6 +8,7 @@ import Task from './frontend/dashboard/Task';
 import NewMeetMins from './frontend/dashboard/MeetingMinutes/NewMeetMins';
 import MeetHistory from './frontend/dashboard/MeetingMinutes/MeetHistory';
 import React from "react";
+import TaskDetails from './frontend/dashboard/TaskDetails';
 // import SplashScreen from './frontend/utils/elements/withSplashScreen';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
       <Route path='task' element={<Task/>}/>
       <Route path='newmeetmins' element={<NewMeetMins/>}/>
       <Route path='meethistory' element={<MeetHistory/>}/>
+      <Route path='taskdetails' element={<TaskDetails/>} />
 
     </Routes>
           {/* )} */}

@@ -5,6 +5,9 @@ module.exports = {
     extend: {
       width: {
         '27': '27%',
+      },
+      zIndex: {
+        '100': '100',
       }
     },
     fontFamily: {

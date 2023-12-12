@@ -1,21 +1,27 @@
-import React from "react";
+import { React, } from "react";
 import GlobalLayout from "../utils/hoc/globalLayout";
 import SearchFilter from "../utils/elements/SearchFilter";
+import { Link } from "react-router-dom";
+
+
 const TaskDetails = {
   onGoing: [
     {
+      id:1,
       TaskName: "TASK_NAME1",
       TargetDate: "DD/MM/YYYY",
       Description:
         "Some Description about the Task will be displayed here.......!!!!",
     },
     {
+      id:2,
       TaskName: "TASK_NAME2",
       TargetDate: "DD/MM/YYYY",
       Description:
         "Some Description about the Task will be displayed here.......!!!!",
     },
     {
+      id:3,
       TaskName: "TASK_NAME3",
       TargetDate: "DD/MM/YYYY",
       Description:
@@ -25,12 +31,14 @@ const TaskDetails = {
 
   overDue: [
     {
+      id:1,
       TaskName: "TASK_NAME1",
       TargetDate: "DD/MM/YYYY",
       Description:
         "Some Description about the Task will be displayed here.......!!!!",
     },
     {
+      id:2,
       TaskName: "TASK_NAME2",
       TargetDate: "DD/MM/YYYY",
       Description:
@@ -40,18 +48,21 @@ const TaskDetails = {
 
   Completed: [
     {
+      id:1,
       TaskName: "TASK_NAME1",
       TargetDate: "DD/MM/YYYY",
       Description:
         "Some Description about the Task will be displayed here.......!!!!",
     },
     {
+      id:2,
       TaskName: "TASK_NAME2",
       TargetDate: "DD/MM/YYYY",
       Description:
         "Some Description about the Task will be displayed here.......!!!!",
     },
     {
+      id:3,
       TaskName: "TASK_NAME3",
       TargetDate: "DD/MM/YYYY",
       Description:
@@ -61,6 +72,8 @@ const TaskDetails = {
 };
 
 const Task = () => {
+
+
   return (
     <GlobalLayout>
       <div className="flex justify-between task-header mt-4">
@@ -73,7 +86,7 @@ const Task = () => {
           style={{
             boxShadow:
               "rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px",
-            borderRadius: "10px"
+            borderRadius: "10px",
           }}
           className="onGoing hover:-translate-y-1 transition ease-in-out w-fit sm:w-27 h-fit p-5"
         >
@@ -100,19 +113,23 @@ const Task = () => {
               </div>
 
               {TaskDetails.onGoing.map((task) => (
-                <div
-                  style={{ width: "107%", marginLeft: "-4%" }}
-                  className="cardList card border drop-shadow-lg rounded-none border-black relative mt-3 py-3 px-4"
-                >
-                  <div className="cardTitle">
-                    <span className="font-semibold">Task name: </span>
-                    <span> {task.TaskName}</span> <br />
-                    <span className="font-semibold">Target Date:</span>
-                    <span> {task.TargetDate} </span>
-                  </div>
-                  <span className="font-semibold">Description: </span>
-                  <p>{task.Description}</p>
-                </div>
+                <>
+                  <Link to="/taskdetails"
+                    style={{ width: "107%", marginLeft: "-4%" }}
+                    key={task.id}
+                    className="cardList card border drop-shadow-lg rounded-none border-black relative mt-3 py-3 px-4"
+                  >
+                    <div className="cardTitle">
+                      <span className="font-semibold">Task name: </span>
+                      <span> {task.TaskName}</span> <br />
+                      <span className="font-semibold">Target Date: </span>
+                      <span> {task.TargetDate} </span>
+                    </div>
+                    <span className="font-semibold">Description: </span>
+                    <p>{task.Description}</p>
+                  </Link>
+
+                </>
               ))}
             </div>
           </div>
@@ -122,7 +139,7 @@ const Task = () => {
           style={{
             boxShadow:
               "rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px",
-            borderRadius: "10px", 
+            borderRadius: "10px",
           }}
           className="overDue hover:-translate-y-1 transition ease-in-out w-fit sm:w-27 h-fit p-5"
         >
@@ -163,7 +180,6 @@ const Task = () => {
                   <p>{task.Description}</p>
                 </div>
               ))}
-
             </div>
           </div>
         </div>
@@ -196,7 +212,6 @@ const Task = () => {
               >
                 <p className="text-sm text-lime-700">Completed</p>
               </div>
-                
 
               {TaskDetails.Completed.map((task) => (
                 <div
@@ -213,8 +228,6 @@ const Task = () => {
                   <p>{task.Description}</p>
                 </div>
               ))}
-
-              
             </div>
           </div>
         </div>
