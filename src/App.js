@@ -9,6 +9,10 @@ import NewMeetMins from './frontend/dashboard/MeetingMinutes/NewMeetMins';
 import MeetHistory from './frontend/dashboard/MeetingMinutes/MeetHistory';
 import React from "react";
 import TaskDetails from './frontend/dashboard/TaskDetails';
+import Overview from './frontend/dashboard/Analytics-Reports/Overview';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import Analytics from './frontend/dashboard/Analytics-Reports/Analytics';
 // import SplashScreen from './frontend/utils/elements/withSplashScreen';
 
 function App() {
@@ -21,6 +25,7 @@ function App() {
   //     setLoading(false);
   //   }, 1000);
   // }, []);
+  AOS.init();
   return (
     <>
     {/* {loading ? (
@@ -35,6 +40,8 @@ function App() {
       <Route path='newmeetmins' element={<NewMeetMins/>}/>
       <Route path='meethistory' element={<MeetHistory/>}/>
       <Route path='taskdetails' element={<TaskDetails/>} />
+      <Route path='overview' element={<Overview/>} />
+      <Route path='analytics' element={<Analytics/>}/>
 
     </Routes>
           {/* )} */}

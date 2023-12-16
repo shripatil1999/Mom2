@@ -8,6 +8,9 @@ module.exports = {
       },
       zIndex: {
         '100': '100',
+      },
+      colors: {
+        'bg-papl':'rgb(37, 44, 72)'
       }
     },
     fontFamily: {

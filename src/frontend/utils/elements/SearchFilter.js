@@ -19,7 +19,7 @@ const SearchFilter = () => {
                         />
                         <button
                             type="submit"
-                            className="bg-blue-500 border border-black text-white rounded-r px-2 md:px-3 py-0 md:py-1"
+                            className="bg-[#252c48] border border-black text-white rounded-r px-2 md:px-3 py-0 md:py-1"
                         >
                             Search
                         </button>

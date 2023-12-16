@@ -37,7 +37,8 @@ class TaskPieChart extends Component {
       series.data.setAll([
         {
           category: "Completed",
-          value: 501.9
+          value: 501.9,
+          fill: am5.color(0xFF4500)
         },
         {
           category: "Not Started",
@@ -49,7 +50,8 @@ class TaskPieChart extends Component {
         },
         {
           category: "Overdue",
-          value: 165.8
+          value: 165.8,
+          fill: am5.color(0xff0000)
         },
 
       ]);

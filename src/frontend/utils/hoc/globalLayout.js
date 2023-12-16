@@ -4,7 +4,7 @@ import Navbar from '../../navbar/Navbar'
 
 const GlobalLayout = ({children}) => {
   return (
-    <div>
+    <div className=''>
       <Header/>
       <div className="grid grid-cols-5">
         <div className="col-span-0 z-50">

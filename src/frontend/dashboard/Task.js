@@ -97,7 +97,7 @@ const Task = () => {
             }}
             className="title w-11/12  rounded text-black bg-amber-500 ml-1 p-3"
           >
-            <p className="">{10}</p>
+            <p className="">{TaskDetails.onGoing.length}</p>
             <p className="text-xl ">Ongoing</p>
           </div>
           <div className="taskList w-full mt-5">
@@ -150,7 +150,7 @@ const Task = () => {
             }}
             className="title w-11/12 rounded text-white  bg-red-700 ml-1 p-3"
           >
-            <p className="">{10}</p>
+            <p className="">{TaskDetails.overDue.length}</p>
             <p className="text-xl">Overdue</p>
           </div>
           <div className="taskList w-full mt-5">
@@ -198,7 +198,7 @@ const Task = () => {
             }}
             className="title w-11/12 rounded text-black bg-lime-500 ml-1 p-3"
           >
-            <p className="">{10}</p>
+            <p className="">{TaskDetails.Completed.length}</p>
             <p className="text-xl">Completed</p>
           </div>
           <div className="taskList w-full mt-5">

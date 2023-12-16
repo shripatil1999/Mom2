@@ -41,7 +41,7 @@ export default function Header() {
         <div className="col-span-1 h-full flex items-center ">
           <div className="w-full bg-gray-200 rounded-full">
             <div
-              className="bg-blue-600 text-sm font-medium text-blue-100 text-center p-1 leading-none rounded-full"
+              className="bg-[#252c48] text-sm font-medium text-blue-100 text-center p-1 leading-none rounded-full"
               style={{ width: value }}
             >
               {" "}
@@ -50,7 +50,7 @@ export default function Header() {
           </div>
         </div>
         <div className="col-span-2 flex flex-row items-center justify-around">
-          <button className="relative bg-blue-500 w-fit text-blue-50 text-xs sm:text-base p-2 mx-3 rounded ">
+          <button className="relative bg-[#252c48] w-fit text-blue-50 text-xs sm:text-base p-2 mx-3 rounded ">
             Notifications
             <span className="absolute -top-3 -right-3 bg-red-500 text-red-50 py-1 px-2 text-xs rounded ml-1">
               {NotificationNumber}
