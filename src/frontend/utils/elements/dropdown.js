@@ -10,7 +10,7 @@ export default function Dropdown(props) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button style={{ border:"1px solid"}} className="w-56 inline-flex justify-center gap-x-1.5 rounded-md bg-gray-100 text-black px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-white">
+        <Menu.Button style={{ border:"1px solid"}} className="w-56 inline-flex justify-center gap-x-1.5 rounded-md bg-gray-50 text-black px-3 py-2 text-sm font-semibold shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-white">
           Projects 
           <ChevronDownIcon className="-mr-1 h-5 w-5 text-black" aria-hidden="true" />
         </Menu.Button>
