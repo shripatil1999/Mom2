@@ -10,18 +10,31 @@ const Analytics = () => {
   const [selectedProject, setSelectedProject] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedWeek, setSelectedWeek] = useState(1); // Default to Week 1
-  let score = "6.8";
-  let TotalTaskToday = "4";
-  let TotalTaskCompletionPercentage = "70%";
-  let Performance = "Outstanding";
-  let username = "Mr. XYZ";
-  let WeekNumber = "5";
+
   const percentage = 80;
   const TotalScore = 5.5;
   // Function to update the data based on selected project, month, and week
   const updateChartData = () => {
     // Update your data here based on selectedProject, selectedMonth, and selectedWeek
     // You may fetch data from an API or use some logic to generate dynamic data
+    // Example: Update data based on the selectedWeek
+    const weekData = getWeekData(selectedWeek);
+    // Use weekData to update the chart data
+    return weekData;
+  };
+
+  // Function to get example data for a specific week (replace with your data logic)
+  const getWeekData = (weekNumber) => {
+    // Example: Assuming each week has the same data structure
+    return [
+      ["Element", "Tasks", { role: "style" }, { sourceColumn: 0, role: "annotation", type: "string", calc: "stringify" }],
+      ["Monday", 8.94 + weekNumber, "#4169E1", null],
+      ["Tuesday", 10.49 + weekNumber, "#4169E1", null],
+      ["Wednesday", 19.3 + weekNumber, "#4169E1", null],
+      ["Thursday", 21.45 + weekNumber, "#4169E1", null],
+      ["Friday", 21.45 + weekNumber, "#4169E1", null],
+      ["Saturday", 21.45 + weekNumber, "#4169E1", null],
+    ];
   };
 
   // Event handlers for dropdowns and buttons
@@ -41,11 +54,7 @@ const Analytics = () => {
   };
 
   // Placeholder data (replace with your dynamic data)
-  const data = [
-    ["Element", "Tasks", { role: "style" }, { sourceColumn: 0, role: "annotation", type: "string", calc: "stringify" }],
-    ["Monday", 8.94, "#4169E1", null],
-    // Add more data rows as needed
-  ];
+  const data = updateChartData();
 
   const options = {
     width: 800,
@@ -53,6 +62,10 @@ const Analytics = () => {
     bar: { groupWidth: "40%" },
     legend: "bottom",
   };
+  let TotalTaskToday = "4";
+  let TotalTaskCompletionPercentage = "70%";
+  let score = "6.8";
+  let username = "Mr. XYZ";
 
   return (
     <GlobalLayout>
@@ -108,19 +121,34 @@ const Analytics = () => {
                 <option defaultValue="None">Choose a Month</option>
                 <option value="a">January</option>
                 <option value="a">February</option>
-                {/* Add more months as needed */}
+                <option value="a">March</option>
+                <option value="a">April</option>
+                <option value="a">May</option>
+                <option value="a">June</option>
+                <option value="a">July</option>
+                <option value="a">August</option>
+                <option value="a">September</option>
+                <option value="a">October</option>
+                <option value="a">November</option>
+                <option value="a">December</option>
               </select>
             </div>
 
             {/* Daily Task Graph */}
             <div className="dailyTaskGraph border p-2 mt-3">
               <div className="flex items-center">
-                <p>Activity - Task Completed each Day &nbsp;</p>
-                <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold w-fit px-1 border border-gray-600 rounded-full hover:shadow">
+              <p>Activity - Task Completed each Day &nbsp;</p>
+                <button
+                  onClick={() => handleWeekChange(-1)}
+                  className="bg-white hover:bg-gray-100 text-gray-800 font-semibold w-fit px-1 border border-gray-600 rounded-full hover:shadow"
+                >
                   <i className="bi bi-caret-left-fill"></i>
                 </button>
                 <p>&nbsp; Week {selectedWeek} &nbsp;</p>
-                <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold w-fit px-1 border border-gray-600 rounded-full hover:shadow">
+                <button
+                  onClick={() => handleWeekChange(1)}
+                  className="bg-white hover:bg-gray-100 text-gray-800 font-semibold w-fit px-1 border border-gray-600 rounded-full hover:shadow"
+                >
                   <i className="bi bi-caret-right-fill"></i>
                 </button>
               </div>
