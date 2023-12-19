@@ -19,7 +19,7 @@ export const options = {
 const Achievement = () => {
 
     const [showColumn, setShowColumn] = useState(true);
-
+    console.log(showColumn)
     useEffect(() => {
         // Set a timeout to wait for 1 second (1000 milliseconds)
         const timeoutId = setTimeout(() => {
@@ -30,6 +30,7 @@ const Achievement = () => {
 
         // Clean up the timeout if the component unmounts or the effect is re-run
         return () => clearTimeout(timeoutId);
+
     }, []); // Empty dependency array ensures this effect runs only once on mount
 
 

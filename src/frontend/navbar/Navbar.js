@@ -162,12 +162,12 @@ const Navbar = () => {
           <Link to='/overview' className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1">
             Overview
           </Link>
-          <Link to='/Analytics' className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1">
+          <Link to='/Analytics' className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1 active:bg-[#33769B] focus:bg-[#33769B]">
             Analytics
           </Link>
-          <h1 className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1">
+          <Link to='/performance' className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1">
             Performance Metrics
-          </h1>
+          </Link>
         </div>
 
         <div className="my-4 bg-gray-600 h-[1px]"></div>

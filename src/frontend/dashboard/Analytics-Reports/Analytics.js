@@ -75,7 +75,7 @@ const Analytics = () => {
         <div className=" flex flex-col items-center text-center w-fit ms-2">
           <img className="w-28" src="/images/icons/user.png" alt="" />
           <div className="user-name w-full bg-slate-200 text-black rounded-sm px-1 m-2">
-            <p className="font-bold text-sm">{"User Name"}</p>
+            <p className="font-bold text-sm"> {username} </p>
           </div>
         </div>
         {/* User message */}
@@ -165,7 +165,7 @@ const Analytics = () => {
           </div>
 
           {/* Progress */}
-          <div className="Progress border w-fit border-black rounded-3xl p-3 m-2 ">
+          <div className="Progress border w-fit border-black rounded-3xl p-3 m-2 shadow-md">
             <p className="font-bold">Progress</p>
             <div style={{ width: '100%',  marginTop:'50%',}}>
               <CircularProgress value={percentage} text={`${percentage}%`} />
@@ -173,7 +173,7 @@ const Analytics = () => {
           </div>
 
           {/* Total Score */}
-          <div className="Score Progress border w-fit border-black rounded-3xl px-4 py-2 m-2 ">
+          <div className="Score Progress border w-fit border-black rounded-3xl px-4 py-2 m-2 shadow-md">
             <p className="font-bold">Your Total Score</p>
             <div style={{ width: '100%', marginTop:'50%',}}>
               <CircularProgress
@@ -185,6 +185,32 @@ const Analytics = () => {
           </div>
         </div>
       </div>
+      
+      <div className="TaskProgress m-4">
+        <p className="font-bold text-lg">Task Progress</p>
+        <div className="flex my-3">
+          <p className="px-2 w-1/6">On Track</p>
+          <div className="bg-gray-200 border-black  w-full h-full mr-20">
+            <div className="bg-green-600 p-1 text-black text-end transition-transform ease-in-out" style={{width:'80%'}}>{8}</div>
+          </div>
+        </div>
+        <div className="flex my-3">
+          <p className="px-2 w-1/6">Concern</p>
+          <div className="bg-gray-200 border-black  w-full h-full mr-20">
+            <div className="bg-yellow-500 p-1 text-black text-end transition-transform ease-in-out" style={{width:'30%'}}>{3}</div>
+          </div>
+        </div>
+        <div className="flex my-3">
+          <p className="px-2 w-1/6">Delayed</p>
+          <div className="bg-gray-200 border-black  w-full h-full mr-20">
+            <div className="bg-red-600 p-1 text-black text-end transition-transform ease-in-out" style={{width:'50%'}}>{5}</div>
+          </div>
+        </div>
+        
+
+      </div>
+
+      
     </GlobalLayout>
   );
 };

@@ -13,6 +13,7 @@ import Overview from './frontend/dashboard/Analytics-Reports/Overview';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Analytics from './frontend/dashboard/Analytics-Reports/Analytics';
+import PerformanceReport from './frontend/dashboard/Analytics-Reports/PerformanceReport';
 // import SplashScreen from './frontend/utils/elements/withSplashScreen';
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
       <Route path='taskdetails' element={<TaskDetails/>} />
       <Route path='overview' element={<Overview/>} />
       <Route path='analytics' element={<Analytics/>}/>
+      <Route path='performance' element={<PerformanceReport/>}></Route>
 
     </Routes>
           {/* )} */}

@@ -17,10 +17,10 @@
   resolved "https://registry.yarnpkg.com/@alloc/quick-lru/-/quick-lru-5.2.0.tgz#7bf68b20c0a350f936915fcae06f58e32007ce30"
   integrity sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==
 
-"@amcharts/amcharts5@^5.6.2":
-  version "5.6.2"
-  resolved "https://registry.yarnpkg.com/@amcharts/amcharts5/-/amcharts5-5.6.2.tgz#d2b64afc581d22167c7205a086f2b85706015206"
-  integrity sha512-dSbF7NVDrxF8jvIJQNJBCbe1k8SK8iAuRnd22FPtwh5Ku4DjZttaOeSTJkIIyMjyhkebaF/mEWk0qQIPOLBbdA==
+"@amcharts/amcharts5@^5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@amcharts/amcharts5/-/amcharts5-5.7.1.tgz#07321183278024009b0c2501a0c632c0e2b7f5c2"
+  integrity sha512-TtD67AP7aCjE75zsBGLOCZSThoU3xWuQJf5d1+Vc+9m17DiWBaaH6co1oYB7sBQ1FxxXob3Va8zoJAuXt980pw==
   dependencies:
     "@types/d3" "^7.0.0"
     "@types/d3-chord" "^3.0.0"
