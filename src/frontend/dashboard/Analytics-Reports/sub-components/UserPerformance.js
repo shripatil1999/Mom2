@@ -1,11 +1,11 @@
 import React from 'react'
 import { Chart } from "react-google-charts";
 const Username = "Mr. XYZ";
-const Year = "2024";
+// const Year = "2024";
 export const data = [
   [
     "Element",
-    "Density",
+    "Score",
     { role: "style" },
     {
       sourceColumn: 0,
@@ -15,10 +15,10 @@ export const data = [
     },
 
   ],
-  [`${Username}`, 8.94, "#4169E1", "👤",], // Add null as the fifth element
-  ["User 1", 10.49, "#4169E1", "👤",],
-  ["User 2", 19.3, "#4169E1", "👤",],
-  ["User 3", 21.45, "#4169E1", "👤",],
+  [`${Username}`, 6.5, "#4169E1", "👤",], // Add null as the fifth element
+  ["User 1",9.1 , "#4169E1", "👤",],
+  ["User 2", 8.7, "#4169E1", "👤",],
+  ["User 3", 8.2, "#4169E1", "👤",],
 ];
 
 export const options = {

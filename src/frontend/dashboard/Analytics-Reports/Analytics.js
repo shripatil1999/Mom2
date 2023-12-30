@@ -88,7 +88,7 @@ const Analytics = () => {
             are tasked with completing <strong> {TotalTaskToday}</strong> tasks,
             and your progress stands at{" "}
             <strong> {TotalTaskCompletionPercentage}</strong>. <br /> Your
-            performance can be described as <strong> {Performance}</strong>.
+            performance can be described as <strong> Impressive</strong>.
           </p>
         </div>
       </div>
