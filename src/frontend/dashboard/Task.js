@@ -2,6 +2,7 @@ import { React, } from "react";
 import GlobalLayout from "../utils/hoc/globalLayout";
 import SearchFilter from "../utils/elements/SearchFilter";
 import { Link } from "react-router-dom";
+import Dropdown from '../utils/elements/dropdown'
 
 
 const TaskDetails = {
@@ -76,8 +77,9 @@ const Task = () => {
 
   return (
     <GlobalLayout>
-      <div className="flex justify-between task-header mt-4">
-        <p className="text-2xl font-bold">Task</p>
+      <div className="flex justify-right task-header mt-4">
+        <p className="text-2xl font-bold mr-auto">Task</p>
+        <Dropdown project1="Project Number 1" project2="Project Number 2" project3="Project Number 3" />
         <SearchFilter />
       </div>
       <p className="text-large">Department | Username </p>

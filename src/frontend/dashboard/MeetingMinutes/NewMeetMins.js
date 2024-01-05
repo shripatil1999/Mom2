@@ -66,12 +66,19 @@ const NewMeetMins = () => {
 
   const handleKeyDown = (event, index) => {
     if (event.key === "Enter") {
-      // Check if the Enter key is pressed in the last "Minutes" input
       if (index === rows.length - 1) {
-        // Add a new empty row
-        setRows([...rows, { attendeeName: "", email: "", minutes: "" }]);
+        setRows((prevRows) => [
+          ...prevRows,
+          { attendeeName: "", email: "", minutes: "" },
+        ]);
       }
     }
+  };
+  const handleAddRow = () => {
+    setRows((prevRows) => [
+      ...prevRows,
+      { attendeeName: "", email: "", minutes: "" },
+    ]);
   };
 
   // New Line inputs for second Table
@@ -83,7 +90,7 @@ const NewMeetMins = () => {
       actionBy: "",
       supporter: "",
       targetDate: defaultDate,
-      subTasks: [""]
+      subTasks: [""],
     },
   ]);
 
@@ -95,22 +102,34 @@ const NewMeetMins = () => {
 
   const handleKeyDownTable2 = (event, index) => {
     if (event.key === "Enter") {
-      // Check if the Enter key is pressed in the last row
       if (index === table2Rows.length - 1) {
-        // Add a new empty row
-        setTable2Rows([
-          ...table2Rows,
+        setTable2Rows((prevRows) => [
+          ...prevRows,
           {
             agenda: "",
             discussionPoints: "",
             actionBy: "",
             supporter: "",
             targetDate: defaultDate,
-            subTasks:  [""]
+            subTasks: [""],
           },
         ]);
       }
     }
+  };
+
+  const handleAddRow2 = () => {
+    setTable2Rows((prevRows) => [
+      ...prevRows,
+      {
+        agenda: "",
+        discussionPoints: "",
+        actionBy: "",
+        supporter: "",
+        targetDate: defaultDate,
+        subTasks: [""],
+      },
+    ]);
   };
 
   // Subtask New Line Creation
@@ -120,23 +139,22 @@ const NewMeetMins = () => {
     const updatedSubtasks = [...table2Rows];
 
     const ROW_DATA = [...table2Rows][index];
-    const TEMP_DATA = {...ROW_DATA , subTasks: [...ROW_DATA?.subTasks , ""]}
-    updatedSubtasks[index] = TEMP_DATA
+    const TEMP_DATA = { ...ROW_DATA, subTasks: [...ROW_DATA?.subTasks, ""] };
+    updatedSubtasks[index] = TEMP_DATA;
     setTable2Rows(updatedSubtasks);
 
-    console.log(TEMP_DATA)
-        
+    console.log(TEMP_DATA);
   };
 
-  const handleSubtaskChange = (index, subIndex , value) => {
+  const handleSubtaskChange = (index, subIndex, value) => {
     const updatedSubtasks = [...table2Rows];
     var PARTICULAR_OBJECT = updatedSubtasks[index];
-    PARTICULAR_OBJECT.subTasks[subIndex] = value
-    updatedSubtasks[index] = PARTICULAR_OBJECT
+    PARTICULAR_OBJECT.subTasks[subIndex] = value;
+    updatedSubtasks[index] = PARTICULAR_OBJECT;
     setSubtasks(updatedSubtasks);
-    console.log(subtasks)
+    console.log(subtasks);
   };
-  
+
   return (
     <GlobalLayout>
       <div className="p-4">
@@ -201,7 +219,7 @@ const NewMeetMins = () => {
                       }
                     />
                   </td>
-                  <td>
+                  <td className="relative">
                     <input
                       className="border-b border-b-slate-950 focus:outline-none"
                       type="text"
@@ -211,6 +229,12 @@ const NewMeetMins = () => {
                       }
                       onKeyDown={(e) => handleKeyDown(e, index)}
                     />
+                    <button
+                      className="absolute bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
+                      onClick={handleAddRow}
+                    >
+                      <i class="bi bi-plus-lg"></i>
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -288,7 +312,11 @@ const NewMeetMins = () => {
                             placeholder="Enter Subtask here"
                             value={subtask}
                             onChange={(e) =>
-                              handleSubtaskChange(index,subIndex, e.target.value)
+                              handleSubtaskChange(
+                                index,
+                                subIndex,
+                                e.target.value
+                              )
                             }
                           />
                         </li>
@@ -323,7 +351,7 @@ const NewMeetMins = () => {
                       }
                     />
                   </td>
-                  <td>
+                  <td className="pr-6 relative">
                     <DatePicker
                       showIcon
                       selected={row.targetDate}
@@ -335,6 +363,16 @@ const NewMeetMins = () => {
                         handleInputChangeTable2(index, "targetDate", date)
                       }
                     />
+                    {/* <div className="flex w-full"> */}
+                    <button
+                      className="absolute bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
+
+                      onClick={handleAddRow2}
+                    >
+                      <i class="bi bi-plus-lg"></i>
+
+                    </button>
+                    {/* </div> */}
                   </td>
                 </tr>
               ))}

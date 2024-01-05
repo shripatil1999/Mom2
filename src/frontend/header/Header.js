@@ -18,15 +18,15 @@ export default function Header() {
 
   return (
     <>
-      <div style={{ boxShadow:'0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)'}} className="grid grid-cols-8 border-bottom gap-0">
-        <div
+      <div style={{ boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)' }} className="flex flex-row items-center fixed w-full justify-end bg-white z-50 border-bottom gap-10">
+        {/* <div
           style={{
             backgroundImage: `url("/images/background.jpg")`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "contain",
             width: "100%",
           }}
-          className="col-span-1 h-full flex justify-center items-center text-center"
+          className=" h-full flex justify-center items-center text-center"
         >
           <p
             style={{ fontSize: "1.1em", marginLeft: "14%" }}
@@ -34,11 +34,11 @@ export default function Header() {
           >
             Minutes of Meeting
           </p>
-        </div>
+        </div> */}
         {/* //progress bar */}
 
-        <div className="col-span-3"></div>
-        <div className="col-span-1 h-full flex items-center ">
+
+        <div className=" h-full w-1/6 flex items-center ">
           <div className="w-full bg-gray-200 rounded-full">
             <div
               className="bg-[#252c48] text-sm font-medium text-blue-100 text-center p-1 leading-none rounded-full"
@@ -49,7 +49,7 @@ export default function Header() {
             </div>
           </div>
         </div>
-        <div className="col-span-2 flex flex-row items-center justify-around">
+        <div className="flex flex-row items-center justify-around">
           <button className="relative bg-[#252c48] w-fit text-blue-50 text-xs sm:text-base p-2 mx-3 rounded ">
             Notifications
             <span className="absolute -top-3 -right-3 bg-red-500 text-red-50 py-1 px-2 text-xs rounded ml-1">

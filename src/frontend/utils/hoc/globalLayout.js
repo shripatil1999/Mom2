@@ -7,10 +7,10 @@ const GlobalLayout = ({children}) => {
     <div className=''>
       <Header/>
       <div className="grid grid-cols-5">
-        <div className="col-span-0 z-50">
+        <div className="col-span-0 z-100">
             <Navbar/>
         </div>
-        <div className="col-span-4">
+        <div className="col-span-4 mt-32">
             {children}
         </div>
       </div>

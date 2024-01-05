@@ -11,13 +11,13 @@ const Home = () => {
     const Username = 'Mr. XYZ'
 
 
- 
+
 
     return (
         <GlobalLayout>
             <div className="upperFeature mt-4 flex flex-row justify-between">
                 <p className='font-bold'>Welcome, {Username}</p>
-                <SearchFilter/>
+                <SearchFilter />
             </div>
             <div className="shadow-lg mr-6">
                 <div style={{ border: '1px solid', padding: '1.2%', }} className="taskFeature mt-5 flex justify-between">
@@ -31,11 +31,11 @@ const Home = () => {
                 </div>
                 <div style={{ border: '1px solid', borderTop: 'none', padding: '1.2%', }} className="Charts ">
                     <div className="TaskList flex justify-start flex-wrap">
-
-                        <div className='flex items-center'><div className='w-3 h-3 rounded bg-red-600 mx-2'></div>Completed </div>
-                        <div className='flex items-center'><div className='w-3 h-3 rounded bg-gray-600 mx-2'></div>Not Started  </div>
                         <div className='flex items-center'><div className='w-3 h-3 rounded bg-yellow-500 mx-2'></div>In Progress</div>
-                        <div className='flex items-center'><div className='w-3 h-3 rounded bg-green-500 mx-2'></div>Overdue</div>
+                        <div className='flex items-center'><div className='w-3 h-3 rounded bg-red-600 mx-2'></div>Overdue</div>
+                        <div className='flex items-center'><div className='w-3 h-3 rounded bg-green-500 mx-2'></div> Completed</div>
+                        <div className='flex items-center'><div className='w-3 h-3 rounded bg-gray-600 mx-2'></div>Not Started </div>
+
 
                     </div>
                     <div className="flex justify-around mt-5 flex-row">

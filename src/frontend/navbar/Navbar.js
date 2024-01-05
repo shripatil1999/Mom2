@@ -130,7 +130,7 @@ const Navbar = () => {
         </Link>
         <div className="my-4 bg-gray-600 h-[1px]"></div>
         <Link
-          to="/Task"
+          to="/projects"
           className="p-2.5 mt-3 flex items-center rounded px-4 duration-300 cursor-pointer hover:bg-[#33769B] text-white"
         >
           <i className="bi bi-person-workspace"></i>
