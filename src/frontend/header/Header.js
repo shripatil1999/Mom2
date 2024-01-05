@@ -75,8 +75,8 @@ export default function Header() {
           </div>
         </div>
 
-        <div className="relative user col-span-1 h-full">
-          <div className="group flex flex-col items-center py-2">
+        <div className="relative user h-full">
+          <div className="group flex flex-col items-center py-2 pr-2">
             <img className="w-16" src="/images/icons/user.png" alt="" />
             <div className="user-name  bg-slate-200 text-black rounded-sm px-4 m-1">
               <p className="font-bold text-base">{"User Name"}</p>
