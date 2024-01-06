@@ -41,8 +41,8 @@ export default function Projects() {
         />
         <SearchFilter />
       </div>
-      <div className="ProjectList mt-4">
-        <table style={{ width: "98%", marginTop: "1rem" }}>
+      <div style={{overflowX:"auto"}} className="ProjectList mt-4">
+        <table  className= "table table-responsive" style={{ width: "98%", marginTop: "1rem" }}>
           <thead>
             <tr className="border border-gray-900 bg-slate-200 ">
               <th

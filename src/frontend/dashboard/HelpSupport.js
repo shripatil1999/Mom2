@@ -33,16 +33,16 @@ const HelpSupport = () => {
           </div>
           <div style={{ marginTop: "8rem" }} className="CallUs">
             <p className="font-bold text-lg mb-2">Call Us/ Email Us</p>
-            <p className="cursor-pointer flex flex-row items-center">
+            <a  href="tel:+918095588122" className="cursor-pointer flex flex-row items-center">
               {/* <i className="bi bi-telephone-fill "> </i> */}
               <img className=" mr-2" src="/images/icons/telephone.png" alt="" />
               +91 80955 88122
-            </p>
-            <p className="cursor-pointer flex flex-row items-center mt-2">
+            </a>
+            <a href="mailto:info@pumpacademy.in" className="cursor-pointer flex flex-row items-center mt-2">
               {/* <i className="bi bi-telephone-fill "> </i> */}
               <img className=" mr-2" src="/images/icons/gmail.png" alt="" />
               info@pumpacademy.in
-            </p>
+            </a>
           </div>
         </div>
         <div className="w-full">
@@ -91,7 +91,9 @@ const HelpSupport = () => {
             <p className="font-bold text-lg mt-3">Updates and Announcements</p>
           </div>
         </div>
+        
       </div>
+      <p className="text-center" >Developed with <i className="bi bi-suit-heart-fill text-red-600"></i> by <a className="text-blue-500 underline hover:text-red-600" href="https://www.pumpacademy.in/" target="_blank" rel="noreferrer">@PAPL</a></p>
     </GlobalLayout>
   );
 };
