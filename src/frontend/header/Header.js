@@ -3,6 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import UserCard from "../utils/elements/UserCard";
 import { Dialog, Transition } from "@headlessui/react";
 
+
 export default function Header() {
   let value = "40%";
   let NotificationNumber = "2";
@@ -69,7 +70,7 @@ export default function Header() {
           <div className="notification">
             {/* <!-- component --> */}
             <div className="relative h-fit w-fit mt-2 mx-8">
-              <div className="absolute -right-2 -top-3 px-1 pb-0.50 bg-red-500 rounded-full">
+              <div className="absolute -right-2 -top-3 px-1 pb-0.50 bg-[#df3333] rounded-full">
                 <span className="text-sm text-white p-1">
                   {NotificationNumber}
                 </span>
@@ -227,9 +228,9 @@ export default function Header() {
               {NotificationNumber}
             </span>
           </button> */}
-          <div className="dateTime flex">
-            <img src="/images/icons/clock.png" alt="" />
-            {/* <svg
+          <div className="dateTime flex items-center">
+            {/* <img src="/images/icons/clock.png" alt="" /> */}
+            <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -242,14 +243,14 @@ export default function Header() {
                 strokeLinejoin="round"
                 d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
               />
-            </svg> */}
+            </svg>
             <p className="font-bold mx-1">{currentDateTime.toLocaleString()}</p>
           </div>
         </div>
 
         <div className="relative user h-full">
           <div className="group flex flex-col items-center py-2 pr-2">
-            <img className="w-16" src="/images/icons/user.png" alt="" />
+            <img className="w-14" src="/images/icons/user.png" alt="" />
             <div className="user-name  bg-slate-200 text-black rounded-sm px-4 m-1">
               <p className="font-bold text-base">{"User Name"}</p>
             </div>

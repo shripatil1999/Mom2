@@ -7,6 +7,15 @@ import SearchFilter from "../utils/elements/SearchFilter";
 import DatePicker from "react-datepicker";
 import { Tab } from "@headlessui/react";
 import "react-datepicker/dist/react-datepicker.css";
+import Attachment from "../utils/elements/Attachment";
+import SubtaskForm from "../utils/elements/SubtaskForm";
+import { FolderArrowDownIcon } from '@heroicons/react/24/solid'
+
+// const TaskInfo={
+//   task1:{
+
+//   }
+// }
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -14,7 +23,12 @@ function classNames(...classes) {
 const TaskDetails = () => {
   const [startDate, setStartDate] = useState(new Date("2024/02/01"));
   const [endDate, setEndDate] = useState(new Date("2024/02/02"));
+  const [Comment, setComment] = useState(" ");
 
+  const clearComment = () => {
+    setComment(""); // Set the Comment state to an empty string
+    console.log(Comment); // This will still log the previous state, setState is asynchronous
+  };
   return (
     <GlobalLayout>
       <div className="flex border-transparent rounded shadow-lg p-3">
@@ -90,8 +104,8 @@ const TaskDetails = () => {
             </Menu>
           </div>
 
-          <div className="side-list p-2 flex flex-col gap-2">
-            <div className="">
+          <div className="side-list  h-fit p-2 flex flex-col gap-4">
+            <div className="shadow p-3">
               <p className=" text-lg font-bold ">Task Name 1</p>
               <p>Subtask 1</p>
               <p>Subtask 2</p>
@@ -100,14 +114,21 @@ const TaskDetails = () => {
 
             <div className="divider border-b"></div>
 
-            <div className="">
-              <p className=" text-lg font-bold ">Task Name 1</p>
+            <div className=" shadow p-3">
+              <p className=" text-lg font-bold ">Task Name 2</p>
               <p>Subtask 1</p>
               <p>Subtask 2</p>
               <p>Subtask 3</p>
             </div>
 
-            {/* <div className="divider border-b"></div> */}
+            <div className="divider border-b"></div>
+
+            <div className="shadow p-3">
+              <p className=" text-lg font-bold ">Task Name 3</p>
+              <p>Subtask 1</p>
+              <p>Subtask 2</p>
+              <p>Subtask 3</p>
+            </div>
           </div>
         </div>
 
@@ -117,8 +138,8 @@ const TaskDetails = () => {
             <SearchFilter />
           </div>
 
-          <div className="main-body  p-2 ">
-            <div className="first-strip flex items-center justify-between p-2 border px-4 ">
+          <div className="main-body p-2 ">
+            <div className="first-strip shadow-sm  flex items-center justify-between p-2 border px-4 ">
               <div className="dropdown">
                 <select
                   id="status"
@@ -128,19 +149,9 @@ const TaskDetails = () => {
                   <option value="All" defaultValue="0">
                     All
                   </option>
-                  <option value="">
-                    <p>
-                      <i className="bi bi-circle-fill text-yellow-600"></i>
-                      Ongoing
-                    </p>{" "}
-                  </option>
-                  <option value="">
-                    <i className="bi bi-circle-fill text-red-600"></i>Overdue
-                  </option>
-                  <option value="">
-                    <i className="bi bi-circle-fill text-green-600"></i>{" "}
-                    Completed
-                  </option>
+                  <option value="">Ongoing</option>
+                  <option value="">Overdue</option>
+                  <option value="">Completed</option>
                 </select>
               </div>
               <p>Subtask ({3})</p>
@@ -151,12 +162,12 @@ const TaskDetails = () => {
               </div>
             </div>
 
-            <div className="second-strip flex items-center p-2 border px-4 mt-3">
+            <div className="second-strip shadow-sm flex items-center p-2 border px-4 mt-3">
               <p className="font-bold">Description:</p> &nbsp;&nbsp;
               <p>Description We'll be shown here. </p>
             </div>
 
-            <div className="third-strip flex flex-col gap-2.5 first-letter: p-2 border px-4 mt-3">
+            <div className="third-strip shadow-sm flex flex-col gap-2.5 first-letter: p-2 border px-4 mt-3">
               <p className="font-bold ">Task Information</p>
               <p>User : &nbsp;&nbsp;&nbsp;{"Mr. XYZ"}</p>
               <div className="flex gap-3">
@@ -241,7 +252,7 @@ const TaskDetails = () => {
 
             <div className="fourth-strip mt-2">
               <Tab.Group>
-                <Tab.List className="flex space-x-1 rounded-xl bg-light-900 p-1">
+                <Tab.List className="flex space-x-1  rounded-xl bg-light-900 p-1">
                   <Tab
                     as={Fragment}
                     className="w-1/6 py-2.5 text-sm font-medium leading-5 "
@@ -251,7 +262,7 @@ const TaskDetails = () => {
                       <button
                         className={
                           selected
-                            ? "bg-light-900 text-blue-900 border-b-2 border-x-2"
+                            ? "bg-light-900 text-blue-900 border-b-2 border-x-2 shadow-sm "
                             : "text-[#252c48]  hover:bg-white/[2] hover:text-[#252c48]"
                         }
                       >
@@ -268,7 +279,7 @@ const TaskDetails = () => {
                       <button
                         className={
                           selected
-                            ? "bg-light-900 text-blue-900 border-b-2 border-x-2"
+                            ? "bg-light-900 text-blue-900 border-b-2 border-x-2 shadow-sm "
                             : "text-[#252c48]  hover:bg-white/[2] hover:text-[#252c48]"
                         }
                       >
@@ -285,7 +296,7 @@ const TaskDetails = () => {
                       <button
                         className={
                           selected
-                            ? "bg-light-900 text-blue-900 border-b-2 border-x-2"
+                            ? "bg-light-900 text-blue-900 border-b-2 border-x-2 shadow-sm "
                             : "text-[#252c48]  hover:bg-white/[2] hover:text-[#252c48]"
                         }
                       >
@@ -294,25 +305,30 @@ const TaskDetails = () => {
                     )}
                   </Tab>
                 </Tab.List>
-                <Tab.Panels className="border m-1 ">
-                  <Tab.Panel className="p-3">
-                  <div className="flex-1 px-4 py-2 overflow-y-auto">
+                <Tab.Panels className="border shadow m-1 ">
+                  <Tab.Panel className="p-3 overflow-y-auto">
+                    <div className="flex-1 px-4 py-2 overflow-y-auto">
                       {/* <!-- chat message --> */}
 
                       <div className="flex items-center ">
                         <div className="flex-none flex flex-col items-center space-y-1 mr-4">
                           <img
                             className="rounded-full w-10 h-10"
-                            src="/images/icons/user.png" alt="user"
+                            src="/images/icons/user.png"
+                            alt="user"
                           />
                           <a href=" " className="block text-xs hover:underline">
                             Username
                           </a>
                         </div>
                         <div className="flex-1 w-3/4 bg-gray-200 text-black p-2 rounded-lg mb-2 relative">
-                            <p className="text-base">Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit.</p>
-                            <p className="text-sm text-end">01/01/2024, 06.60 PM</p>                          
+                          <p className="text-base">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                            elit.
+                          </p>
+                          <p className="text-sm text-end">
+                            01/01/2024, 06.60 PM
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -324,25 +340,147 @@ const TaskDetails = () => {
                         <div className="flex-none flex flex-col items-center space-y-1 mr-4">
                           <img
                             className="rounded-full w-10 h-10"
-                            src="/images/icons/user.png" alt="user"
+                            src="/images/icons/user.png"
+                            alt="user"
                           />
                           <a href=" " className="block text-xs hover:underline">
-                          Username
+                            Username
                           </a>
                         </div>
                         <div className="flex-1 w-3/4 bg-indigo-400 text-white p-2 rounded-lg mb-2 relative">
-                            <p className="text-base">Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit.</p>
-                            <p className="text-sm text-end">01/01/2024,  06.60 PM</p>                          
+                          <p className="text-base">
+                            Lorem ipsum dolor sit amet, consectetur adipisicing
+                            elit.
+                          </p>
+                          <p className="text-sm text-end">
+                            01/01/2024, 06.60 PM
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-4 pb-0">
+                      <div className="overflow-hidden">
+                        <textarea
+                          id="OrderNotes"
+                          className="w-full resize-none border-x-0 border-t-0 border-gray-200 bg-gray-100 p-2 align-top sm:text-sm"
+                          rows="6"
+                          placeholder="Type Comments here..........👇🏻👇🏻"
+                          value={Comment}
+                          onChange={(e) => {
+                            setComment(e.target.value);
+                          }}
+                        ></textarea>
+
+                        <div className="flex items-center justify-end gap-2 py-3 border-t-2 border-gray-400">
+                          <Attachment />
+                          <button
+                            type="button"
+                            className="rounded bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-600"
+                            onClick={clearComment}
+                          >
+                            Clear Comment
+                          </button>
+
+                          <button
+                            type="button"
+                            className="rounded bg-[#252c48] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#252c48ce]"
+                          >
+                            Add Comment
+                          </button>
                         </div>
                       </div>
                     </div>
                   </Tab.Panel>
-                  <Tab.Panel>
-                    <p>ok</p>
+                  <Tab.Panel className="p-3 overflow-y-auto">
+                    <ul typeof="disc" className="">
+                      <li>Subtask 1</li>
+                      <li>Subtask 2</li>
+                      <li>Subtask 3</li>
+                    </ul>
+                    <div className="addTask flex w-full h-full my-10 justify-center items-center">
+                      <button
+                        type="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#staticBackdrop"
+                        className="border-1 px-3 py-2 rounded bg-[#252c48] text-white"
+                      >
+                        Add Subtask
+                      </button>
+                      {/* <!-- Modal --> */}
+                      <div
+                        className="modal fade"
+                        id="staticBackdrop"
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                        tabindex="-1"
+                        aria-labelledby="staticBackdropLabel"
+                        aria-hidden="true"
+                      >
+                        <div className="modal-dialog">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                              <h1
+                                className="modal-title font-bold text-lg fs-5"
+                                id="staticBackdropLabel"
+                              >
+                                Add Subtask
+                              </h1>
+                              <button
+                                type="button"
+                                className="btn-close text-black "
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                              >
+                                <i class="bi bi-x-circle"></i>
+                              </button>
+                            </div>
+                            <div className="modal-body">
+                              <SubtaskForm />
+                            </div>
+                            <div className="modal-footer">
+                              <button
+                                type="button"
+                                className="btn btn-danger bg-red-500"
+                                data-bs-dismiss="modal"
+                              >
+                                Close
+                              </button>
+                              <button
+                                type="button"
+                                className="btn bg-[#252c48] text-white hover:bg-[#3b4670]"
+                              >
+                                Add Subtask
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </Tab.Panel>
-                  <Tab.Panel>
-                    <p>ok</p>
+                  <Tab.Panel className="flex flex-col justify-center items-center">
+                    <div className="DisplayFIles my-2">
+                      <p>Uploaded Files will be shown here.</p>
+                      <div className="FilesView w-full flex justify-start gap-3 mt-2">
+                        <img src="/images/icons/word.png" alt="" />
+                        <img src="/images/icons/pdf.png" alt="" />
+                      </div>
+                    </div>
+                    <div style={{border:"dashed 1px gray"}} className="m-4  w-1/2 flex justify-center rounded-lg border-gray-900/25 px-6 py-10">
+                      <div className="text-center ">
+                        <FolderArrowDownIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+                        <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                          <label
+                            htmlFor="file-upload"
+                            className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                          >
+                            <span>Upload a file</span>
+                            <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                          </label>
+                          <p className="pl-1">or drag and drop</p>
+                        </div>
+                        <p className="text-xs leading-5 text-gray-600">Image, File, PDF up to 10MB</p>
+                      </div>
+                    </div>
                   </Tab.Panel>
                 </Tab.Panels>
               </Tab.Group>

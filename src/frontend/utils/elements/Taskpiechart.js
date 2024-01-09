@@ -1,78 +1,38 @@
-import React, { Component } from 'react';
-import * as am5 from "@amcharts/amcharts5";
-import * as am5percent from "@amcharts/amcharts5/percent";
-import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+import React from 'react';
+import { Chart } from "react-google-charts";
 
-class TaskPieChart extends Component {
-  componentDidMount() {
-    // Check if the root instance already exists
-    if (!this.root) {
-      // Create a new root instance
-      this.root = am5.Root.new("chartdiv");
+export const data = [
+  ["Status", "Tasks Status in Percentage"],
+  ["Not Started", 2],
+  ["Overdue", 2],
+  ["On Going", 1],
+  ["Completed", 3],
+];
 
-      // Set themes
-      this.root.setThemes([
-        am5themes_Animated.new(this.root)
-      ]);
+export const options = {
+  pieSliceText: "label",
+  width: 800,
+  height: 400,
+  pieStartAngle: 100,
+  legend: { position: "none" },
+};
 
-      // Create the pie chart
-      var chart = this.root.container.children.push(
-        am5percent.PieChart.new(this.root, {
-          endAngle: 270
-        })
-      );
+const TaskPieChart = () => {
 
-      var series = chart.series.push(
-        am5percent.PieSeries.new(this.root, {
-          valueField: "value",
-          categoryField: "category",
-          endAngle: 270
-        })
-      );
+  return (
+    <div >
 
-      series.states.create("hidden", {
-        endAngle: -90
-      });
-
-      series.data.setAll([
-        {
-          category: "Completed",
-          value: 501.9,
-          fill: am5.color(0xFF4500)
-        },
-        {
-          category: "Not Started",
-          value: 301.9
-        },
-        {
-          category: "In Progress",
-          value: 201.1
-        },
-        {
-          category: "Overdue",
-          value: 165.8,
-          fill: am5.color(0xff0000)
-        },
-
-      ]);
-      
-      series.appear(1000, 100);
-    }
-  }
-
-  componentWillUnmount() {
-    // Check if the root instance exists before disposing
-    if (this.root) {
-      this.root.dispose();
-      this.root = null; // Set to null to indicate that it's disposed
-    }
-  }
-
-  render() {
-    return (
-      <div id="chartdiv" style={{ width: "50%", height: "300px" }}></div>
-    );
-  }
-}
+        <Chart
+          chartType="PieChart"
+          data={data}
+          options={options}
+          width={"100%"}
+          height={"100%"}
+        />
+    
+    </div>
+  );
+};
 
 export default TaskPieChart;
+

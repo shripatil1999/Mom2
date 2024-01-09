@@ -1,55 +1,38 @@
-
 import React from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  // Legend,
-  
-} from "recharts";
+import { Chart } from "react-google-charts";
 
-const data = [
-  {
-    name: "Top Priority",
-    tasks: 5,
-  },
-  {
-    name: "High Priority",
-    tasks: 2,
-  },
-  {
-    name: "Medium Priority",
-    tasks: 2,
-  },
-  {
-    name: "Low Priority",
-    tasks: 3,
-  },
-
+export const data = [
+  [
+    "Element",
+    "Density",
+    { role: "style" },
+    {
+      sourceColumn: 0,
+      role: "annotation",
+      type: "string",
+      calc: "stringify",
+    },
+  ],
+  ["Top Priority", 3, "red", null],
+  ["High", 5, "#FB8B24", null],
+  ["Medium", 2, "#4f7eff", null],
+  ["Low", 7, "#bdbdbd", null],
 ];
 
-export default function Prioritybarchart() {
+export const options = {
+  title: "Priority wise Tasks",
+  width: 500,
+  height: 400,
+  bar: { groupWidth: "65%" },
+  legend: { position: "none" },
+};
+
+export default function  Prioritybarchart() {
   return (
-    <BarChart
-      width={500}
-      height={300}
+    <Chart
+      chartType="ColumnChart"
       data={data}
-      margin={{
-        top: 5,
-        right: 30,
-        left: 20,
-        bottom: 5
-      }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      {/* <Legend /> */}
-      <Bar dataKey="tasks" fill="#8884d8" />
-    </BarChart>
+      options={options}
+    />
   );
 }
