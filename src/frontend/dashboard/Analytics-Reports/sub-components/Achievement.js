@@ -13,7 +13,7 @@ export const options = {
     pieSliceText: "label",
     title: "Achievement Rate",
     pieStartAngle: 100,
-    colors: ['#FB8B24', '#4f7eff', '#bdbdbd'],
+    colors: ['#008000', 'orange', ],
 };
 
 const Achievement = () => {

@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       width: {
-        '27': '27%',
+        'w-27': '27%',
       },
       zIndex: {
         '100': '100',

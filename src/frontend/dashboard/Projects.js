@@ -50,6 +50,7 @@ export default function Projects() {
                   width: "20%",
                   padding: "1%",
                   border: "1px solid black",
+                  background:" rgb(226 232 240)"
                 }}
               >
                 Project Name
@@ -59,6 +60,7 @@ export default function Projects() {
                   width: "20%",
                   padding: "1%",
                   border: "1px solid black",
+                  background:" rgb(226 232 240)"
                 }}
               >
                Percentage %
@@ -68,6 +70,7 @@ export default function Projects() {
                   width: "20%",
                   padding: "1%",
                   border: "1px solid black",
+                  background:" rgb(226 232 240)"
                 }}
               >
                 Users
@@ -77,6 +80,7 @@ export default function Projects() {
                   width: "20%",
                   padding: "1%",
                   border: "1px solid black",
+                  background:" rgb(226 232 240)"
                 }}
               >
                 Status
@@ -86,6 +90,7 @@ export default function Projects() {
                   width: "20%",
                   padding: "1%",
                   border: "1px solid black",
+                  background:" rgb(226 232 240)"
                 }}
               >
                 Tasks

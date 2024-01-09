@@ -6,7 +6,7 @@ import { Dialog, Transition } from "@headlessui/react";
 
 export default function Header() {
   let value = "40%";
-  let NotificationNumber = "2";
+  let NotificationNumber = "3";
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   let [isOpen, setIsOpen] = useState(false);
 
