@@ -27,6 +27,11 @@ export const options = {
   height: 400,
   bar: { groupWidth: "65%" },
   legend: { position: "none" },
+  animation: {
+    startup: true,
+    easing: "linear",
+    duration: 1000,
+  },
   annotations: {
     textStyle: {
       fontSize: 20, // Adjust the font size as needed
@@ -39,8 +44,8 @@ const UserPerformance = () => {
     <div>
       <Chart
             chartType="ColumnChart"
-            width="100%"
-            height="400px"
+            width="600"
+            height="400"
             data={data}
             options={options}
           />

@@ -83,7 +83,7 @@ const Task = () => {
         <SearchFilter />
       </div>
       <p className="text-large">Department | Username </p>
-      <main className="TaskMain mt-4 flex justify-around flex-wrap">
+      <main className="TaskMain mt-4 flex  flex-wrap justify-around ">
         <div
           style={{
             boxShadow:
@@ -131,7 +131,6 @@ const Task = () => {
                     <span className="font-semibold">Description: </span>
                     <p>{task.Description}</p>
                   </Link>
-
                 </>
               ))}
             </div>

@@ -48,6 +48,7 @@ const Home = () => {
                     <div className="TaskDetails mt-5">
                         <Accordion />
                     </div>
+                    
                 </div>
             </div>
         </GlobalLayout >

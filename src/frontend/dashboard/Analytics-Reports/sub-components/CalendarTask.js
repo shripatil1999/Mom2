@@ -13,12 +13,12 @@ const WeeklyDatePicker = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [taskDetails, setTaskDetails] = useState({
 
-        "2023-12-01": ["Task details 1", "Task details 2"],
-        "2023-12-02": "Task details",
-        "2023-12-29": "Task details",
-        "2023-12-30": "Task details",
-        "2024-01-01": "Task details",
-        "2024-01-02": "Task details",
+        "2024-01-01": ["Task details 1", "Task details 2"],
+        "2024-01-10": "Task details will be shown here.",
+        "2024-01-11": "Task details",
+        "2024-01-13": "Task details",
+        "2024-01-08": "Task details",
+        "2024-01-14": "Task details",
 
     });
 
@@ -52,7 +52,7 @@ const WeeklyDatePicker = () => {
 
     return (
         <>
-            <div className="p-3">
+            <div className="p-2 mt-5 w-fit">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-bold">
                         {format(selectedDate, "MMMM yyyy")}
@@ -62,13 +62,13 @@ const WeeklyDatePicker = () => {
                             className="px-2 py-1 bg-blue-500 text-white rounded-full mr-2"
                             onClick={handlePrevWeek}
                         >
-                            <i className="bi bi-arrow-left-short"></i>
+                            <i className="bi bi-arrow-left-short text-`xl`"></i>
                         </button>
                         <button
                             className="px-2 py-1 rounded-full bg-blue-500 text-white ml-2"
                             onClick={handleNextWeek}
                         >
-                            <i className="bi bi-bold bi-arrow-right-short"></i>
+                            <i className="bi bi-bold bi-arrow-right-short text-xl"></i>
                         </button>
                     </div>
                 </div>

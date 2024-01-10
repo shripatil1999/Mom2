@@ -15,6 +15,11 @@ export const options = {
   height: 400,
   pieStartAngle: 100,
   legend: { position: "none" },
+  animation: {
+    startup: true,
+    easing: "linear",
+    duration: 1000,
+  },
 };
 
 const TaskPieChart = () => {

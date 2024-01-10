@@ -25,6 +25,11 @@ export const options = {
   height: 400,
   bar: { groupWidth: "65%" },
   legend: { position: "none" },
+  animation: {
+    startup: true,
+    easing: "linear",
+    duration: 1500,
+  },
 };
 
 export default function  Prioritybarchart() {

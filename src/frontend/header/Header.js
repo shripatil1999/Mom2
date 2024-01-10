@@ -76,7 +76,7 @@ export default function Header() {
                 </span>
               </div>
               <div onClick={openModal} className="p-2">
-                <img src="/images/icons/bell.png" alt="" />
+                <img style={{ width:'2rem'}} src="/images/icons/bell.png" alt="" />
                 {/* <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill={currentColor}

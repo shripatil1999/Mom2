@@ -193,7 +193,7 @@ export default function Projects() {
             ))}
           </tbody>
         </table>
-        <button className="absolute bottom-0 right-0 m-20 border rounded-md border-black px-8 py-3 shadow-sm bg-slate-200 hover:bg-slate-700 font-bold hover:text-white">Add Project</button>
+        {/* <button className="absolute bottom-0 right-0 m-20 border rounded-md border-black px-8 py-3 shadow-sm bg-slate-200 hover:bg-slate-700 font-bold hover:text-white">Add Project</button> */}
       </div>
     </GlobalLayout>
   );

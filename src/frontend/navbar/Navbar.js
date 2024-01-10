@@ -213,224 +213,100 @@ const Navbar = () => {
 export default Navbar;
 
 // import React from 'react'
-// import { Link } from 'react-router-dom'
+// import { BarChart, Wallet, Newspaper, BellRing, Paperclip, LogIn } from 'lucide-react'
 
 // export default function Navbar() {
 //   return (
-
-//     <div>
-//       <ul className="space-y-1">
-//         <li>
-//           <Link to='/home'
-//             className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-gray-700"
-//           >
-//             <svg
-//               xmlns="http://www.w3.org/2000/svg"
-//               className="h-5 w-5 opacity-75"
-//               fill="none"
-//               viewBox="0 0 24 24"
-//               stroke="currentColor"
-//               strokeWidth="2"
+//     <aside className="flex h-screen w-64 flex-col overflow-y-auto border-r bg-white px-5 py-8">
+//       <a href="#">
+//         <svg
+//           width="40"
+//           height="46"
+//           viewBox="0 0 50 56"
+//           fill="none"
+//           xmlns="http://www.w3.org/2000/svg"
+//         >
+//           <path
+//             d="M23.2732 0.2528C20.8078 1.18964 2.12023 12.2346 1.08477 13.3686C0 14.552 0 14.7493 0 27.7665C0 39.6496 0.0986153 41.1289 0.83823 42.0164C2.12023 43.5449 23.2239 55.4774 24.6538 55.5267C25.9358 55.576 46.1027 44.3832 48.2229 42.4602C49.3077 41.474 49.3077 41.3261 49.3077 27.8158C49.3077 14.3055 49.3077 14.1576 48.2229 13.1714C46.6451 11.7415 27.1192 0.450027 25.64 0.104874C24.9497 -0.0923538 23.9142 0.00625992 23.2732 0.2528ZM20.2161 21.8989C20.2161 22.4906 18.9835 23.8219 17.0111 25.3997C15.2361 26.7803 13.8061 27.9637 13.8061 28.0623C13.8061 28.1116 15.2361 29.0978 16.9618 30.2319C18.6876 31.3659 20.2655 32.6479 20.4134 33.0917C20.8078 34.0286 19.871 35.2119 18.8355 35.2119C17.8001 35.2119 9.0233 29.3936 8.67815 28.5061C8.333 27.6186 9.36846 26.5338 14.3485 22.885C17.6521 20.4196 18.4904 20.0252 19.2793 20.4196C19.7724 20.7155 20.2161 21.3565 20.2161 21.8989ZM25.6893 27.6679C23.4211 34.9161 23.0267 35.7543 22.1391 34.8668C21.7447 34.4723 22.1391 32.6479 23.6677 27.9637C26.2317 20.321 26.5275 19.6307 27.2671 20.3703C27.6123 20.7155 27.1685 22.7864 25.6893 27.6679ZM36.0932 23.2302C40.6788 26.2379 41.3198 27.0269 40.3337 28.1609C39.1503 29.5909 31.6555 35.2119 30.9159 35.2119C29.9298 35.2119 28.9436 33.8806 29.2394 33.0424C29.3874 32.6479 30.9652 31.218 32.7403 29.8867L35.9946 27.4706L32.5431 25.1532C30.6201 23.9205 29.0915 22.7371 29.0915 22.5892C29.0915 21.7509 30.2256 20.4196 30.9159 20.4196C31.3597 20.4196 33.6771 21.7016 36.0932 23.2302Z"
+//             fill="black"
+//           />
+//         </svg>
+//       </a>
+//       <div className="mt-6 flex flex-1 flex-col justify-between">
+//         <nav className="-mx-3 space-y-6 ">
+//           <div className="space-y-3 ">
+//             <label className="px-3 text-xs font-semibold uppercase text-gray-900">analytics</label>
+//             <a
+//               className="flex transform items-center rounded-lg px-3 py-2 text-gray-600 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
+//               href="#"
 //             >
-//               <path
-//                 strokeLinecap="round"
-//                 strokeLinejoin="round"
-//                 d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+//               <BarChart className="h-5 w-5" aria-hidden="true" />
+//               <span className="mx-2 text-sm font-medium">Dashboard</span>
+//             </a>
+//             <a
+//               className="flex transform items-center rounded-lg px-3 py-2 text-gray-600 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
+//               href="#"
+//             >
+//               <Wallet className="h-5 w-5" aria-hidden="true" />
+//               <span className="mx-2 text-sm font-medium">Sales</span>
+//             </a>
+//           </div>
+//           <div className="space-y-3 ">
+//             <label className="px-3 text-xs font-semibold uppercase text-gray-900">content</label>
+//             <a
+//               className="flex transform items-center rounded-lg px-3 py-2 text-gray-600 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
+//               href="#"
+//             >
+//               <Newspaper className="h-5 w-5" aria-hidden="true" />
+//               <span className="mx-2 text-sm font-medium">Blogs</span>
+//             </a>
+//             <a
+//               className="flex transform items-center rounded-lg px-3 py-2 text-gray-600 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
+//               href="#"
+//             >
+//               <BellRing className="h-5 w-5" aria-hidden="true" />
+//               <span className="mx-2 text-sm font-medium">Notifications</span>
+//             </a>
+//             <a
+//               className="flex transform items-center rounded-lg px-3 py-2 text-gray-600 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
+//               href="#"
+//             >
+//               <Paperclip className="h-5 w-5" aria-hidden="true" />
+//               <span className="mx-2 text-sm font-medium">Checklists</span>
+//             </a>
+//           </div>
+//         </nav>
+//         <div className="mt-6">
+//           <div className="rounded-lg bg-gray-100 p-3 ">
+//             <h2 className="text-sm font-medium text-gray-800">New feature availabel!</h2>
+//             <p className="mt-1 text-xs text-gray-500">
+//               Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus harum officia eligendi
+//               velit.
+//             </p>
+//             <img
+//               className="mt-2 h-32 w-full rounded-lg object-cover"
+//               src="https://images.unsplash.com/photo-1605379399642-870262d3d051?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1806&q=80"
+//               alt="Feature"
+//             />
+//           </div>
+//           <div className="mt-6 flex items-center justify-between">
+//             <a href="#" className="flex items-center gap-x-2">
+//               <img
+//                 className="h-7 w-7 rounded-full object-cover"
+//                 src="https://overreacted.io/static/profile-pic-c715447ce38098828758e525a1128b87.jpg"
+//                 alt="avatar"
 //               />
-//               <path
-//                 strokeLinecap="round"
-//                 strokeLinejoin="round"
-//                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-//               />
-//             </svg>
-
-//             <span className="text-sm font-medium"> General </span>
-//           </Link>
-//         </li>
-
-//         <li>
-//           <details className="group [&_summary::-webkit-details-marker]:hidden">
-//             <summary
-//               className="group flex items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+//               <span className="text-sm font-medium text-gray-700">Dan Abromov</span>
+//             </a>
+//             <a
+//               href="#"
+//               className="rotate-180 text-gray-800 transition-colors duration-200 hover:text-gray-900"
 //             >
-//               <div className="flex items-center gap-2">
-//                 <svg
-//                   xmlns="http://www.w3.org/2000/svg"
-//                   className="h-5 w-5 opacity-75"
-//                   fill="none"
-//                   viewBox="0 0 24 24"
-//                   stroke="currentColor"
-//                   strokeWidth="2"
-//                 >
-//                   <path
-//                     strokeLinecap="round"
-//                     strokeLinejoin="round"
-//                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-//                   />
-//                 </svg>
-
-//                 <span className="text-sm font-medium"> Teams </span>
-//               </div>
-
-//               <span className="shrink-0 transition duration-300 group-open:-rotate-180">
-//                 <svg
-//                   xmlns="http://www.w3.org/2000/svg"
-//                   className="h-5 w-5"
-//                   viewBox="0 0 20 20"
-//                   fill="currentColor"
-//                 >
-//                   <path
-//                     fillRule="evenodd"
-//                     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-//                     clipRule="evenodd"
-//                   />
-//                 </svg>
-//               </span>
-//             </summary>
-
-//             <ul className="mt-2 space-y-1 px-4">
-//               <li>
-//                 <Link to='/task'
-//                   className="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-//                 >
-//                   Banned Users
-//                 </Link>
-//               </li>
-
-//               <li>
-//                 <a
-//                   href={{}}
-//                   className="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-//                 >
-//                   Calendar
-//                 </a>
-//               </li>
-//             </ul>
-//           </details>
-//         </li>
-
-//         <li>
-//           <a
-//             href={{}}
-//             className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-//           >
-//             <svg
-//               xmlns="http://www.w3.org/2000/svg"
-//               className="h-5 w-5 opacity-75"
-//               fill="none"
-//               viewBox="0 0 24 24"
-//               stroke="currentColor"
-//               strokeWidth="2"
-//             >
-//               <path
-//                 strokeLinecap="round"
-//                 strokeLinejoin="round"
-//                 d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-//               />
-//             </svg>
-
-//             <span className="text-sm font-medium"> Billing </span>
-//           </a>
-//         </li>
-
-//         <li>
-//           <a
-//             href={{}}
-//             className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-//           >
-//             <svg
-//               xmlns="http://www.w3.org/2000/svg"
-//               className="h-5 w-5 opacity-75"
-//               fill="none"
-//               viewBox="0 0 24 24"
-//               stroke="currentColor"
-//               strokeWidth="2"
-//             >
-//               <path
-//                 strokeLinecap="round"
-//                 strokeLinejoin="round"
-//                 d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-//               />
-//             </svg>
-
-//             <span className="text-sm font-medium"> Invoices </span>
-//           </a>
-//         </li>
-
-//         <li>
-//           <details className="group [&_summary::-webkit-details-marker]:hidden">
-//             <summary
-//               className="group flex items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-//             >
-//               <div className="flex items-center gap-2">
-//                 <svg
-//                   xmlns="http://www.w3.org/2000/svg"
-//                   className="h-5 w-5 opacity-75"
-//                   fill="none"
-//                   viewBox="0 0 24 24"
-//                   stroke="currentColor"
-//                   strokeWidth="2"
-//                 >
-//                   <path
-//                     strokeLinecap="round"
-//                     strokeLinejoin="round"
-//                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-//                   />
-//                 </svg>
-
-//                 <span className="text-sm font-medium"> Account </span>
-//               </div>
-
-//               <span className="shrink-0 transition duration-300 group-open:-rotate-180">
-//                 <svg
-//                   xmlns="http://www.w3.org/2000/svg"
-//                   className="h-5 w-5"
-//                   viewBox="0 0 20 20"
-//                   fill="currentColor"
-//                 >
-//                   <path
-//                     fillRule="evenodd"
-//                     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-//                     clipRule="evenodd"
-//                   />
-//                 </svg>
-//               </span>
-//             </summary>
-
-//             <ul className="mt-2 space-y-1 px-4">
-//               <li>
-//                 <a
-//                   href={{}}
-//                   className="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-//                 >
-//                   Details
-//                 </a>
-//               </li>
-
-//               <li>
-//                 <a
-//                   href={{}}
-//                   className="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-//                 >
-//                   Security
-//                 </a>
-//               </li>
-
-//               <li>
-//                 <form action="/logout">
-//                   <button
-//                     type="submit"
-//                     className="w-full rounded-lg px-4 py-2 text-sm font-medium text-gray-500 [text-align:_inherit] hover:bg-gray-100 hover:text-gray-700"
-//                   >
-//                     Logout
-//                   </button>
-//                 </form>
-//               </li>
-//             </ul>
-//           </details>
-//         </li>
-//       </ul>
-
-//     </div>
+//               <LogIn className="h-5 w-5" />
+//             </a>
+//           </div>
+//         </div>
+//       </div>
+//     </aside>
 //   )
 // }

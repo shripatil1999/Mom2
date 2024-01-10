@@ -30,7 +30,7 @@ const PerformanceReport = () => {
     <GlobalLayout>
       <div className="title mt-4">
         <p className="text-2xl">
-          Performance Metrics – Current Ongoing Performance of the{" "}
+          Performance Metrics – Current ongoing performance of the{" "}
           <strong>{Username}</strong> for the year <strong>{Year}</strong>
         </p>
       </div>

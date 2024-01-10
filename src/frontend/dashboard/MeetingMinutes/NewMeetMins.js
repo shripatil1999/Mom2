@@ -201,7 +201,7 @@ const NewMeetMins = () => {
                   <td>{index + 1}</td>
                   <td>
                     <input
-                      className="border-b border-b-slate-950 focus:outline-none"
+                      className=" border-b-2 bg-gray-100 border-gray-300 focus:outline-none"
                       type="textarea"
                       value={row.attendeeName}
                       onChange={(e) =>
@@ -211,7 +211,7 @@ const NewMeetMins = () => {
                   </td>
                   <td>
                     <input
-                      className="border-b border-b-slate-950 focus:outline-none"
+                      className="border-b-2 bg-gray-100 border-gray-300 focus:outline-none"
                       type="text"
                       value={row.email}
                       onChange={(e) =>
@@ -221,7 +221,7 @@ const NewMeetMins = () => {
                   </td>
                   <td className="relative">
                     <input
-                      className="border-b border-b-slate-950 focus:outline-none"
+                      className="border-b-2 bg-gray-100 border-gray-300 focus:outline-none"
                       type="text"
                       value={row.minutes}
                       onChange={(e) =>
@@ -233,7 +233,7 @@ const NewMeetMins = () => {
                       className="absolute bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
                       onClick={handleAddRow}
                     >
-                      <i class="bi bi-plus-lg"></i>
+                      <i className="bi bi-plus-lg"></i>
                     </button>
                   </td>
                 </tr>
@@ -248,12 +248,12 @@ const NewMeetMins = () => {
               <tr className="border border-gray-900 bg-slate-200 ">
                 <th style={{ width: "10%", padding: "1%" }}>U. ID</th>
                 <th style={{ width: "16%", padding: "1%" }}>AGENDA</th>
-                <th style={{ width: "26%", padding: "1%" }}>
+                <th style={{ width: "30%", padding: "1%" }}>
                   DISCUSSION POINTS
                 </th>
                 <th style={{ width: "16%", padding: "1%" }}>ACTION BY</th>
                 <th style={{ width: "16%", padding: "1%" }}>SUPPORTER</th>
-                <th style={{ width: "16%", padding: "1%" }}>TARGET DATE</th>
+                <th style={{ width: "12%", padding: "1%" }}>TARGET DATE</th>
               </tr>
             </thead>
             <tbody>
@@ -264,7 +264,7 @@ const NewMeetMins = () => {
                   </td>
                   <td>
                     <input
-                      className="border-b border-gray-900 p-2 focus:outline-none"
+                      className="border-b-2 bg-gray-100 border-gray-300 p-2 focus:outline-none"
                       type="text"
                       value={row.agenda}
                       placeholder="Task Name"
@@ -275,8 +275,8 @@ const NewMeetMins = () => {
                   </td>
                   <td>
                     <p>Description:</p>
-                    <input
-                      className="border-b border-gray-900 p-2 focus:outline-none"
+                    <textarea
+                      className=" w-full border-b-2 bg-gray-100 border-gray-300 p-2 focus:outline-none"
                       type="text"
                       value={row.discussionPoints}
                       onChange={(e) =>
@@ -307,7 +307,7 @@ const NewMeetMins = () => {
                         <li key={subIndex}>
                           {subIndex + 1}
                           <input
-                            className="border-b border-gray-900 p-2 focus:outline-none"
+                            className="border-b-2 bg-gray-100 border-gray-300 p-2 mb-3 focus:outline-none"
                             type="text"
                             placeholder="Enter Subtask here"
                             value={subtask}
@@ -325,7 +325,7 @@ const NewMeetMins = () => {
                   </td>
                   <td>
                     <input
-                      className="border-b border-gray-900 p-2 focus:outline-none"
+                      className="border-b-2 bg-gray-100 border-gray-300 p-2 focus:outline-none"
                       type="text"
                       value={row.actionBy}
                       onChange={(e) =>
@@ -339,7 +339,7 @@ const NewMeetMins = () => {
                   </td>
                   <td>
                     <input
-                      className="border-b border-gray-900 p-2 focus:outline-none"
+                      className="border-b-2 bg-gray-100 border-gray-300 p-2 focus:outline-none"
                       type="text"
                       value={row.supporter}
                       onChange={(e) =>
@@ -369,7 +369,7 @@ const NewMeetMins = () => {
 
                       onClick={handleAddRow2}
                     >
-                      <i class="bi bi-plus-lg"></i>
+                      <i className="bi bi-plus-lg"></i>
 
                     </button>
                     {/* </div> */}

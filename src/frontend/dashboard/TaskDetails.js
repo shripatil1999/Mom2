@@ -23,7 +23,7 @@ function classNames(...classes) {
 const TaskDetails = () => {
   const [startDate, setStartDate] = useState(new Date("2024/02/01"));
   const [endDate, setEndDate] = useState(new Date("2024/02/02"));
-  const [Comment, setComment] = useState(" ");
+  const [Comment, setComment] = useState("");
 
   const clearComment = () => {
     setComment(""); // Set the Comment state to an empty string
@@ -250,7 +250,7 @@ const TaskDetails = () => {
               </div>
             </div>
 
-            <div className="fourth-strip mt-2">
+            <div className="fourth-strip mt-4 ">
               <Tab.Group>
                 <Tab.List className="flex space-x-1  rounded-xl bg-light-900 p-1">
                   <Tab
@@ -392,7 +392,7 @@ const TaskDetails = () => {
                     </div>
                   </Tab.Panel>
                   <Tab.Panel className="p-3 overflow-y-auto">
-                    <ul typeof="disc" className="">
+                    <ul typeof="disc" className="p-2.5 m-3 border-b-2 bg-gray-100 border-gray-400">
                       <li>Subtask 1</li>
                       <li>Subtask 2</li>
                       <li>Subtask 3</li>
