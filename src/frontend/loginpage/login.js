@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import './style.css'
 import { Link } from 'react-router-dom';
+
 // import { dialog } from '@material-tailwind/react';
 function Login() {
 
@@ -11,7 +12,7 @@ function Login() {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const dialog = document.getElementById("myDialog");
+    var dialog = document.getElementById("myDialog");
     const showDialog = () => {
         dialog.showModal();
     }
@@ -87,8 +88,10 @@ function Login() {
                                             <label htmlFor="remember" className="text-black">Remember me</label>
                                         </div>
                                     </div>
-                                    <div className="forgot-password text-center m-3">
-                                        <span className="text-sm  font-medium text-center text-primary-600 hover:underline cursor-pointer">Forgot password  </span><span>&nbsp;|&nbsp;</span><span className="text-sm font-medium text-center text-primary-600 hover:underline cursor-pointer"> Need Help ?</span>
+                                    <div className="forgot-password flex justify-center text-center m-3">
+                                        <p className="text-sm font-medium text-center text-primary-600 hover:underline cursor-pointer">Forgot password  </p>
+                                        <span>&nbsp;|&nbsp;</span>
+                                        <span className="text-sm font-medium text-center text-primary-600 hover:underline cursor-pointer"> Need Help ?</span>
                                     </div>
                                 </div>
                             </form>
@@ -99,7 +102,7 @@ function Login() {
                     <footer className='flex flex-row text-white items-center relative bottom-0 cursor-pointer'>
                         <p onClick={showDialog} className=' text-sm hover:underline hover:text-sky-600'>Disclaimer Policy </p> <p>&nbsp;|&nbsp;</p>
 
-                        <dialog id="myDialog" className='p-5'>
+                        <dialog id="myDialog"  className='p-5'>
                             <p className='font-bold text-2xl'>Disclaimer Policy</p>
                             <ul className='mb-3 leading-8'>
                                 <li className='mt-3'>1. The "Minutes of Meetings" application is a tool designed solely for recording and organizing meeting minutes.</li>
@@ -108,9 +111,9 @@ function Login() {
                                 <li>  4. The application's developers are not liable for any loss of data or unauthorized access resulting from user negligence.</li>
                                 <li>   5. By using the application, users agree to abide by its terms and conditions outlined in this disclaimer.</li>
                             </ul>
-                            <div className="flex justify-center">
+                            {/* <div className="flex justify-center"> */}
                             <button type="button" onClick={hideDialog} className="focus:outline-none cursor-pointer text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-bold rounded-lg text-sm px-3 py-2 mt-10">Close</button>
-                            </div>
+                            {/* </div> */}
                         </dialog>
                         <p className='text-sm hover:underline hover:text-sky-600'>Contact Details </p> <p>&nbsp;|&nbsp;</p>
                         <a href='http://www.pumpacademy.in/' target='_blank' rel="noreferrer" className='text-sm hover:underline hover:text-sky-600'>©PAPL 2021-2023</a>

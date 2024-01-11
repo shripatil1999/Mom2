@@ -465,7 +465,7 @@ const TaskDetails = () => {
                         <img src="/images/icons/pdf.png" alt="" />
                       </div>
                     </div>
-                    <div style={{border:"dashed 1px gray"}} className="m-4  w-1/2 flex justify-center rounded-lg border-gray-900/25 px-6 py-10">
+                    <div style={{ border: "dashed 1px gray" }} className="m-4  w-1/2 flex justify-center rounded-lg border-gray-900/25 px-6 py-10">
                       <div className="text-center ">
                         <FolderArrowDownIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
                         <div className="mt-4 flex text-sm leading-6 text-gray-600">

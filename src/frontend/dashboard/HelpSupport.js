@@ -36,12 +36,12 @@ const HelpSupport = () => {
             <a  href="tel:+918095588122" className="cursor-pointer flex flex-row items-center">
               {/* <i className="bi bi-telephone-fill "> </i> */}
               <img className=" mr-2" src="/images/icons/telephone.png" alt="" />
-              +91 80955 88122
+              +91 96563 18678
             </a>
             <a href="mailto:info@pumpacademy.in" className="cursor-pointer flex flex-row items-center mt-2">
               {/* <i className="bi bi-telephone-fill "> </i> */}
-              <img className=" mr-2" src="/images/icons/gmail.png" alt="" />
-              info@pumpacademy.in
+              <img className=" mr-4" src="/images/icons/gmail.png" alt="" />
+              it@pumpacademy.in
             </a>
           </div>
         </div>

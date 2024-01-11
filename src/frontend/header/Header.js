@@ -2,6 +2,7 @@ import React from "react";
 import { Fragment, useEffect, useState } from "react";
 import UserCard from "../utils/elements/UserCard";
 import { Dialog, Transition } from "@headlessui/react";
+import { format } from 'date-fns';
 
 
 export default function Header() {
@@ -21,7 +22,7 @@ export default function Header() {
   useEffect(() => {
     // Update the current date and time every second
     const intervalId = setInterval(() => {
-      setCurrentDateTime(new Date());
+      setCurrentDateTime(format(new Date(),'dd/MM/yyyy, hh:mm:ss a'));
     }, 1000);
 
     // Clean up the interval when the component unmounts
