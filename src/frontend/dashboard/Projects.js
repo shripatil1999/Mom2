@@ -8,7 +8,8 @@ const ProjectDetails = [
     ProjectId: 1,
     Name: "IPMS",
     Percentage: 90,
-    User: "Shridhar",
+    User: "Mr. PAPL",
+    Supporter:"No One",
     Status: "Ongoing",
     Tasks: 4,
   },
@@ -16,7 +17,8 @@ const ProjectDetails = [
     ProjectId: 2,
     Name: "MoM",
     Percentage: 30,
-    User: "Shridhar",
+    User: "Mr. ADD",
+    Supporter:"No One",
     Status: "Completed",
     Tasks: 8,
   },
@@ -24,7 +26,8 @@ const ProjectDetails = [
     ProjectId: 3,
     Name: "New Project",
     Percentage: 0,
-    User: "Shridhar",
+    User: "Ms. DWMN",
+    Supporter:"No One",
     Status: "Not Started",
     Tasks: 15,
   },
@@ -57,7 +60,7 @@ export default function Projects() {
               </th>
               <th
                 style={{
-                  width: "20%",
+                  width: "10%",
                   padding: "1%",
                   border: "1px solid black",
                   background:" rgb(226 232 240)"
@@ -83,11 +86,21 @@ export default function Projects() {
                   background:" rgb(226 232 240)"
                 }}
               >
-                Status
+                Supporter
               </th>
               <th
                 style={{
                   width: "20%",
+                  padding: "1%",
+                  border: "1px solid black",
+                  background:" rgb(226 232 240)"
+                }}
+              >
+                Status
+              </th>
+              <th
+                style={{
+                  width: "10%",
                   padding: "1%",
                   border: "1px solid black",
                   background:" rgb(226 232 240)"
@@ -111,7 +124,7 @@ export default function Projects() {
                 </th>
                 <th
                   style={{
-                    width: "20%",
+                    width: "13%",
                     padding: "1%",
                     border: "1px solid black",
                   }}
@@ -127,6 +140,16 @@ export default function Projects() {
                 >
                   <div className="flex">
                 <img className="mr-2" src="/images/icons/programmer.png" alt="" />  {project.User}</div>
+                </th>
+                <th
+                  style={{
+                    width: "20%",
+                    padding: "1%",
+                    border: "1px solid black",
+                  }}
+                >
+                  <div className="flex">
+                  {project.Supporter}</div>
                 </th>
                 <th
                   style={{
@@ -182,7 +205,7 @@ export default function Projects() {
                 </th>
                 <th
                   style={{
-                    width: "20%",
+                    width: "7%",
                     padding: "1%",
                     border: "1px solid black",
                   }}

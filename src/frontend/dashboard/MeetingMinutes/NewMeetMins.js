@@ -1,15 +1,33 @@
 import React from "react";
 import GlobalLayout from "../../utils/hoc/globalLayout";
 import Dropdown from "../../utils/elements/dropdown";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import moment from "moment";
 import SearchFilter from "../../utils/elements/SearchFilter";
 import "./NewMeetMins.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Listbox, Transition } from '@headlessui/react'
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+
+
+const Department = [
+  { name: 'Software Development' },
+  { name: 'Hardware Development' },
+  { name: 'Information Technology' },
+  { name: 'Administration' },
+  { name: 'Marketing & Public Relation' },
+  { name: 'Human resource' },
+  { name: 'Corporate Communication' },
+  { name: 'Procurement' },
+  { name: 'Project Execution' },
+  { name: 'Accounts & CS' },
+]
+
 
 const NewMeetMins = () => {
   const [sessionStartTime] = useState(moment());
+  const [selected, setSelected] = useState(Department[0])
 
   const [activeSessionTime, setActiveSessionTime] = useState(
     moment.duration(0)
@@ -242,18 +260,68 @@ const NewMeetMins = () => {
           </table>
 
           {/* Second Table */}
-
+          <div className="p-2 bg-slate-200">
+            <Listbox value={selected} onChange={setSelected}>
+              <div className="relative mt-1 w-1/5">
+                <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                  <span className="block truncate">{selected.name}</span>
+                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                    <ChevronUpDownIcon
+                      className="h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Listbox.Button>
+                <Transition
+                  as={Fragment}
+                  leave="transition ease-in duration-100"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <Listbox.Options className="z-99 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                    {Department.map((person, personIdx) => (
+                      <Listbox.Option
+                        key={personIdx}
+                        className={({ active }) =>
+                          `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-slate-200 text-slate-900' : 'text-gray-900'
+                          }`
+                        }
+                        value={person}
+                      >
+                        {({ selected }) => (
+                          <>
+                            <span
+                              className={`block truncate ${selected ? 'font-medium' : 'font-normal'
+                                }`}
+                            >
+                              {person.name}
+                            </span>
+                            {selected ? (
+                              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-600">
+                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                              </span>
+                            ) : null}
+                          </>
+                        )}
+                      </Listbox.Option>
+                    ))}
+                  </Listbox.Options>
+                </Transition>
+              </div>
+            </Listbox>
+          </div>
           <table style={{ width: "100%" }}>
             <thead>
               <tr className="border border-gray-900 bg-slate-200 ">
                 <th style={{ width: "10%", padding: "1%" }}>U. ID</th>
-                <th style={{ width: "16%", padding: "1%" }}>AGENDA</th>
-                <th style={{ width: "30%", padding: "1%" }}>
+                <th style={{ width: "15%", padding: "1%" }}>AGENDA</th>
+                <th style={{ width: "27%", padding: "1%" }}>
                   DISCUSSION POINTS
                 </th>
-                <th style={{ width: "16%", padding: "1%" }}>ACTION BY</th>
-                <th style={{ width: "16%", padding: "1%" }}>SUPPORTER</th>
-                <th style={{ width: "12%", padding: "1%" }}>TARGET DATE</th>
+                <th style={{ width: "15%", padding: "1%" }}>ACTION BY</th>
+                <th style={{ width: "15%", padding: "1%" }}>SUPPORTER</th>
+                <th style={{ width: "9%", padding: "1%" }}>START DATE</th>
+                <th style={{ width: "9%", padding: "1%" }}>TARGET DATE</th>
               </tr>
             </thead>
             <tbody>
@@ -287,7 +355,7 @@ const NewMeetMins = () => {
                         )
                       }
                     />
-                    <div className="border-b my-4 border-blue-800 relative">
+                    <div className="border-b my-4 border-blue-800 relative ">
                       <button
                         onClick={() => addSubtask(index)}
                         className="absolute top-0 right-0 border rounded -mt-4 border-slate-900 bg-gray-100 px-3 py-1 text-sm font-bold"
@@ -351,8 +419,9 @@ const NewMeetMins = () => {
                       }
                     />
                   </td>
-                  <td className="pr-6 relative">
+                  <td className="pr-6 relative -z-1">
                     <DatePicker
+                      className="-z-1"
                       showIcon
                       selected={row.targetDate}
                       onSelect={(date) =>
@@ -365,7 +434,31 @@ const NewMeetMins = () => {
                     />
                     {/* <div className="flex w-full"> */}
                     <button
-                      className="absolute bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
+                      className="absolute -z-3 bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
+
+                      onClick={handleAddRow2}
+                    >
+                      <i className="bi bi-plus-lg"></i>
+
+                    </button>
+                    {/* </div> */}
+                  </td>
+                  <td className="pr-6 relative -z-1">
+                    <DatePicker
+                      className="-z-1"
+                      showIcon
+                      selected={row.targetDate}
+                      // onSelect={(date) =>
+                      //   handleInputChangeTable2(index, "targetDate", date)
+                      // }
+                      // onKeyDown={(e) => handleKeyDownTable2(e, index)}
+                      // onChange={(date) =>
+                      //   handleInputChangeTable2(index, "targetDate", date)
+                      // }
+                    />
+                    {/* <div className="flex w-full"> */}
+                    <button
+                      className="absolute -z-3 bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
 
                       onClick={handleAddRow2}
                     >

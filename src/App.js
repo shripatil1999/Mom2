@@ -16,6 +16,7 @@ import Analytics from './frontend/dashboard/Analytics-Reports/Analytics';
 import PerformanceReport from './frontend/dashboard/Analytics-Reports/PerformanceReport';
 import HelpSupport from './frontend/dashboard/HelpSupport';
 import Projects from './frontend/dashboard/Projects';
+import Profile from './frontend/dashboard/Profile';
 // import SplashScreen from './frontend/utils/elements/withSplashScreen';
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
       <Route path='performance' element={<PerformanceReport/>}></Route>
       <Route path='helpSupport' element={<HelpSupport/>}></Route>
       <Route path='projects' element={<Projects/>}></Route>
+      <Route path='profile' element={<Profile/>}></Route>
 
 
     </Routes>

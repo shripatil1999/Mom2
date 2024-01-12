@@ -62,7 +62,7 @@ const WeeklyDatePicker = () => {
                             className="px-2 py-1 bg-blue-500 text-white rounded-full mr-2"
                             onClick={handlePrevWeek}
                         >
-                            <i className="bi bi-arrow-left-short text-`xl`"></i>
+                            <i className="bi bi-arrow-left-short text-xl"></i>
                         </button>
                         <button
                             className="px-2 py-1 rounded-full bg-blue-500 text-white ml-2"

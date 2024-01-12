@@ -3,6 +3,8 @@ import { Fragment, useEffect, useState } from "react";
 import UserCard from "../utils/elements/UserCard";
 import { Dialog, Transition } from "@headlessui/react";
 import { format } from 'date-fns';
+import { Link } from "react-router-dom";
+
 
 
 export default function Header() {
@@ -126,7 +128,7 @@ export default function Header() {
                           >
                             All Notification
                           </Dialog.Title>
-                          <div className="mt-8 flex items-center gap-4 border-1 border-gray-400 p-4">
+                          <Link to="/taskdetails" className="mt-8 flex items-center gap-4 border-1 border-gray-400 p-4">
                             <div className="avatar">
                               <img src="/images/icons/profile.png" alt="" />
                             </div>
@@ -149,8 +151,8 @@ export default function Header() {
                               src="/images/icons/bell2.png"
                               alt=""
                             />
-                          </div>
-                          <div className="mt-8 flex items-center gap-4 border-1 border-gray-400 p-4">
+                          </Link>
+                          <Link to="/taskdetails"  className="mt-8 flex items-center gap-4 border-1 border-gray-400 p-4">
                             <div className="avatar">
                               <img src="/images/icons/profile.png" alt="" />
                             </div>
@@ -173,8 +175,8 @@ export default function Header() {
                               src="/images/icons/bell2.png"
                               alt=""
                             />
-                          </div>
-                          <div className="mt-8 flex items-center gap-4 border-1 border-gray-400 p-4">
+                          </Link>
+                          <Link to="/taskdetails"  className="mt-8 flex items-center gap-4 border-1 border-gray-400 p-4">
                             <div className="avatar">
                               <img src="/images/icons/profile.png" alt="" />
                             </div>
@@ -197,7 +199,7 @@ export default function Header() {
                               src="/images/icons/bell2.png"
                               alt=""
                             />
-                          </div>
+                          </Link>
 
                           <div className="mt-14 flex gap-5">
                             <button
