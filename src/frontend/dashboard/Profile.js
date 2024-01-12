@@ -10,6 +10,7 @@ const Profile = () => {
                         <div className="img flex justify-center mt-2">
                             <img className='w-1/4' src="/images/icons/user.png" alt="" />
                         </div>
+                        
                     </div>
                 </div>
                 <div className="w-2/3">
