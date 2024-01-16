@@ -1875,6 +1875,11 @@
   resolved "https://registry.yarnpkg.com/@preline/overlay/-/overlay-2.0.2.tgz#ef715a985f401bfd55d14f2dfcef0a50630630bb"
   integrity sha512-X3Lw6zRsgxqEnjAqHUYnJD/88NAb2+Q3OlXmvepNmADfUPnWb+rxem2k/M56qiWfP767sZuhDvNeXTlQnGZciA==
 
+"@preline/tabs@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@preline/tabs/-/tabs-2.0.2.tgz#973e4900c2f4d811ff0454b1bd0ef11319bc0b87"
+  integrity sha512-co7kNWSZdh3a9P8YEv77KpW1pfrI2Vom4t32TDvDvuyophl24ax6R9z70Mfk76f/NuJberEy0ckCLHGfeNr1vg==
+
 "@react-aria/ssr@^3.5.0":
   version "3.9.0"
   resolved "https://registry.npmjs.org/@react-aria/ssr/-/ssr-3.9.0.tgz"
