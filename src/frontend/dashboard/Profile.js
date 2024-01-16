@@ -116,7 +116,7 @@ const Profile = () => {
                             </p>
                     </div>
                     <div className="tab card shadow mr-3 mt-3">
-                        <div className="w-full max-w-lg px-3 py-6 sm:px-0">
+                        <div className="w-full max-w-xl px-3 py-6 sm:px-0">
                             <Tab.Group>
                                 <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/10 p-1">
                                     <Tab
@@ -172,11 +172,11 @@ const Profile = () => {
                                         Change Password
                                     </Tab>
                                 </Tab.List>
-                                <Tab.Panels className="mt-2">
-                                    <Tab.Panel>Content 1</Tab.Panel>
-                                    <Tab.Panel>Content 2</Tab.Panel>
-                                    <Tab.Panel>Content 3</Tab.Panel>
-                                    <Tab.Panel>Content 4</Tab.Panel>
+                                <Tab.Panels className="mt-3">
+                                    <Tab.Panel className="card shadow p-3">Content 1</Tab.Panel>
+                                    <Tab.Panel className="card shadow p-3">Content 2</Tab.Panel>
+                                    <Tab.Panel className="card shadow p-3">Content 3</Tab.Panel>
+                                    <Tab.Panel className="card shadow p-3">Content 4</Tab.Panel>
                                 </Tab.Panels>
                             </Tab.Group>
                         </div>

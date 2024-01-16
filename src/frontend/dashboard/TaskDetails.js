@@ -1,7 +1,7 @@
 import React from "react";
 import GlobalLayout from "../utils/hoc/globalLayout";
 import { Fragment, useState } from "react";
-import { Menu, Transition } from "@headlessui/react";
+import { Menu, Transition, Popover } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import SearchFilter from "../utils/elements/SearchFilter";
 import DatePicker from "react-datepicker";
@@ -9,7 +9,7 @@ import { Tab } from "@headlessui/react";
 import "react-datepicker/dist/react-datepicker.css";
 import Attachment from "../utils/elements/Attachment";
 import SubtaskForm from "../utils/elements/SubtaskForm";
-import { FolderArrowDownIcon } from '@heroicons/react/24/solid'
+import { FolderArrowDownIcon } from "@heroicons/react/24/solid";
 
 // const TaskInfo={
 //   task1:{
@@ -391,12 +391,93 @@ const TaskDetails = () => {
                       </div>
                     </div>
                   </Tab.Panel>
-                  <Tab.Panel className="p-3 overflow-y-auto">
-                    <ul typeof="disc" className="p-2.5 m-3 border-b-2 bg-gray-100 border-gray-400">
-                      <li>Subtask 1</li>
-                      <li>Subtask 2</li>
-                      <li>Subtask 3</li>
-                    </ul>
+                  <Tab.Panel className="p-3">
+                    <div className=" flex flex-col gap-2 p-2.5 m-3 border-b-2 bg-gray-100 border-gray-400">
+                      <Popover className="relative">
+                        <Popover.Button>{"Subtask 1"}</Popover.Button>
+                        <Transition
+                          enter="transition duration-100 ease-out"
+                          enterFrom="transform scale-95 opacity-0"
+                          enterTo="transform scale-100 opacity-100"
+                          leave="transition duration-75 ease-out"
+                          leaveFrom="transform scale-100 opacity-100"
+                          leaveTo="transform scale-95 opacity-0"
+                        ></Transition>
+                        <Popover.Panel className="absolute z-10 bg-white p-3 card shadow">
+                          <div className="cardTitle flex flex-col gap-3">
+                            <div className="flex">
+                              <p className="font-semibold">Task name: &nbsp;</p>
+                              <p> {" Task Name"}</p>
+                            </div>
+                            <div className="flex">
+                              <p className="font-semibold">Target Date: &nbsp;</p>
+                              <p> {" Target Date"} </p>
+                            </div>
+                            <div className="">
+                            <p className="font-semibold ">Description: </p>
+                            <p>{"Small Description about the task will be appeared here..."}</p>
+                            </div>
+                          </div>
+
+                        </Popover.Panel>
+                      </Popover>
+                      <Popover className="relative">
+                        <Popover.Button>{"Subtask 2"}</Popover.Button>
+                        <Transition
+                          enter="transition duration-100 ease-out"
+                          enterFrom="transform scale-95 opacity-0"
+                          enterTo="transform scale-100 opacity-100"
+                          leave="transition duration-75 ease-out"
+                          leaveFrom="transform scale-100 opacity-100"
+                          leaveTo="transform scale-95 opacity-0"
+                        ></Transition>
+                        <Popover.Panel className="absolute z-10 bg-white p-3 card shadow">
+                          <div className="cardTitle flex flex-col gap-3">
+                            <div className="flex">
+                              <p className="font-semibold">Task name: &nbsp;</p>
+                              <p> {" Task Name"}</p>
+                            </div>
+                            <div className="flex">
+                              <p className="font-semibold">Target Date: &nbsp;</p>
+                              <p> {" Target Date"} </p>
+                            </div>
+                            <div className="">
+                            <p className="font-semibold ">Description: </p>
+                            <p>{"Small Description about the task will be appeared here..."}</p>
+                            </div>
+                          </div>
+
+                        </Popover.Panel>
+                      </Popover>
+                      <Popover className="relative">
+                        <Popover.Button>{"Subtask 3  "}</Popover.Button>
+                        <Transition
+                          enter="transition duration-100 ease-out"
+                          enterFrom="transform scale-95 opacity-0"
+                          enterTo="transform scale-100 opacity-100"
+                          leave="transition duration-75 ease-out"
+                          leaveFrom="transform scale-100 opacity-100"
+                          leaveTo="transform scale-95 opacity-0"
+                        ></Transition>
+                        <Popover.Panel className="absolute z-10 bg-white p-3 card shadow">
+                          <div className="cardTitle flex flex-col gap-3">
+                            <div className="flex">
+                              <p className="font-semibold">Task name: &nbsp;</p>
+                              <p> {" Task Name"}</p>
+                            </div>
+                            <div className="flex">
+                              <p className="font-semibold">Target Date: &nbsp;</p>
+                              <p> {" Target Date"} </p>
+                            </div>
+                            <div className="">
+                            <p className="font-semibold ">Description: </p>
+                            <p>{"Small Description about the task will be appeared here..."}</p>
+                            </div>
+                          </div>
+
+                        </Popover.Panel>
+                      </Popover>
+                    </div>
                     <div className="addTask flex w-full h-full my-10 justify-center items-center">
                       <button
                         type="button"
@@ -465,20 +546,33 @@ const TaskDetails = () => {
                         <img src="/images/icons/pdf.png" alt="" />
                       </div>
                     </div>
-                    <div style={{ border: "dashed 1px gray" }} className="m-4  w-1/2 flex justify-center rounded-lg border-gray-900/25 px-6 py-10">
+                    <div
+                      style={{ border: "dashed 1px gray" }}
+                      className="m-4  w-1/2 flex justify-center rounded-lg border-gray-900/25 px-6 py-10"
+                    >
                       <div className="text-center ">
-                        <FolderArrowDownIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+                        <FolderArrowDownIcon
+                          className="mx-auto h-12 w-12 text-gray-300"
+                          aria-hidden="true"
+                        />
                         <div className="mt-4 flex text-sm leading-6 text-gray-600">
                           <label
                             htmlFor="file-upload"
                             className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                           >
                             <span>Upload a file</span>
-                            <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                            <input
+                              id="file-upload"
+                              name="file-upload"
+                              type="file"
+                              className="sr-only"
+                            />
                           </label>
                           <p className="pl-1">or drag and drop</p>
                         </div>
-                        <p className="text-xs leading-5 text-gray-600">Image, File, PDF up to 10MB</p>
+                        <p className="text-xs leading-5 text-gray-600">
+                          Image, File, PDF up to 10MB
+                        </p>
                       </div>
                     </div>
                   </Tab.Panel>
