@@ -4,7 +4,7 @@ import { Chart } from "react-google-charts";
 export const data = [
   [
     "Element",
-    "Density",
+    "No. of Tasks",
     { role: "style" },
     {
       sourceColumn: 0,

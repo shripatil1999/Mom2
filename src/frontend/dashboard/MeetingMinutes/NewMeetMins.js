@@ -2,13 +2,14 @@ import React from "react";
 import GlobalLayout from "../../utils/hoc/globalLayout";
 import Dropdown from "../../utils/elements/dropdown";
 import { useEffect, useState, Fragment } from "react";
-import moment from "moment";
 import SearchFilter from "../../utils/elements/SearchFilter";
 import "./NewMeetMins.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import { format } from 'date-fns';
+
 
 
 const Department = [
@@ -26,54 +27,61 @@ const Department = [
 
 
 const NewMeetMins = () => {
-  const [sessionStartTime] = useState(moment());
+
   const [selected, setSelected] = useState(Department[0])
-
-  const [activeSessionTime, setActiveSessionTime] = useState(
-    moment.duration(0)
-  );
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const currentTime = moment();
-      const duration = moment.duration(currentTime.diff(sessionStartTime));
-      setActiveSessionTime(duration);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [sessionStartTime]);
-
-  const formatTime = (value) => {
-    return value < 10 ? `0${value}` : value;
-  };
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
   useEffect(() => {
     // Update the current date and time every second
     const intervalId = setInterval(() => {
-      setCurrentDateTime(new Date());
+      setCurrentDateTime(format(new Date(), 'dd/MM/yyyy, hh:mm a'));
     }, 1000);
 
     // Clean up the interval when the component unmounts
     return () => clearInterval(intervalId);
   }, []); // Empty dependency array ensures the effect runs only once on mount
 
-  // Format the date and time
-  const options = {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+
+  // state to store time
+  const [time, setTime] = useState(0);
+
+  // state to check stopwatch running or not
+  const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => {
+    let intervalId;
+    if (isRunning) {
+      // setting time from 0 to 1 every 10 milisecond using javascript setInterval method
+      intervalId = setInterval(() => setTime(time + 1), 10);
+    }
+    return () => clearInterval(intervalId);
+  }, [isRunning, time]);
+
+  // Hours calculation
+  const hours = Math.floor(time / 360000);
+
+  // Minutes calculation
+  const minutes = Math.floor((time % 360000) / 6000);
+
+  // Seconds calculation
+  const seconds = Math.floor((time % 6000) / 100);
+
+  // Method to start and stop timer
+  const startAndStop = () => {
+    setIsRunning(!isRunning);
   };
-  const formattedDateTime = new Intl.DateTimeFormat("en-GB", options).format(
-    currentDateTime
-  );
+
+  // Method to reset timer back to 0
+  const reset = () => {
+    alert("This Meeting was "+ hours +" Hours " + minutes +" Minutes " + seconds +" Seconds long");
+    setTime(0);
+  };
+
 
   // New Line inputs for First Table
 
   const [rows, setRows] = useState([
-    { attendeeName: "", email: "", minutes: "" },
+    { attendeeName: "", email: "", Designation: "" },
   ]);
 
   const handleInputChange = (index, field, value) => {
@@ -87,7 +95,7 @@ const NewMeetMins = () => {
       if (index === rows.length - 1) {
         setRows((prevRows) => [
           ...prevRows,
-          { attendeeName: "", email: "", minutes: "" },
+          { attendeeName: "", email: "", Designation: "" },
         ]);
       }
     }
@@ -95,7 +103,7 @@ const NewMeetMins = () => {
   const handleAddRow = () => {
     setRows((prevRows) => [
       ...prevRows,
-      { attendeeName: "", email: "", minutes: "" },
+      { attendeeName: "", email: "", Designation: "" },
     ]);
   };
 
@@ -183,12 +191,22 @@ const NewMeetMins = () => {
             project2="Project Number 2"
             project3="Project Number 3"
           />
-          <p className="font-semibold">
-            Active Session Time: {formatTime(activeSessionTime.hours())}:
-            {formatTime(activeSessionTime.minutes())}:
-            {formatTime(activeSessionTime.seconds())}
-          </p>
+
+          <div className="stopwatch-container flex items-center font-semibold">
+            <p className="stopwatch-time">
+              Active session Time :
+              {hours}:{minutes.toString().padStart(2, "0")}:
+              {seconds.toString().padStart(2, "0")}
+            </p>
+            <div className="stopwatch-buttons mx-2">
+              <button className={`stopwatch-button px-2 py-1 rounded ${isRunning ? 'bg-red-700' : 'bg-green-700'
+                } text-white`} onClick={startAndStop}>
+                {isRunning ? "Stop" : "Start"}
+              </button>
+            </div>
+          </div>
           <SearchFilter />
+
         </div>
         <main className="MeetTable mt-3 border-gray-900 mr-6">
           <div className="TableTop flex flex-wrap justify-between font-semibold bg-slate-200 border  p-2 mt-4">
@@ -202,7 +220,7 @@ const NewMeetMins = () => {
                 id="MeetLocation"
               />
             </div>
-            <p className="font-bold mr-10">Date:{formattedDateTime}</p>
+            <p className="font-bold mr-10">Date: {currentDateTime.toLocaleString()}</p>
           </div>
           <table style={{ width: "100%" }}>
             <thead>
@@ -210,7 +228,7 @@ const NewMeetMins = () => {
                 <th width={"10%"}>Sl. No.</th>
                 <th>Attendee Name</th>
                 <th>Email-ID</th>
-                <th>Minutes</th>
+                <th>Designation</th>
               </tr>
             </thead>
             <tbody>
@@ -260,9 +278,9 @@ const NewMeetMins = () => {
           </table>
 
           {/* Second Table */}
-          <div className="p-2 bg-slate-200">
+          <div className="p-2 bg-slate-200 flex">
             <Listbox value={selected} onChange={setSelected}>
-              <div className="relative mt-1 w-1/5">
+              <div className="relative h-fit w-1/5">
                 <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
                   <span className="block truncate">{selected.name}</span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -309,19 +327,25 @@ const NewMeetMins = () => {
                 </Transition>
               </div>
             </Listbox>
+            <input
+              type="text"
+              placeholder="Chairing the Meeting"
+              className="w-full md:w-80 px-2 mx-4  rounded-lg border border-gray-100 shadow-md focus:outline-none focus:border-black"
+            />
+
           </div>
           <table style={{ width: "100%" }}>
             <thead>
               <tr className="border border-gray-900 bg-slate-200 ">
                 <th style={{ width: "10%", padding: "1%" }}>U. ID</th>
-                <th style={{ width: "15%", padding: "1%" }}>AGENDA</th>
+                <th style={{ width: "20%", padding: "1%" }}>AGENDA</th>
                 <th style={{ width: "27%", padding: "1%" }}>
                   DISCUSSION POINTS
                 </th>
                 <th style={{ width: "15%", padding: "1%" }}>ACTION BY</th>
                 <th style={{ width: "15%", padding: "1%" }}>SUPPORTER</th>
-                <th style={{ width: "9%", padding: "1%" }}>START DATE</th>
-                <th style={{ width: "9%", padding: "1%" }}>TARGET DATE</th>
+                <th style={{ width: "5%", padding: "1%" }}>START DATE</th>
+                <th style={{ width: "5%", padding: "1%" }}>TARGET DATE</th>
               </tr>
             </thead>
             <tbody>
@@ -448,13 +472,13 @@ const NewMeetMins = () => {
                       className="-z-1"
                       showIcon
                       selected={row.targetDate}
-                      // onSelect={(date) =>
-                      //   handleInputChangeTable2(index, "targetDate", date)
-                      // }
-                      // onKeyDown={(e) => handleKeyDownTable2(e, index)}
-                      // onChange={(date) =>
-                      //   handleInputChangeTable2(index, "targetDate", date)
-                      // }
+                    // onSelect={(date) =>
+                    //   handleInputChangeTable2(index, "targetDate", date)
+                    // }
+                    // onKeyDown={(e) => handleKeyDownTable2(e, index)}
+                    // onChange={(date) =>
+                    //   handleInputChangeTable2(index, "targetDate", date)
+                    // }
                     />
                     {/* <div className="flex w-full"> */}
                     <button
@@ -471,6 +495,10 @@ const NewMeetMins = () => {
               ))}
             </tbody>
           </table>
+          <div className="save-meet flex justify-end">
+            <button onClick={reset} className="mt-3 rounded bg-[#252c48] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#252c48ce]">Save Meeting</button>
+
+          </div>
         </main>
       </div>
     </GlobalLayout>

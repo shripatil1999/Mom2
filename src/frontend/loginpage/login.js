@@ -28,6 +28,7 @@ function Login() {
 
                     </div>
                     <div className="m-10 text-2xl text-center font-semibold text-gray-900  relative sm:relative md:absolute lg:absolute xl:absolute top-0 right-0">
+                        <img className='w-14 mx-auto' src="/ipumpnet.png" alt="" />
                         <p className='logo drop-shadow'>Minutes of Meeting</p>
 
                     </div>
@@ -62,12 +63,17 @@ function Login() {
                                         ..............................<br />
                                         ..............................<br />
                                         ..............................</Modal.Body>
+                                        <div className="flex items-center h-5 p-3">
+                                            <input id="Agree" aria-describedby="remember" type="checkbox" className="w-4 h-4 border mr-2 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 " required="" />
+                                        
+                                            <label htmlFor="Agree" className="text-black">I Agree</label>
+                                        </div>
                                     <Modal.Footer>
                                         <Button style={{ color: 'white', background: 'red' }} variant="danger" onClick={handleClose}>
                                             Close
                                         </Button>
                                         <Button style={{ color: 'white' }} className='bg-sky-500' variant="primary" onClick={handleClose}>
-                                            Ok
+                                            OK
                                         </Button>
                                     </Modal.Footer>
                                 </Modal>
@@ -102,7 +108,7 @@ function Login() {
                     <footer className='flex flex-row text-white items-center relative bottom-0 cursor-pointer'>
                         <p onClick={showDialog} className=' text-sm hover:underline hover:text-sky-600'>Disclaimer Policy </p> <p>&nbsp;|&nbsp;</p>
 
-                        <dialog id="myDialog"  className='p-5'>
+                        <dialog id="myDialog" className='p-5'>
                             <p className='font-bold text-2xl'>Disclaimer Policy</p>
                             <ul className='mb-3 leading-8'>
                                 <li className='mt-3'>1. The "Minutes of Meetings" application is a tool designed solely for recording and organizing meeting minutes.</li>

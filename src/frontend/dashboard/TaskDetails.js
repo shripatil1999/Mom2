@@ -23,12 +23,34 @@ function classNames(...classes) {
 const TaskDetails = () => {
   const [startDate, setStartDate] = useState(new Date("2024/02/01"));
   const [endDate, setEndDate] = useState(new Date("2024/02/02"));
-  const [Comment, setComment] = useState("");
+  // State to manage the list of comments and the current comment input
+  const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState('');
 
-  const clearComment = () => {
-    setComment(""); // Set the Comment state to an empty string
-    console.log(Comment); // This will still log the previous state, setState is asynchronous
+  // Function to add a new comment to the list
+  const addComment = () => {
+    // Check if the comment is not empty
+    if (comment.trim() !== '') {
+      // Update the comments state with the new comment
+      setComments((prevComments) => [
+        ...prevComments,
+        { text: comment, timestamp: new Date().toLocaleString() },
+      ]);
+
+      // Clear the current comment input
+      setComment('');
+    }
   };
+
+  // Function to clear the current comment input
+  const clearComment = () => {
+    setComment('');
+  };
+
+
+
+
+
   return (
     <GlobalLayout>
       <div className="flex border-transparent rounded shadow-lg p-3">
@@ -56,6 +78,20 @@ const TaskDetails = () => {
               >
                 <Menu.Items className="absolute left-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
+                  <Menu.Item>
+                      {({ active }) => (
+                        <p
+                          className={classNames(
+                            active
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700",
+                            "block px-4 py-2 text-sm"
+                          )}
+                        >
+                         All
+                        </p>
+                      )}
+                    </Menu.Item>
                     <Menu.Item>
                       {({ active }) => (
                         <p
@@ -184,26 +220,7 @@ const TaskDetails = () => {
                   <option value="">High</option>
                 </select>
 
-                <p className="ml-auto">Completion Percentage: </p>
-                <select
-                  id="priority"
-                  name="priority"
-                  className="w-fit focus:outline-none bg-white focus:border-black text-black rounded p-2 md:px-3 py-0 md:py-1 tracking-wider mr-auto"
-                >
-                  <option value="All" defaultValue="0">
-                    0 %
-                  </option>
-                  <option value="">10 %</option>
-                  <option value="">20 %</option>
-                  <option value="">30 %</option>
-                  <option value="">40 %</option>
-                  <option value="">50 %</option>
-                  <option value="">60 %</option>
-                  <option value="">70 %</option>
-                  <option value="">80 %</option>
-                  <option value="">90 %</option>
-                  <option value="">100 %</option>
-                </select>
+              
               </div>
 
               <div className="flex items-center gap-3">
@@ -307,94 +324,69 @@ const TaskDetails = () => {
                 </Tab.List>
                 <Tab.Panels className="border shadow m-1 ">
                   <Tab.Panel className="p-3 overflow-y-auto">
-                    <div className="flex-1 px-4 py-2 overflow-y-auto">
-                      {/* <!-- chat message --> */}
-
-                      <div className="flex items-center ">
-                        <div className="flex-none flex flex-col items-center space-y-1 mr-4">
-                          <img
-                            className="rounded-full w-10 h-10"
-                            src="/images/icons/user.png"
-                            alt="user"
-                          />
-                          <a href=" " className="block text-xs hover:underline">
-                            Username
-                          </a>
+               
+                      {/* Display existing chat messages */}
+                      {comments.map((c, index) => (
+                        <div key={index} className="flex items-center">
+                          {/* Display user info */}
+                          <div className="flex-none flex flex-col items-center space-y-1 mr-4">
+                            <img
+                              className="rounded-full w-10 h-10"
+                              src="/images/icons/user.png"
+                              alt="user"
+                            />
+                            <a href=" " className="block text-xs hover:underline">
+                              Username
+                            </a>
+                          </div>
+                          {/* Display chat message */}
+                          <div className="flex-1 w-3/4 bg-indigo-400 text-white p-2 rounded-lg mb-2 relative">
+                            <p className="text-base">{c.text}</p>
+                            <p className="text-sm text-end">{c.timestamp}</p>
+                          </div>
                         </div>
-                        <div className="flex-1 w-3/4 bg-gray-200 text-black p-2 rounded-lg mb-2 relative">
-                          <p className="text-base">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit.
-                          </p>
-                          <p className="text-sm text-end">
-                            01/01/2024, 06.60 PM
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                      ))}
 
-                    <div className="flex-1 px-4 py-4 overflow-y-auto">
-                      {/* <!-- chat message --> */}
+                      {/* Textarea for typing new comments */}
+                      <div className="p-4 pb-0">
+                        <div className="overflow-hidden">
+                          <textarea
+                            id="OrderNotes"
+                            className="w-full resize-none border-x-0 border-t-0 border-gray-200 bg-gray-100 p-2 align-top sm:text-sm"
+                            rows="6"
+                            placeholder="Type Comments here..........👇🏻👇🏻"
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                          ></textarea>
 
-                      <div className="flex items-center ">
-                        <div className="flex-none flex flex-col items-center space-y-1 mr-4">
-                          <img
-                            className="rounded-full w-10 h-10"
-                            src="/images/icons/user.png"
-                            alt="user"
-                          />
-                          <a href=" " className="block text-xs hover:underline">
-                            Username
-                          </a>
-                        </div>
-                        <div className="flex-1 w-3/4 bg-indigo-400 text-white p-2 rounded-lg mb-2 relative">
-                          <p className="text-base">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit.
-                          </p>
-                          <p className="text-sm text-end">
-                            01/01/2024, 06.60 PM
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="p-4 pb-0">
-                      <div className="overflow-hidden">
-                        <textarea
-                          id="OrderNotes"
-                          className="w-full resize-none border-x-0 border-t-0 border-gray-200 bg-gray-100 p-2 align-top sm:text-sm"
-                          rows="6"
-                          placeholder="Type Comments here..........👇🏻👇🏻"
-                          value={Comment}
-                          onChange={(e) => {
-                            setComment(e.target.value);
-                          }}
-                        ></textarea>
-
-                        <div className="flex items-center justify-end gap-2 py-3 border-t-2 border-gray-400">
+                          {/* Buttons for clearing and adding comments */}
+                          <div className="flex items-center justify-end gap-2 py-3 border-t-2 border-gray-400">
                           <Attachment />
-                          <button
-                            type="button"
-                            className="rounded bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-600"
-                            onClick={clearComment}
-                          >
-                            Clear Comment
-                          </button>
+                            <button
+                              type="button"
+                              className="rounded bg-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-600"
+                              onClick={clearComment}
+                            >
+                              Clear Comment
+                            </button>
 
-                          <button
-                            type="button"
-                            className="rounded bg-[#252c48] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#252c48ce]"
-                          >
-                            Add Comment
-                          </button>
+                            <button
+                              type="button"
+                              className="rounded bg-[#252c48] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#252c48ce]"
+                              onClick={addComment}
+                            >
+                              Add Comment
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
+    
+
                   </Tab.Panel>
                   <Tab.Panel className="p-3">
                     <div className=" flex flex-col gap-2 p-2.5 m-3 border-b-2 bg-gray-100 border-gray-400">
                       <Popover className="relative">
-                        <Popover.Button>{"Subtask 1"}</Popover.Button>
+                        <Popover.Button className="bg-white p-1.5 shadow-sm">{"Subtask 1"}</Popover.Button>
                         <Transition
                           enter="transition duration-100 ease-out"
                           enterFrom="transform scale-95 opacity-0"
@@ -414,15 +406,15 @@ const TaskDetails = () => {
                               <p> {" Target Date"} </p>
                             </div>
                             <div className="">
-                            <p className="font-semibold ">Description: </p>
-                            <p>{"Small Description about the task will be appeared here..."}</p>
+                              <p className="font-semibold ">Description: </p>
+                              <p>{"Small Description about the task will be appeared here..."}</p>
                             </div>
                           </div>
 
                         </Popover.Panel>
                       </Popover>
                       <Popover className="relative">
-                        <Popover.Button>{"Subtask 2"}</Popover.Button>
+                        <Popover.Button className="bg-white p-1.5 shadow-sm">{"Subtask 2"}</Popover.Button>
                         <Transition
                           enter="transition duration-100 ease-out"
                           enterFrom="transform scale-95 opacity-0"
@@ -442,15 +434,15 @@ const TaskDetails = () => {
                               <p> {" Target Date"} </p>
                             </div>
                             <div className="">
-                            <p className="font-semibold ">Description: </p>
-                            <p>{"Small Description about the task will be appeared here..."}</p>
+                              <p className="font-semibold ">Description: </p>
+                              <p>{"Small Description about the task will be appeared here..."}</p>
                             </div>
                           </div>
 
                         </Popover.Panel>
                       </Popover>
                       <Popover className="relative">
-                        <Popover.Button>{"Subtask 3  "}</Popover.Button>
+                        <Popover.Button className="bg-white p-1.5 shadow-sm" >{"Subtask 3  "}</Popover.Button>
                         <Transition
                           enter="transition duration-100 ease-out"
                           enterFrom="transform scale-95 opacity-0"
@@ -470,8 +462,8 @@ const TaskDetails = () => {
                               <p> {" Target Date"} </p>
                             </div>
                             <div className="">
-                            <p className="font-semibold ">Description: </p>
-                            <p>{"Small Description about the task will be appeared here..."}</p>
+                              <p className="font-semibold ">Description: </p>
+                              <p>{"Small Description about the task will be appeared here..."}</p>
                             </div>
                           </div>
 

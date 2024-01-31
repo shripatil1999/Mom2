@@ -15,7 +15,7 @@ const SearchFilter = () => {
                         <input
                             type="text"
                             placeholder="Type here to Search"
-                            className="w-full md:w-80 px-3 h-10 rounded-l border border-black focus:outline-none focus:border-black"
+                            className="w-full md:w-72 px-3 h-10 rounded-l border border-black focus:outline-none focus:border-black"
                         />
                         <button
                             type="submit"
