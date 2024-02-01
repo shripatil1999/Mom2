@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import GlobalLayout from "../../utils/hoc/globalLayout";
@@ -8,41 +8,35 @@ const MeetHistory = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedMeeting, setSelectedMeeting] = useState(null);
 
-  const handleTabClick = (selectedDate) => {
-    // Find the corresponding date object in tasksData
-    const dateObject = tasksData.dates.find((date) => {
-      const formattedDate = new Date(date.date).toISOString().split("T")[0];
-      return formattedDate === selectedDate.toISOString().split("T")[0];
-    });
-
-    if (dateObject && dateObject.meetings && dateObject.meetings.length > 0) {
-      // Set selectedMeeting to the first meeting of the selected date
-      const firstMeeting = dateObject.meetings[0];
-      // console.log("First Meeting:", firstMeeting);
-      setSelectedMeeting(firstMeeting);
-    } else {
-      // If there are no meetings, set selectedMeeting to null or handle it accordingly
-      setSelectedMeeting(null);
-    }
+  const handleTabClick = (date) => {
+    setSelectedDate(date);
+    updateSelectedMeeting(date);
   };
+
   const handleTodayClick = () => {
     setSelectedDate(new Date());
-    // Find the corresponding date object in tasksData
-    const dateObject = tasksData.dates.find((date) => {
-      const formattedDate = new Date(date.date).toISOString().split("T")[0];
-      return formattedDate === selectedDate.toISOString().split("T")[0];
+    updateSelectedMeeting(new Date());
+  };
+
+  const updateSelectedMeeting = (date) => {
+    const dateObject = tasksData.dates.find((d) => {
+      const formattedDate = new Date(d.date).toISOString().split("T")[0];
+      return formattedDate === date.toISOString().split("T")[0];
     });
 
     if (dateObject && dateObject.meetings && dateObject.meetings.length > 0) {
-      // Set selectedMeeting to the first meeting of the selected date
       const firstMeeting = dateObject.meetings[0];
-      // console.log("First Meeting:", firstMeeting);
       setSelectedMeeting(firstMeeting);
     } else {
-      // If there are no meetings, set selectedMeeting to null or handle it accordingly
       setSelectedMeeting(null);
     }
   };
+
+  useEffect(() => {
+    // Load details of the first meeting when the component mounts
+    updateSelectedMeeting(selectedDate);
+  }, [selectedDate]); // Empty dependency array ensures it runs only once on mount
+
 
   return (
     <GlobalLayout>
