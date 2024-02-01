@@ -67,6 +67,7 @@
           {
             "meetID": "2024020102",
             "name": "Requirements Gathering",
+            "chairing": ["Mr.XYZ", "Mr.ABC"],
             "attendees": ["John Doe", "Jane Doe"],
             "location": "Conference Room A",
             "tasks": [
@@ -133,6 +134,7 @@
           {
             "meetID": "2024020201",
             "name": "Team Collaboration",
+            "chairing": ["Mr.XYZ", "Mr.ABC"],
             "attendees": ["Alice Smith", "Bob Johnson"],
             "location": "Conference Room B",
             "tasks": [
@@ -199,6 +201,7 @@
           {
             "meetID": "2024020301",
             "name": "Client Presentation",
+            "chairing": ["Mr.XYZ", "Mr.ABC"],
             "attendees": ["Eva Davis", "Charlie Brown"],
             "location": "Conference Room C",
             "tasks": [
