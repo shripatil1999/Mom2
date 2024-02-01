@@ -6,6 +6,7 @@
           {
             "meetID": "2024020101",
             "name": "Project Review",
+            "chairing": ["Mr.XYZ", "Mr.ABC"],
             "attendees": ["John Doe", "Jane Doe"],
             "location": "Conference Room A",
             "tasks": [
