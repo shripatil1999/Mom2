@@ -180,7 +180,7 @@ const Profile = () => {
                                     >
                                         About
                                     </Tab>
-                                    <Tab
+                                    {/* <Tab
                                         className={({ selected }) =>
                                             classNames(
                                                 "w-full rounded-lg py-2.5 text-sm font-medium leading-5",
@@ -192,8 +192,8 @@ const Profile = () => {
                                         }
                                     >
                                         Projects
-                                    </Tab>
-                                    <Tab
+                                    </Tab> */}
+                                    {/* <Tab
                                         className={({ selected }) =>
                                             classNames(
                                                 "w-full rounded-lg py-2.5 text-sm font-medium leading-5",
@@ -205,7 +205,7 @@ const Profile = () => {
                                         }
                                     >
                                         Performance
-                                    </Tab>
+                                    </Tab> */}
                                     <Tab
                                         className={({ selected }) =>
                                             classNames(
@@ -222,7 +222,7 @@ const Profile = () => {
                                 </Tab.List>
                                 <Tab.Panels className="mt-3">
                                     <Tab.Panel className="card shadow p-3">Content 1</Tab.Panel>
-                                    <Tab.Panel className="card shadow p-3">
+                                    {/* <Tab.Panel className="card shadow p-3">
                                         <div className="parent rounded w-fit">
                                             <div className="child p-3">
                                                 <span>
@@ -230,9 +230,9 @@ const Profile = () => {
                                                 </span>
                                             </div>
                                         </div>
-                                    </Tab.Panel>
+                                    </Tab.Panel> */}
 
-                                    <Tab.Panel className="card shadow p-3">Content 3</Tab.Panel>
+                                    {/* <Tab.Panel className="card shadow p-3">Content 3</Tab.Panel> */}
                                     <Tab.Panel className="card shadow p-3">
                                         <form className="w-full px-4" action="">
                                             <label

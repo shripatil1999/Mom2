@@ -1,267 +1,144 @@
 {
-    "dates": [
-      {
-        "date": "2024-02-01",
-        "meetings": [
-          {
-            "meetID": "2024020101",
-            "name": "Project Review",
-            "chairing": ["Mr.XYZ", "Mr.ABC"],
-            "attendees": ["John Doe", "Jane Doe"],
-            "location": "Conference Room A",
-            "tasks": [
-              {
-                "uid": "task1",
-                "agenda": "Discuss Project A",
-                "actionBy": "John Doe",
-                "startDate": "2024-02-01T09:30:00",
-                "targetDate": "2024-02-01T12:00:00",
-                "description": "Evaluate progress and define next steps",
-                "subtasks": [
-                  {
-                    "uid": "subtask1",
-                    "agenda": "Create presentation",
-                    "actionBy": "Jane Doe",
-                    "startDate": "2024-02-01T08:30:00",
-                    "targetDate": "2024-02-01T10:00:00",
-                    "description": "Prepare slides and gather relevant data"
-                  },
-                  {
-                    "uid": "subtask2",
-                    "agenda": "Prepare meeting materials",
-                    "actionBy": "Jane Doe",
-                    "startDate": "2024-02-01T10:30:00",
-                    "targetDate": "2024-02-01T11:30:00",
-                    "description": "Organize documents and materials"
-                  }
-                ]
-              },
-              {
-                "uid": "task2",
-                "agenda": "Discuss Project B",
-                "actionBy": "John Doe",
-                "startDate": "2024-02-01T13:00:00",
-                "targetDate": "2024-02-01T15:30:00",
-                "description": "Review milestones and set objectives",
-                "subtasks": [
-                  {
-                    "uid": "subtask3",
-                    "agenda": "Prepare presentation",
-                    "actionBy": "Jane Doe",
-                    "startDate": "2024-02-01T12:30:00",
-                    "targetDate": "2024-02-01T14:00:00",
-                    "description": "Create slides and gather relevant data"
-                  },
-                  {
-                    "uid": "subtask4",
-                    "agenda": "Coordinate meeting logistics",
-                    "actionBy": "Jane Doe",
-                    "startDate": "2024-02-01T14:30:00",
-                    "targetDate": "2024-02-01T15:00:00",
-                    "description": "Ensure all meeting logistics are in place"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "meetID": "2024020102",
-            "name": "Requirements Gathering",
-            "chairing": ["Mr.XYZ", "Mr.ABC"],
-            "attendees": ["John Doe", "Jane Doe"],
-            "location": "Conference Room A",
-            "tasks": [
-              {
-                "uid": "task1",
-                "agenda": "Discuss Project A",
-                "actionBy": "John Doe",
-                "startDate": "2024-02-01T09:30:00",
-                "targetDate": "2024-02-01T12:00:00",
-                "description": "Evaluate progress and define next steps",
-                "subtasks": [
-                  {
-                    "uid": "subtask1",
-                    "agenda": "Create presentation",
-                    "actionBy": "Jane Doe",
-                    "startDate": "2024-02-01T08:30:00",
-                    "targetDate": "2024-02-01T10:00:00",
-                    "description": "Prepare slides and gather relevant data"
-                  },
-                  {
-                    "uid": "subtask2",
-                    "agenda": "Prepare meeting materials",
-                    "actionBy": "Jane Doe",
-                    "startDate": "2024-02-01T10:30:00",
-                    "targetDate": "2024-02-01T11:30:00",
-                    "description": "Organize documents and materials"
-                  }
-                ]
-              },
-              {
-                "uid": "task2",
-                "agenda": "Discuss Project B",
-                "actionBy": "John Doe",
-                "startDate": "2024-02-01T13:00:00",
-                "targetDate": "2024-02-01T15:30:00",
-                "description": "Review milestones and set objectives",
-                "subtasks": [
-                  {
-                    "uid": "subtask3",
-                    "agenda": "Prepare presentation",
-                    "actionBy": "Jane Doe",
-                    "startDate": "2024-02-01T12:30:00",
-                    "targetDate": "2024-02-01T14:00:00",
-                    "description": "Create slides and gather relevant data"
-                  },
-                  {
-                    "uid": "subtask4",
-                    "agenda": "Coordinate meeting logistics",
-                    "actionBy": "Jane Doe",
-                    "startDate": "2024-02-01T14:30:00",
-                    "targetDate": "2024-02-01T15:00:00",
-                    "description": "Ensure all meeting logistics are in place"
-                  }
-                ]
-              }
-            ]
-          }
-
-        ]
-      },
-      {
-        "date": "2024-02-02",
-        "meetings": [
-          {
-            "meetID": "2024020201",
-            "name": "Team Collaboration",
-            "chairing": ["Mr.XYZ", "Mr.ABC"],
-            "attendees": ["Alice Smith", "Bob Johnson"],
-            "location": "Conference Room B",
-            "tasks": [
-              {
-                "uid": "task3",
-                "agenda": "Brainstorming Session",
-                "actionBy": "Alice Smith",
-                "startDate": "2024-02-02T10:00:00",
-                "targetDate": "2024-02-02T12:30:00",
-                "description": "Generate creative ideas and solutions",
-                "subtasks": [
-                  {
-                    "uid": "subtask5",
-                    "agenda": "Prepare brainstorming materials",
-                    "actionBy": "Bob Johnson",
-                    "startDate": "2024-02-02T09:30:00",
-                    "targetDate": "2024-02-02T10:00:00",
-                    "description": "Gather necessary materials for the session"
-                  },
-                  {
-                    "uid": "subtask6",
-                    "agenda": "Facilitate discussion",
-                    "actionBy": "Alice Smith",
-                    "startDate": "2024-02-02T10:30:00",
-                    "targetDate": "2024-02-02T12:00:00",
-                    "description": "Guide the team through the brainstorming process"
-                  }
-                ]
-              },
-              {
-                "uid": "task4",
-                "agenda": "Project Planning",
-                "actionBy": "Bob Johnson",
-                "startDate": "2024-02-02T13:00:00",
-                "targetDate": "2024-02-02T15:30:00",
-                "description": "Define project goals and timelines",
-                "subtasks": [
-                  {
-                    "uid": "subtask7",
-                    "agenda": "Prepare project timeline",
-                    "actionBy": "Alice Smith",
-                    "startDate": "2024-02-02T12:30:00",
-                    "targetDate": "2024-02-02T14:00:00",
-                    "description": "Outline project milestones and deadlines"
-                  },
-                  {
-                    "uid": "subtask8",
-                    "agenda": "Coordinate with team members",
-                    "actionBy": "Bob Johnson",
-                    "startDate": "2024-02-02T14:30:00",
-                    "targetDate": "2024-02-02T15:00:00",
-                    "description": "Communicate project plan to team members"
-                  }
-                ]
-              }
-            ]
-          }
-      
-        ]
-      },
-      {
-        "date": "2024-02-03",
-        "meetings": [
-          {
-            "meetID": "2024020301",
-            "name": "Client Presentation",
-            "chairing": ["Mr.XYZ", "Mr.ABC"],
-            "attendees": ["Eva Davis", "Charlie Brown"],
-            "location": "Conference Room C",
-            "tasks": [
-              {
-                "uid": "task5",
-                "agenda": "Review Project C",
-                "actionBy": "Eva Davis",
-                "startDate": "2024-02-03T09:00:00",
-                "targetDate": "2024-02-03T11:30:00",
-                "description": "Present project updates and gather feedback",
-                "subtasks": [
-                  {
-                    "uid": "subtask9",
-                    "agenda": "Finalize presentation slides",
-                    "actionBy": "Charlie Brown",
-                    "startDate": "2024-02-03T08:30:00",
-                    "targetDate": "2024-02-03T10:00:00",
-                    "description": "Polish and refine the presentation materials"
-                  },
-                  {
-                    "uid": "subtask10",
-                    "agenda": "Coordinate meeting logistics",
-                    "actionBy": "Charlie Brown",
-                    "startDate": "2024-02-03T10:30:00",
-                    "targetDate": "2024-02-03T11:00:00",
-                    "description": "Ensure all necessary arrangements for the presentation"
-                  }
-                ]
-              },
-              {
-                "uid": "task6",
-                "agenda": "Discuss Project D",
-                "actionBy": "Eva Davis",
-                "startDate": "2024-02-03T13:00:00",
-                "targetDate": "2024-02-03T15:30:00",
-                "description": "Address client queries and plan future steps",
-                "subtasks": [
-                  {
-                    "uid": "subtask11",
-                    "agenda": "Prepare project documentation",
-                    "actionBy": "Charlie Brown",
-                    "startDate": "2024-02-03T12:30:00",
-                    "targetDate": "2024-02-03T14:00:00",
-                    "description": "Compile and organize project documentation"
-                  },
-                  {
-                    "uid": "subtask12",
-                    "agenda": "Coordinate with team members",
-                    "actionBy": "Charlie Brown",
-                    "startDate": "2024-02-03T14:30:00",
-                    "targetDate": "2024-02-03T15:00:00",
-                    "description": "Communicate project updates to the team"
-                  }
-                ]
-              }
-            ]
-          }
-   
-        ]
-      }
-    ]
+  "dates": [
+    {
+      "date": "2024-02-02",
+      "meetings": [
+        {
+          "meetID": "2024020101",
+          "name": "Project Review",
+          "chairing": ["Mr.XYZ", "Mr.ABC"],
+          "attendees": [
+            "Alice Smith",
+            "Bob Johnson",
+            "Eva Martinez",
+            "Chris Brown",
+            "Lily Chen",
+            "David Miller",
+            "Sophia Rodriguez",
+            "Michael Lee"
+          ],
+          "location": "Conference Room A",
+          "tasks": [
+            {
+              "uid": "T-FEB-01",
+              "agenda": "Discuss Project A",
+              "actionBy": ["Mr.XYZ", "Mr.ABC"],
+              "supporter": ["Mr.XYZ", "Mr.ABC"],
+              "startDate": "2024-02-01 09:30 PM",
+              "targetDate": "2024-02-02 12:00 PM",
+              "description": "Evaluate progress and define next steps",
+              "subtasks": ["Subtask 1", "Subtask 2", "Subtask 3"]
+            },
+            {
+              "uid": "T-FEB-02",
+              "agenda": "Discuss Project B",
+              "actionBy": ["Mr.XYZ", "Mr.ABC"],
+              "supporter": ["Mr.XYZ", "Mr.ABC"],
+              "startDate": "2024-02-01 13:00 PM",
+              "targetDate": "2024-02-02 15:30 PM",
+              "description": "Review milestones and set objectives",
+              "subtasks": ["Subtask 1", "Subtask 2", "Subtask 3"]
+            }
+          ]
+        },
+        {
+          "meetID": "2024020102",
+          "name": "Requirements Gathering",
+          "chairing": ["Mr.XYZ", "Mr.ABC"],
+          "attendees": ["John Doe", "Jane Doe"],
+          "location": "Conference Room A",
+          "tasks": [
+            {
+              "uid": "T-FEB-03",
+              "agenda": "Discuss Project A",
+              "actionBy": ["Mr.XYZ", "Mr.ABC"],
+              "supporter": ["Mr.XYZ", "Mr.ABC"],
+              "startDate": "2024-02-01T09:30:00",
+              "targetDate": "2024-02-01T12:00:00",
+              "description": "Evaluate progress and define next steps",
+              "subtasks": ["Subtask 1", "Subtask 2", "Subtask 3"]
+            },
+            {
+              "uid": "T-FEB-04",
+              "agenda": "Discuss Project B",
+              "actionBy": ["Mr.XYZ", "Mr.ABC"],
+              "supporter": ["Mr.XYZ", "Mr.ABC"],
+              "startDate": "2024-02-01T13:00:00",
+              "targetDate": "2024-02-01T15:30:00",
+              "description": "Review milestones and set objectives",
+              "subtasks": ["Subtask 1", "Subtask 2", "Subtask 3"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2024-02-01",
+      "meetings": [
+        {
+          "meetID": "2024020201",
+          "name": "Team Collaboration",
+          "chairing": ["Mr.XYZ", "Mr.ABC"],
+          "attendees": ["Alice Smith", "Bob Johnson"],
+          "location": "Conference Room B",
+          "tasks": [
+            {
+              "uid": "task3",
+              "agenda": "Brainstorming Session",
+              "actionBy": ["Mr.XYZ", "Mr.ABC"],
+              "supporter": ["Mr.XYZ", "Mr.ABC"],
+              "startDate": "2024-02-02T10:00:00",
+              "targetDate": "2024-02-02T12:30:00",
+              "description": "Generate creative ideas and solutions",
+              "subtasks": ["Subtask 1", "Subtask 2", "Subtask 3"]
+            },
+            {
+              "uid": "task4",
+              "agenda": "Project Planning",
+              "actionBy": ["Mr.XYZ", "Mr.ABC"],
+              "supporter": ["Mr.XYZ", "Mr.ABC"],
+              "startDate": "2024-02-02T13:00:00",
+              "targetDate": "2024-02-02T15:30:00",
+              "description": "Define project goals and timelines",
+              "subtasks": ["Subtask 1", "Subtask 2", "Subtask 3"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2024-02-03",
+      "meetings": [
+        {
+          "meetID": "2024020301",
+          "name": "Client Presentation",
+          "chairing": ["Mr.XYZ", "Mr.ABC"],
+          "attendees": ["Eva Davis", "Charlie Brown"],
+          "location": "Conference Room C",
+          "tasks": [
+            {
+              "uid": "task5",
+              "agenda": "Review Project C",
+              "actionBy": ["Mr.XYZ", "Mr.ABC"],
+              "supporter": ["Mr.XYZ", "Mr.ABC"],
+              "startDate": "2024-02-03T09:00:00",
+              "targetDate": "2024-02-03T11:30:00",
+              "description": "Present project updates and gather feedback",
+              "subtasks": ["Subtask 1", "Subtask 2", "Subtask 3"]
+            },
+            {
+              "uid": "task6",
+              "agenda": "Discuss Project D",
+              "actionBy": ["Mr.XYZ", "Mr.ABC"],
+              "supporter": ["Mr.XYZ", "Mr.ABC"],
+              "startDate": "2024-02-03T13:00:00",
+              "targetDate": "2024-02-03T15:30:00",
+              "description": "Address client queries and plan future steps",
+              "subtasks": ["Subtask 1", "Subtask 2", "Subtask 3"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
-  
