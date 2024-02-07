@@ -1,9 +1,9 @@
 // NewProfile.js
 import React, { useState } from 'react';
-// import { db } from '../../firebase';
+import { db } from '../../firebase';
 import GlobalLayout from "../utils/hoc/globalLayout";
 import "./profile.css";
-import { db } from './firebase';
+// import { db } from './firebase';
 
 const NewProfile = ({ user }) => {
   const [employeeID, setEmployeeID] = useState('');
