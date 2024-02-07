@@ -1,21 +1,27 @@
-import React from 'react'
-import Header from '../../header/Header'
-import Navbar from '../../navbar/Navbar'
+import React from 'react';
+import Header from '../../header/Header';
+import Navbar from '../../navbar/Navbar';
 
-const GlobalLayout = ({children}) => {
+const GlobalLayout = ({ children }) => {
   return (
-    <div className=''>
-      <Header/>
-      <div className="grid grid-cols-5">
-        <div className="col-span-0 z-100">
-            <Navbar/>
-        </div>
-        <div className="col-span-4 mt-32">
-            {children}
-        </div>
-      </div>
-    </div>
-  )
-}
+    <div className="flex flex-col min-h-screen">
+      <Header />
 
-export default GlobalLayout
+      <main className="flex flex-grow gap-8 mt-10">
+        {/* Adjust these classes for the layout you need */}
+        <nav className="overflow-hidden w-64 flex-shrink-0 z-100">
+          <Navbar />
+        </nav>
+
+        <div className="flex-grow overflow-hidden mt-24">
+          {children}
+        </div>
+      </main>
+
+      {/* Footer if needed */}
+      {/* <Footer /> */}
+    </div>
+  );
+};
+
+export default GlobalLayout;

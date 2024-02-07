@@ -4,6 +4,7 @@ import UserCard from "../utils/elements/UserCard";
 import { Dialog, Transition } from "@headlessui/react";
 import { format } from 'date-fns';
 import { Link } from "react-router-dom";
+import { auth } from "../../firebase";
 
 
 
@@ -12,6 +13,8 @@ export default function Header() {
   let NotificationNumber = "3";
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   let [isOpen, setIsOpen] = useState(false);
+  const user = auth.currentUser;
+
 
   function closeModal() {
     setIsOpen(false);
@@ -255,7 +258,7 @@ export default function Header() {
           <div className="group flex flex-col items-center py-2 pr-2">
             <img className="w-14" src="/images/icons/user.png" alt="" />
             <div className="user-name  bg-slate-200 text-black rounded-sm px-4 m-1">
-              <p className="font-bold text-base">{"User Name"}</p>
+              <p className="font-bold text-base">{user.email}</p>
             </div>
             <div className="hidden group-hover:block absolute z-50 top-14 right-14 transition transform translate-y-8 ease-in-out">
               <UserCard />
