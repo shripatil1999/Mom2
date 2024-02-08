@@ -206,7 +206,7 @@ const Navbar = () => {
         >
           <i className="bi bi-gear-fill"></i>
           <span className="text-[15px] ml-4 text-gray-200 font-bold">
-            Settings
+            New Profile
           </span>
         </Link>
 

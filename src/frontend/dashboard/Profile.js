@@ -1,17 +1,78 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import GlobalLayout from "../utils/hoc/globalLayout";
 import { Tab } from "@headlessui/react";
 import "./profile.css";
+import { app, auth } from '../../firebase';
+import { getFirestore, doc, updateDoc, getDoc } from 'firebase/firestore';
+
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
 const Profile = () => {
+    const [name, setName] = useState('');
+    const [about, setAbout] = useState('');
+    const [phone, setPhone] = useState('');
+    const [employeeID, setEmployeeID] = useState('');
+    const [email, setEmail] = useState('');
+    const [department, setDepartment] = useState('');  
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const user = auth.currentUser;
+
     var loadFile = (event) => {
         var image = document.getElementById("output");
         image.src = URL.createObjectURL(event.target.files[0]);
     };
+
+    // Fetch user data when component mounts
+   
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const db = getFirestore(app);
+        const userDocRef = doc(db, 'Users', user.uid);
+        const userDocSnapshot = await getDoc(userDocRef);
+
+        if (userDocSnapshot.exists()) {
+          const userData = userDocSnapshot.data();
+          setName(userData.name || '');
+          setEmployeeID(userData.employeeID || '');
+          setEmail(userData.email || '');
+          setPhone(userData.phone || '');
+          setDepartment(userData.department || '');
+          setAbout(userData.about || '');
+        }
+      } catch (error) {
+        alert.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [user.uid]);
+    // This is Shridhar Patil, from Belgaum. Working as Software Developer at PAPL, Bangalore.
+    const handleUpdate = async () => {
+        try {
+            const db = getFirestore(app);
+            const userDocRef = doc(db, 'Users', user.uid);
+
+            await updateDoc(userDocRef, {
+                name,
+                about,
+                phone,
+            });
+
+            setSuccessMessage('Profile updated successfully!');
+            setErrorMessage('');
+        } catch (error) {
+            setSuccessMessage('');
+            setErrorMessage('Error updating profile. Please try again.');
+            console.error('Error updating profile:', error);
+        }
+    };
+
 
     return (
         <GlobalLayout>
@@ -52,7 +113,65 @@ const Profile = () => {
                                 />
                             </div>
                         </div>
-                        <form className="w-full px-4" >
+                        <div className="w-full px-4">
+                            <label
+                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                htmlFor="full-name"
+                            >
+                                Full Name
+                            </label>
+                            <input
+                                className="appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                id="full-name"
+                                type="text"
+                                placeholder="XYZ"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+
+                            <label
+                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                htmlFor="phone"
+                            >
+                                Phone No.
+                            </label>
+                            <input
+                                className="appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                id="phone"
+                                type="tel"
+                                placeholder="9876543210"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                            />
+
+                            <label
+                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                htmlFor="about"
+                            >
+                                About
+                            </label>
+                            <textarea
+                                className="appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                id="about"
+                                type="text"
+                                rows={3}
+                                placeholder="Write something About you."
+                                value={about}
+                                onChange={(e) => setAbout(e.target.value)}
+                            />
+
+                            <div className="flex justify-center">
+                                <button
+                                    onClick={handleUpdate}
+                                    className="py-2 px-3 rounded bg-[#252c48] font-medium text-white hover:bg-[#3a4675]"
+                                >
+                                    Update
+                                </button>
+                            </div>
+                            {successMessage && <p className="text-green-500">{successMessage}</p>}
+                            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+                        </div>
+                        {/* <form className="w-full px-4" >
                             <label
                                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                 htmlFor="full-name"
@@ -110,7 +229,7 @@ const Profile = () => {
                                     Update
                                 </button>
                             </div>
-                        </form>
+                        </form> */}
                     </div>
                 </div>
                 <div className="w-2/3">
@@ -120,7 +239,7 @@ const Profile = () => {
                             <p className="text-gray-600">
                                 {" "}
                                 <span className="font-semibold text-gray-900"> Name: </span>
-                                {"Mr. XYZ"}
+                                {name}
                             </p>
                         </div>
                         <div className="flex mt-3">
@@ -129,14 +248,14 @@ const Profile = () => {
                                 <span className="font-semibold text-gray-900">
                                     Employee ID:
                                 </span>{" "}
-                                {"PAPL0018"}
+                                {employeeID}
                             </p>{" "}
                             <p className="m-auto text-gray-600">
                                 {" "}
                                 <span className="font-semibold text-gray-900">
                                     Company Email:{" "}
                                 </span>{" "}
-                                {"xyz@pumpacademy.in"}
+                                {email}
                             </p>
                         </div>
                         <div className="flex mt-3">
@@ -145,22 +264,20 @@ const Profile = () => {
                                 <span className="font-semibold text-gray-900">
                                     Contact:
                                 </span>{" "}
-                                {"9876543210"}
+                                {phone}
                             </p>{" "}
                             <p className="m-auto text-gray-600">
                                 {" "}
                                 <span className="font-semibold text-gray-900">
                                     Department:{" "}
                                 </span>{" "}
-                                {"Software Development"}
+                                {department}
                             </p>
                         </div>
                         <p className="mt-4 text-gray-600">
                             {" "}
                             <span className="font-semibold text-gray-900"> About Me: </span>
-                            {
-                                "Hello, This is Mr. XYZ. Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, necessitatibus. Placeat impedit vero fugiat sequi dolores, "
-                            }
+                            {about}
                         </p>
                     </div>
                     <div className="tab card shadow mr-3 mt-3">
