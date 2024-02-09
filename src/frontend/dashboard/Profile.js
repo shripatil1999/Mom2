@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import GlobalLayout from "../utils/hoc/globalLayout";
 import { Tab } from "@headlessui/react";
 import "./profile.css";
-import { app, auth } from '../../firebase';
+import { app, auth, upload } from '../../firebase';
 import { getFirestore, doc, updateDoc, getDoc } from 'firebase/firestore';
+import ProfileData from './ProfileData';
 
 
 
@@ -20,40 +21,37 @@ const Profile = () => {
     const [department, setDepartment] = useState('');  
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [photoURL, setPhotoURL] = useState("/images/icons/user.png")
+    const [photo, setPhoto] = useState(null)
+    const [loading, setLoading] = useState(false)
     const user = auth.currentUser;
 
-    var loadFile = (event) => {
-        var image = document.getElementById("output");
-        image.src = URL.createObjectURL(event.target.files[0]);
-    };
 
-    // Fetch user data when component mounts
-   
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const db = getFirestore(app);
-        const userDocRef = doc(db, 'Users', user.uid);
-        const userDocSnapshot = await getDoc(userDocRef);
-
-        if (userDocSnapshot.exists()) {
-          const userData = userDocSnapshot.data();
-          setName(userData.name || '');
-          setEmployeeID(userData.employeeID || '');
-          setEmail(userData.email || '');
-          setPhone(userData.phone || '');
-          setDepartment(userData.department || '');
-          setAbout(userData.about || '');
+    var loadFile = (e) => {
+        var ctrlImage = document.getElementById("output");
+        ctrlImage.src = URL.createObjectURL(e.target.files[0]);
+        // setPhoto(image.src)
+        if(e.target.files[0]){
+            setPhoto(e.target.files[0])
         }
-      } catch (error) {
-        alert.error('Error fetching user data:', error);
-      }
+
     };
 
-    fetchUserData();
-  }, [user.uid]);
+
+useEffect(()=>{
+    if(user && user.photoURL){
+        setPhotoURL(user.photoURL)
+    }
+
+},[user])
+
+
     // This is Shridhar Patil, from Belgaum. Working as Software Developer at PAPL, Bangalore.
     const handleUpdate = async () => {
+
+        //profile Pic update
+        upload(photo, user, setLoading)
+
         try {
             const db = getFirestore(app);
             const userDocRef = doc(db, 'Users', user.uid);
@@ -106,12 +104,13 @@ const Profile = () => {
                                 </label>
                                 <input id="file" type="file" onChange={loadFile} />
                                 <img
-                                    src="/images/icons/user.png"
+                                    src={photoURL}
                                     id="output"
                                     alt=" "
                                     width="200"
                                 />
                             </div>
+                            
                         </div>
                         <div className="w-full px-4">
                             <label
@@ -162,7 +161,8 @@ const Profile = () => {
 
                             <div className="flex justify-center">
                                 <button
-                                    onClick={handleUpdate}
+                                disabled={loading}
+                                    onClick={handleUpdate || !photo}
                                     className="py-2 px-3 rounded bg-[#252c48] font-medium text-white hover:bg-[#3a4675]"
                                 >
                                     Update
@@ -233,53 +233,7 @@ const Profile = () => {
                     </div>
                 </div>
                 <div className="w-2/3">
-                    <div className="details p-4 card shadow mr-3">
-                        <p className="font-bold text-lg">Personal Information: </p>
-                        <div className="flex gap-2 mt-3">
-                            <p className="text-gray-600">
-                                {" "}
-                                <span className="font-semibold text-gray-900"> Name: </span>
-                                {name}
-                            </p>
-                        </div>
-                        <div className="flex mt-3">
-                            <p className="text-gray-600">
-                                {" "}
-                                <span className="font-semibold text-gray-900">
-                                    Employee ID:
-                                </span>{" "}
-                                {employeeID}
-                            </p>{" "}
-                            <p className="m-auto text-gray-600">
-                                {" "}
-                                <span className="font-semibold text-gray-900">
-                                    Company Email:{" "}
-                                </span>{" "}
-                                {email}
-                            </p>
-                        </div>
-                        <div className="flex mt-3">
-                            <p className="text-gray-600">
-                                {" "}
-                                <span className="font-semibold text-gray-900">
-                                    Contact:
-                                </span>{" "}
-                                {phone}
-                            </p>{" "}
-                            <p className="m-auto text-gray-600">
-                                {" "}
-                                <span className="font-semibold text-gray-900">
-                                    Department:{" "}
-                                </span>{" "}
-                                {department}
-                            </p>
-                        </div>
-                        <p className="mt-4 text-gray-600">
-                            {" "}
-                            <span className="font-semibold text-gray-900"> About Me: </span>
-                            {about}
-                        </p>
-                    </div>
+                    <ProfileData/>
                     <div className="tab card shadow mr-3 mt-3">
                         <div className="w-full max-w-xl px-3 py-6 sm:px-0">
                             <Tab.Group>

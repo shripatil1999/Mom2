@@ -19,7 +19,7 @@ function Login() {
     const [show, setShow] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [agree, setAgree] = useState(false);
+    const [agree, setAgree] = useState(true);
     const alert = useAlert()
 
     const handleClose = () => setShow(false);
@@ -39,7 +39,7 @@ function Login() {
             console.log(password);
             signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
-                    console.log(userCredential);
+                    // console.log(userCredential);
                     navigate("/home");
                 })
                 .catch((error) => {
