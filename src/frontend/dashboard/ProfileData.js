@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import GlobalLayout from "../utils/hoc/globalLayout";
-import { Tab } from "@headlessui/react";
 import "./profile.css";
-import { app, auth, upload } from '../../firebase';
-import { getFirestore, doc, updateDoc, getDoc } from 'firebase/firestore';
+import { app, auth,} from '../../firebase';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 
 export default function ProfileData() {
     const [name, setName] = useState('');
@@ -12,16 +10,12 @@ export default function ProfileData() {
     const [employeeID, setEmployeeID] = useState('');
     const [email, setEmail] = useState('');
     const [department, setDepartment] = useState('');  
-    const [successMessage, setSuccessMessage] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
-    const [photoURL, setPhotoURL] = useState("/images/icons/user.png")
-    const [photo, setPhoto] = useState(null)
-    const [loading, setLoading] = useState(false)
     const user = auth.currentUser;
 
         // Fetch user data
    
   useEffect(() => {
+    
     const fetchUserData = async () => {
       try {
         const db = getFirestore(app);
