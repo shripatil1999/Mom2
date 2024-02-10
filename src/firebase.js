@@ -55,7 +55,7 @@ setPersistence(auth, browserSessionPersistence)
   });
 
   export async function upload(file, currentUser, setLoading) {
-    const fileRef = ref(storage, 'ProfilePics/' + currentUser.uid + '.png');
+    const fileRef = ref(storage, currentUser.uid + '.png');
   
     setLoading(true);
   
@@ -73,11 +73,10 @@ setPersistence(auth, browserSessionPersistence)
   
     // Update the user's profile with the new photoURL
     updateProfile(currentUser, { photoURL });
-  
     setLoading(false);
     alert('Uploaded..!!!!');
-    
-    return photoURL;
+    var profileFetched=true;
+    return photoURL && profileFetched; 
   }
 
   

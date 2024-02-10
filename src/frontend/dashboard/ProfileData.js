@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "./profile.css";
 import { app, auth,} from '../../firebase';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { getFirestore, doc, onSnapshot } from 'firebase/firestore';
 
 export default function ProfileData() {
     const [name, setName] = useState('');
@@ -14,33 +14,25 @@ export default function ProfileData() {
 
         // Fetch user data
    
-  useEffect(() => {
-    
-    const fetchUserData = async () => {
-      try {
-        const db = getFirestore(app);
-        const userDocRef = doc(db, 'Users', user.uid);
-        const userDocSnapshot = await getDoc(userDocRef);
-
-        if (userDocSnapshot.exists()) {
-          const userData = userDocSnapshot.data();
-          setName(userData.name || '');
-          setEmployeeID(userData.employeeID || '');
-          setEmail(userData.email || '');
-          setPhone(userData.phone || '');
-          setDepartment(userData.department || '');
-          setAbout(userData.about || '');
-        }
-
-        console.log("Fetched Data")
-      } catch (error) {
-        alert.error('Error fetching user data:', error);
-      }
-    };
-
-    fetchUserData();
-  }, [user.uid]);
-
+        useEffect(() => {
+            const db = getFirestore(app);
+            const userDocRef = doc(db, 'Users', user.uid);
+            const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+              if (docSnapshot.exists()) {
+                const userData = docSnapshot.data();
+                setName(userData.name || ''); 
+                setEmployeeID(userData.employeeID || '');
+                setEmail(userData.email || '');
+                setPhone(userData.phone || '');
+                setDepartment(userData.department || '');
+                setAbout(userData.about || '');
+                console.log("Fetched Data")
+              }
+            });
+          
+            // Remember to clean up the listener on unmount
+            return () => unsubscribe();
+          }, [user.uid]);
 
 
     return (

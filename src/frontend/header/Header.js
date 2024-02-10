@@ -14,6 +14,8 @@ export default function Header() {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   let [isOpen, setIsOpen] = useState(false);
   const user = auth.currentUser;
+  const photoURL = user.photoURL;
+
 
 
   function closeModal() {
@@ -256,12 +258,12 @@ export default function Header() {
 
         <div className="relative user h-full">
           <div className="group flex flex-col items-center py-2 pr-2">
-            <img className="w-14" src="/images/icons/user.png" alt="" />
+            <img className="w-12 h-12 rounded-full" src={photoURL} alt="" />
             <div className="user-name  bg-slate-200 text-black rounded-sm px-4 m-1">
               <p className="font-bold text-base">{user.email}</p>
             </div>
             <div className="hidden group-hover:block absolute z-50 top-14 right-14 transition transform translate-y-8 ease-in-out">
-              <UserCard />
+              <UserCard userPic={photoURL} user={user} />
             </div>
           </div>
         </div>

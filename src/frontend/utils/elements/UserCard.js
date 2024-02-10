@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const UserCard = () => {
+const UserCard = (props) => {
   return (
     <div>
       <div className="max-w-xs">
@@ -9,7 +9,7 @@ const UserCard = () => {
           <div className="photo-wrapper p-2">
             <img
               className="w-32 h-32 rounded-full mx-auto"
-              src="/images/icons/user.png"
+              src={props.userPic}
               alt="John Doe"
             />
           </div>

@@ -6,6 +6,8 @@ import { app, auth, upload } from "../../firebase";
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
 import ProfileData from "./ProfileData";
 import { redirect } from "react-router-dom";
+import { useAlert } from 'react-alert'
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -15,12 +17,15 @@ const Profile = () => {
   const [name, setName] = useState("");
   const [about, setAbout] = useState("");
   const [phone, setPhone] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+//   const [successMessage, setSuccessMessage] = useState("");
+//   const [errorMessage, setErrorMessage] = useState("");
+ 
+  const user = auth.currentUser;
+  const alert = useAlert()
   const [photoURL, setPhotoURL] = useState("/images/icons/user.png");
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
-  const user = auth.currentUser;
+
 
   var loadFile = (e) => {
     var ctrlImage = document.getElementById("output");
@@ -29,6 +34,9 @@ const Profile = () => {
     if (e.target.files[0]) {
       setPhoto(e.target.files[0]);
     }
+    // if(profileFetched===true){
+
+    // }
   };
 
   useEffect(() => {
@@ -36,8 +44,16 @@ const Profile = () => {
       setPhotoURL(user.photoURL);
     }
   }, [user]);
-
-  
+ 
+  //profile Pic update
+  const updateProfilePic =()=>{
+    if(photo){
+  upload(photo, user, setLoading)
+    }
+    else {
+        alert.error("Please select the photo")
+    }
+  }
 
   // This is Shridhar Patil, from Belgaum. Working as Software Developer at PAPL, Bangalore.
   const handleUpdate = async () => {
@@ -47,22 +63,19 @@ const Profile = () => {
       const db = getFirestore(app);
       const userDocRef = doc(db, "Users", user.uid);
 
-      const updatedData = {};
-
-      if (name && about && phone) {
-        updatedData.name = name;
-        updatedData.about = about;
-        updatedData.phone = phone;
-      }
-
-      await updateDoc(userDocRef, updatedData);
-
-      setSuccessMessage("Profile updated successfully!");
-      setErrorMessage("");
+            await updateDoc(userDocRef, {
+                name,
+                about,
+                phone,
+            });
+            alert.success("Profile updated successfully!")
+    //   setSuccessMessage("Profile updated successfully!");
+    //   setErrorMessage("");
       return redirect("/profile");
     } catch (error) {
-      setSuccessMessage("");
-      setErrorMessage("Error updating profile. Please try again.");
+        alert.error("Error updating profile. Please try again.")
+    //   setSuccessMessage("");
+    //   setErrorMessage("Error updating profile. Please try again.");
       console.error("Error updating profile:", error);
     }
   };
@@ -105,7 +118,7 @@ const Profile = () => {
             </div>
             <button
                   disabled={loading}
-                  onClick={handleUpdate || !photo}
+                  onClick={updateProfilePic || !photo}
                   className="py-2 px-3 rounded bg-[#252c48] font-medium text-white hover:bg-[#3a4675]"
                 >
                   Update Profile
@@ -169,10 +182,10 @@ const Profile = () => {
                   Update
                 </button>
               </div>
-              {successMessage && (
+              {/* {successMessage && (
                 <p className="text-green-500">{successMessage}</p>
               )}
-              {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+              {errorMessage && <p className="text-red-500">{errorMessage}</p>} */}
             </div>
             {/* <form className="w-full px-4" >
                             <label
