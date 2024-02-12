@@ -5,8 +5,9 @@ import "./profile.css";
 import { app, auth, upload } from "../../firebase";
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
 import ProfileData from "./ProfileData";
-import { redirect } from "react-router-dom";
-import { useAlert } from 'react-alert'
+import { useForm } from "react-hook-form";
+import { useAlert } from "react-alert";
+import { updateProfile  } from "firebase/auth";
 
 
 function classNames(...classes) {
@@ -14,18 +15,22 @@ function classNames(...classes) {
 }
 
 const Profile = () => {
-  const [name, setName] = useState("");
-  const [about, setAbout] = useState("");
-  const [phone, setPhone] = useState("");
-//   const [successMessage, setSuccessMessage] = useState("");
-//   const [errorMessage, setErrorMessage] = useState("");
- 
-  const user = auth.currentUser;
-  const alert = useAlert()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
+
+  // const [name, setName] = useState("");
+  // const [about, setAbout] = useState("");
+  // const [phone, setPhone] = useState("");
   const [photoURL, setPhotoURL] = useState("/images/icons/user.png");
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const user = auth.currentUser;
+  const alert = useAlert();
 
   var loadFile = (e) => {
     var ctrlImage = document.getElementById("output");
@@ -38,44 +43,46 @@ const Profile = () => {
 
     // }
   };
-
   useEffect(() => {
     if (user && user.photoURL) {
       setPhotoURL(user.photoURL);
+
     }
-  }, [user]);
- 
+
+    // Set initial values for the form fields
+    setValue("name", user.displayName || "");
+    setValue("about", ""); // Set default value for 'about' field
+    setValue("phone", ""); // Set default value for 'phone' field
+  }, [user, setValue]);
+
   //profile Pic update
-  const updateProfilePic =()=>{
-    if(photo){
-  upload(photo, user, setLoading)
+  const updateProfilePic = () => {
+    if (photo) {
+      upload(photo, user, setLoading);
+    } else {
+      alert.error("Please select the photo");
     }
-    else {
-        alert.error("Please select the photo")
-    }
-  }
+  };
 
   // This is Shridhar Patil, from Belgaum. Working as Software Developer at PAPL, Bangalore.
-  const handleUpdate = async () => {
-    //profile Pic update
-   
+  const onSubmit = async (data) => {
     try {
       const db = getFirestore(app);
       const userDocRef = doc(db, "Users", user.uid);
 
-            await updateDoc(userDocRef, {
-                name,
-                about,
-                phone,
-            });
-            alert.success("Profile updated successfully!")
-    //   setSuccessMessage("Profile updated successfully!");
-    //   setErrorMessage("");
-      return redirect("/profile");
+      await updateDoc(userDocRef, {
+        name: data.name,
+        about: data.about,
+        phone: data.phone,
+      });
+      updateProfile(user, {
+        displayName: data.name
+      })
+      console.log(user.displayName)
+      alert.success("Profile updated successfully!");
+
     } catch (error) {
-        alert.error("Error updating profile. Please try again.")
-    //   setSuccessMessage("");
-    //   setErrorMessage("Error updating profile. Please try again.");
+      alert.error("Error updating profile. Please try again.");
       console.error("Error updating profile:", error);
     }
   };
@@ -112,140 +119,106 @@ const Profile = () => {
                 </label>
                 <input id="file" type="file" onChange={loadFile} required />
                 <img src={photoURL} id="output" alt=" " width="200" />
-                
               </div>
-              
             </div>
             <button
-                  disabled={loading}
-                  onClick={updateProfilePic || !photo}
-                  className="py-2 px-3 rounded bg-[#252c48] font-medium text-white hover:bg-[#3a4675]"
-                >
-                  Update Profile
-                </button>
-            <div className="w-full px-4">
+              disabled={loading}
+              onClick={updateProfilePic || !photo}
+              className="py-2 px-3 rounded bg-[#252c48] font-medium text-white hover:bg-[#3a4675]"
+            >
+              Update Profile
+            </button>
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full px-4">
               <label
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 htmlFor="full-name"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
               >
                 Full Name
               </label>
               <input
-                className="appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
-                id="full-name"
                 type="text"
+                id="full-name"
+                className={classNames(
+                  "appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white",
+                  { "border-red-500": errors.name }
+                )}
                 placeholder="XYZ"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
+                {...register("name", {
+                  required: "Name is Required",
+                  minLength: {
+                    value: 4,
+                    message: "Minimum 4 characters required.",
+                  },
+                })}
               />
-
+              <p className="text-red-500 font-semibold mb-4 -mt-3">{errors.name?.message && (
+                <span>
+                  <i className="bi bi-exclamation-circle mr-2"></i> {errors.name?.message}
+                </span>
+              )}</p>
               <label
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 htmlFor="phone"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
               >
                 Phone No.
               </label>
               <input
-                className="appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
-                id="phone"
                 type="tel"
+                id="phone"
+                className={classNames(
+                  "appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white",
+                  // { "border-red-500": errors.phone }
+                )}
                 placeholder="9876543210"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
+                {...register("phone", {
+                  required: "Phone number required",
+                  pattern: {
+                    value: /^[6-9]\d{9}$/,
+                    message: "Invalid phone number format",
+                  },
+                  maxLength: {
+                    value: 10,
+                    message: "Maximum 10 numbers required.",
+                  },
+                })}
               />
-
+              <p className="text-red-500 font-semibold mb-4 -mt-3">{errors.phone?.message && (
+                <span>
+                  <i className="bi bi-exclamation-circle mr-2"></i> {errors.phone?.message}
+                </span>
+              )}</p>
               <label
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 htmlFor="about"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
               >
                 About
               </label>
               <textarea
-                className="appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="about"
-                type="text"
                 rows={3}
+                className="appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
                 placeholder="Write something About you."
-                value={about}
-                onChange={(e) => setAbout(e.target.value)}
-                required
+                {...register("about", {
+                  required: "About is required",
+                  minLength: {
+                    value: 10,
+                    message: "Minimum 5 words are required required.",
+                  },
+                })}
               />
+              <p className="text-red-500 font-semibold mb-4 -mt-3">{errors.about?.message && (
+                <span>
+                  <i className="bi bi-exclamation-circle mr-2"></i> {errors.about?.message}
+                </span>
+              )}</p>
 
               <div className="flex justify-center">
-                <button
-                //   disabled={loading}
-                  onClick={handleUpdate}
+                <input
+                  type="submit"
                   className="py-2 px-3 rounded bg-[#252c48] font-medium text-white hover:bg-[#3a4675]"
-                >
-                  Update
-                </button>
+                />
               </div>
-              {/* {successMessage && (
-                <p className="text-green-500">{successMessage}</p>
-              )}
-              {errorMessage && <p className="text-red-500">{errorMessage}</p>} */}
-            </div>
-            {/* <form className="w-full px-4" >
-                            <label
-                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                htmlFor="full-name"
-                            >
-                                Full Name
-                            </label>
-                            <input
-                                className="appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
-                                id="full-name"
-                                type="text"
-                                placeholder="XYZ"
-                            />
-                            <label
-                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                htmlFor="phone"
-                            >
-                                Phone No.
-                            </label>
-                            <input
-                                className="appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
-                                id="phone"
-                                type="tel"
-                                placeholder="9876543210"
-                            />
-                            <label
-                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                htmlFor="email"
-                            >
-                                email
-                            </label>
-                            <input
-                                className="appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
-                                id="email"
-                                type="email"
-                                placeholder="example@email.com"
-                            />
-                            <label
-                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                htmlFor="about"
-                            >
-                                About
-                            </label>
-                            <textarea
-                                className="appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
-                                id="email"
-                                type="text"
-                                rows={3}
-                                placeholder="Write something About you."
-                            />
-                            <div className="flex justify-center">
-                                <button
-                                    className="py-2 px-3 rounded bg-[#252c48] font-medium text-white hover:bg-[#3a4675]"
-                                //  type="submit"
-                                >
-                                    Update
-                                </button>
-                            </div>
-                        </form> */}
+            </form>
           </div>
         </div>
         <div className="w-2/3">
@@ -267,32 +240,7 @@ const Profile = () => {
                   >
                     About
                   </Tab>
-                  {/* <Tab
-                                        className={({ selected }) =>
-                                            classNames(
-                                                "w-full rounded-lg py-2.5 text-sm font-medium leading-5",
-                                                "ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
-                                                selected
-                                                    ? "bg-white text-blue-700 shadow"
-                                                    : "text-[#252c48] hover:bg-red/[0.12] hover:text-blue-700"
-                                            )
-                                        }
-                                    >
-                                        Projects
-                                    </Tab> */}
-                  {/* <Tab
-                                        className={({ selected }) =>
-                                            classNames(
-                                                "w-full rounded-lg py-2.5 text-sm font-medium leading-5",
-                                                "ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
-                                                selected
-                                                    ? "bg-white text-blue-700 shadow"
-                                                    : "text-[#252c48] hover:bg-red/[0.12] hover:text-blue-700"
-                                            )
-                                        }
-                                    >
-                                        Performance
-                                    </Tab> */}
+
                   <Tab
                     className={({ selected }) =>
                       classNames(
@@ -309,17 +257,7 @@ const Profile = () => {
                 </Tab.List>
                 <Tab.Panels className="mt-3">
                   <Tab.Panel className="card shadow p-3">Content 1</Tab.Panel>
-                  {/* <Tab.Panel className="card shadow p-3">
-                                        <div className="parent rounded w-fit">
-                                            <div className="child p-3">
-                                                <span>
-                                                    Minutes of Meeting
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </Tab.Panel> */}
 
-                  {/* <Tab.Panel className="card shadow p-3">Content 3</Tab.Panel> */}
                   <Tab.Panel className="card shadow p-3">
                     <form className="w-full px-4" action="">
                       <label
@@ -361,7 +299,7 @@ const Profile = () => {
                       <div className="flex justify-center">
                         <button
                           className="py-2 px-3 rounded bg-[#252c48] font-medium text-white hover:bg-[#3a4675]"
-                          //  type="submit"
+                        //  type="submit"
                         >
                           Reset Password
                         </button>

@@ -30,7 +30,7 @@ export default function ProfileData() {
               }
             });
           
-            // Remember to clean up the listener on unmount
+
             return () => unsubscribe();
           }, [user.uid]);
 

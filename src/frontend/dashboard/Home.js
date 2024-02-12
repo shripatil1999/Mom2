@@ -5,10 +5,12 @@ import TaskPieChart from '../utils/elements/Taskpiechart';
 import Prioritybarchart from '../utils/elements/Prioritybarchart';
 import Accordion from '../utils/elements/Accordion';
 import SearchFilter from '../utils/elements/SearchFilter';
+import { auth } from "../../firebase";
 
 const Home = () => {
 
-    const Username = 'Mr. XYZ'
+    
+    const user = auth.currentUser;
 
 
 
@@ -16,7 +18,7 @@ const Home = () => {
     return (
         <GlobalLayout>
             <div className="upperFeature mt-4 flex flex-row justify-between">
-                <p className='font-bold'>Welcome, {Username}</p>
+                <p className='font-bold'>Welcome, {user.displayName}</p>
                 <SearchFilter />
             </div>
             <div className="shadow-lg mr-6">

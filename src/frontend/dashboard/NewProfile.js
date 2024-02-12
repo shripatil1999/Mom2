@@ -4,6 +4,8 @@ import { getFirestore, doc, setDoc } from "firebase/firestore";
 import GlobalLayout from "../utils/hoc/globalLayout";
 import "./profile.css";
 // import { auth } from "../../firebase";
+import { useAlert } from 'react-alert'
+
 
 const NewProfile = ({ user }) => {
   const [employeeID, setEmployeeID] = useState('');
@@ -18,6 +20,7 @@ const NewProfile = ({ user }) => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   // const userID = auth.currentUser;
+  const alert = useAlert()
 
   const handleSave = async () => {
     try {
@@ -40,12 +43,19 @@ const NewProfile = ({ user }) => {
         password,
         phone,
       });
+      setEmployeeID("")
+      setName("")
+      setAbout("")
+      setDepartment("")
+      setDesignation("")
+      setEmail("")
+      setPassword("")
+      setPhone("")
+      setUserID("")
+     alert.success('Profile saved successfully!')
 
-      setSuccessMessage('Profile saved successfully!');
-      setErrorMessage('');
     } catch (error) {
-      setSuccessMessage('');
-      setErrorMessage('Error saving profile. Please try again.');
+      alert.error('Error saving profile. Please try again.');
       console.error('Error saving profile:', error);
     }
   };

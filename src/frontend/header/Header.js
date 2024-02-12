@@ -260,7 +260,7 @@ export default function Header() {
           <div className="group flex flex-col items-center py-2 pr-2">
             <img className="w-12 h-12 rounded-full" src={photoURL} alt="" />
             <div className="user-name  bg-slate-200 text-black rounded-sm px-4 m-1">
-              <p className="font-bold text-base">{user.email}</p>
+              <p className="font-bold text-base">{user.displayName}</p>
             </div>
             <div className="hidden group-hover:block absolute z-50 top-14 right-14 transition transform translate-y-8 ease-in-out">
               <UserCard userPic={photoURL} user={user} />

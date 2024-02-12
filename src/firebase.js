@@ -55,7 +55,7 @@ setPersistence(auth, browserSessionPersistence)
   });
 
   export async function upload(file, currentUser, setLoading) {
-    const fileRef = ref(storage, currentUser.uid + '.png');
+    const fileRef = ref(storage, 'ProfilePics/' + currentUser.uid + '.png');
   
     setLoading(true);
   
