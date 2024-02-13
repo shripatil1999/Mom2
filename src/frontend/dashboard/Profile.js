@@ -2,13 +2,23 @@ import React, { useState, useEffect } from "react";
 import GlobalLayout from "../utils/hoc/globalLayout";
 import { Tab } from "@headlessui/react";
 import "./profile.css";
-import { app, auth, upload } from "../../firebase";
-import { getFirestore, doc, updateDoc } from "firebase/firestore";
+import {
+  app,
+  auth,
+  upload,
+  // db
+} from "../../firebase";
+import {
+  // getDoc,
+  getFirestore,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import ProfileData from "./ProfileData";
 import { useForm } from "react-hook-form";
 import { useAlert } from "react-alert";
-import { updateProfile  } from "firebase/auth";
-
+import { updateProfile } from "firebase/auth";
+// import { useAuthState } from 'react-firebase-hooks/auth';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -30,6 +40,10 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
 
   const user = auth.currentUser;
+  // const [user] = useAuthState(auth);
+
+  // Access UID
+  // const uid = user ? user.uid : null;
   const alert = useAlert();
 
   var loadFile = (e) => {
@@ -46,7 +60,6 @@ const Profile = () => {
   useEffect(() => {
     if (user && user.photoURL) {
       setPhotoURL(user.photoURL);
-
     }
 
     // Set initial values for the form fields
@@ -64,6 +77,22 @@ const Profile = () => {
     }
   };
 
+  // const getUserData = async () => {
+  //   try {
+  //     const userRef = doc(db, 'Users', uid);
+  //     const snapshot = await getDoc(userRef);
+
+  //     if (snapshot && snapshot.exists()) {
+  //       const userData = snapshot.data();
+  //       console.log('User Data:', userData);
+  //       // Use userData as needed
+  //     } else {
+  //       console.log('User not found');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error getting user data:', error);
+  //   }
+  // };
   // This is Shridhar Patil, from Belgaum. Working as Software Developer at PAPL, Bangalore.
   const onSubmit = async (data) => {
     try {
@@ -76,11 +105,12 @@ const Profile = () => {
         phone: data.phone,
       });
       updateProfile(user, {
-        displayName: data.name
-      })
-      console.log(user.displayName)
+        displayName: data.name,
+      });
+      console.log(user.displayName);
       alert.success("Profile updated successfully!");
 
+      // getUserData();
     } catch (error) {
       alert.error("Error updating profile. Please try again.");
       console.error("Error updating profile:", error);
@@ -151,11 +181,14 @@ const Profile = () => {
                   },
                 })}
               />
-              <p className="text-red-500 font-semibold mb-4 -mt-3">{errors.name?.message && (
-                <span>
-                  <i className="bi bi-exclamation-circle mr-2"></i> {errors.name?.message}
-                </span>
-              )}</p>
+              <p className="text-red-500 font-semibold mb-4 -mt-3">
+                {errors.name?.message && (
+                  <span>
+                    <i className="bi bi-exclamation-circle mr-2"></i>{" "}
+                    {errors.name?.message}
+                  </span>
+                )}
+              </p>
               <label
                 htmlFor="phone"
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -166,7 +199,7 @@ const Profile = () => {
                 type="tel"
                 id="phone"
                 className={classNames(
-                  "appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white",
+                  "appearance-none block w-full bg-gray-100 text-gray-700 border border-red-500 rounded py-2 px-2 mb-3 leading-tight focus:outline-none focus:bg-white"
                   // { "border-red-500": errors.phone }
                 )}
                 placeholder="9876543210"
@@ -182,11 +215,14 @@ const Profile = () => {
                   },
                 })}
               />
-              <p className="text-red-500 font-semibold mb-4 -mt-3">{errors.phone?.message && (
-                <span>
-                  <i className="bi bi-exclamation-circle mr-2"></i> {errors.phone?.message}
-                </span>
-              )}</p>
+              <p className="text-red-500 font-semibold mb-4 -mt-3">
+                {errors.phone?.message && (
+                  <span>
+                    <i className="bi bi-exclamation-circle mr-2"></i>{" "}
+                    {errors.phone?.message}
+                  </span>
+                )}
+              </p>
               <label
                 htmlFor="about"
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -206,15 +242,19 @@ const Profile = () => {
                   },
                 })}
               />
-              <p className="text-red-500 font-semibold mb-4 -mt-3">{errors.about?.message && (
-                <span>
-                  <i className="bi bi-exclamation-circle mr-2"></i> {errors.about?.message}
-                </span>
-              )}</p>
+              <p className="text-red-500 font-semibold mb-4 -mt-3">
+                {errors.about?.message && (
+                  <span>
+                    <i className="bi bi-exclamation-circle mr-2"></i>{" "}
+                    {errors.about?.message}
+                  </span>
+                )}
+              </p>
 
               <div className="flex justify-center">
                 <input
                   type="submit"
+                  value="Update"
                   className="py-2 px-3 rounded bg-[#252c48] font-medium text-white hover:bg-[#3a4675]"
                 />
               </div>
@@ -299,7 +339,7 @@ const Profile = () => {
                       <div className="flex justify-center">
                         <button
                           className="py-2 px-3 rounded bg-[#252c48] font-medium text-white hover:bg-[#3a4675]"
-                        //  type="submit"
+                          //  type="submit"
                         >
                           Reset Password
                         </button>

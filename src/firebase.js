@@ -8,7 +8,10 @@ import 'firebase/auth';
 import { getAuth,setPersistence, browserSessionPersistence, 
   onAuthStateChanged,
    updateProfile  } from "firebase/auth";
-import {getStorage, ref, uploadBytes,getDownloadURL,  updateMetadata  } from 'firebase/storage'
+import {getStorage,ref as sRef , 
+  // uploadBytes,
+  getDownloadURL,  updateMetadata  } from 'firebase/storage'
+
 // import {useAuthState} from 'react-firebase-hooks/auth';
 // import {useCollectionData} from 'react-firebase-hooks/firestore';
 
@@ -38,8 +41,8 @@ export function useAuth() {
   const [currentUser, setCurrentUser] = useState();
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, user => setCurrentUser(user));
-    return unsub;
+    const unsubscribe  = onAuthStateChanged(auth, user => setCurrentUser(user));
+    return unsubscribe ;
   }, [])
 
   return currentUser;
@@ -55,7 +58,7 @@ setPersistence(auth, browserSessionPersistence)
   });
 
   export async function upload(file, currentUser, setLoading) {
-    const fileRef = ref(storage, 'ProfilePics/' + currentUser.uid + '.png');
+    const fileRef = sRef(storage, 'ProfilePics/' + currentUser.uid + '.png');
   
     setLoading(true);
   
@@ -68,7 +71,7 @@ setPersistence(auth, browserSessionPersistence)
     await updateMetadata(fileRef, metadata);
   
     // Upload the file
-    const snapshot = await uploadBytes(fileRef, file);
+    // const snapshot = await uploadBytes(fileRef, file);
     const photoURL = await getDownloadURL(fileRef);
   
     // Update the user's profile with the new photoURL
