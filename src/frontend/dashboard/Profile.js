@@ -97,7 +97,7 @@ const Profile = () => {
   const onSubmit = async (data) => {
     try {
       const db = getFirestore(app);
-      const userDocRef = doc(db, "Users", user.uid);
+      const userDocRef = doc(db, "Users", user.email);
 
       await updateDoc(userDocRef, {
         name: data.name,

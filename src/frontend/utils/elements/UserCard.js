@@ -16,7 +16,7 @@ const UserCard = (props) => {
    
         useEffect(() => {
           const db = getFirestore(app);
-          const userDocRef = doc(db, 'Users', user.uid);
+          const userDocRef = doc(db, 'Users', user.email);
           const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
             if (docSnapshot.exists()) {
               const userData = docSnapshot.data();
@@ -33,7 +33,7 @@ const UserCard = (props) => {
         
 
           return () => unsubscribe();
-        }, [user.uid]);
+        }, [user.email]);
 
 
 

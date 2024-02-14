@@ -9,7 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { format } from 'date-fns';
-
+import AutoInput from "../../utils/elements/AutoInput";
 
 
 const Department = [
@@ -26,10 +26,23 @@ const Department = [
 ]
 
 
+
 const NewMeetMins = () => {
 
   const [selected, setSelected] = useState(Department[0])
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  // state to store time
+  const [time, setTime] = useState(0);
+  // state to check stopwatch running or not
+  const [isRunning, setIsRunning] = useState(false);
+  // Hours calculation
+  const hours = Math.floor(time / 360000);
+  // Minutes calculation
+  const minutes = Math.floor((time % 360000) / 6000);
+  // Seconds calculation
+  const seconds = Math.floor((time % 6000) / 100);
+
+
 
   useEffect(() => {
     // Update the current date and time every second
@@ -42,12 +55,6 @@ const NewMeetMins = () => {
   }, []); // Empty dependency array ensures the effect runs only once on mount
 
 
-  // state to store time
-  const [time, setTime] = useState(0);
-
-  // state to check stopwatch running or not
-  const [isRunning, setIsRunning] = useState(false);
-
   useEffect(() => {
     let intervalId;
     if (isRunning) {
@@ -57,14 +64,7 @@ const NewMeetMins = () => {
     return () => clearInterval(intervalId);
   }, [isRunning, time]);
 
-  // Hours calculation
-  const hours = Math.floor(time / 360000);
 
-  // Minutes calculation
-  const minutes = Math.floor((time % 360000) / 6000);
-
-  // Seconds calculation
-  const seconds = Math.floor((time % 6000) / 100);
 
   // Method to start and stop timer
   const startAndStop = () => {
@@ -73,7 +73,7 @@ const NewMeetMins = () => {
 
   // Method to reset timer back to 0
   const reset = () => {
-    alert("This Meeting was "+ hours +" Hours " + minutes +" Minutes " + seconds +" Seconds long");
+    alert("This Meeting was " + hours + " Hours " + minutes + " Minutes " + seconds + " Seconds long");
     setTime(0);
   };
 
@@ -115,6 +115,7 @@ const NewMeetMins = () => {
       discussionPoints: "",
       actionBy: "",
       supporter: "",
+      startDate: defaultDate,
       targetDate: defaultDate,
       subTasks: [""],
     },
@@ -136,6 +137,7 @@ const NewMeetMins = () => {
             discussionPoints: "",
             actionBy: "",
             supporter: "",
+            startDate: defaultDate,
             targetDate: defaultDate,
             subTasks: [""],
           },
@@ -152,6 +154,7 @@ const NewMeetMins = () => {
         discussionPoints: "",
         actionBy: "",
         supporter: "",
+        startDate: defaultDate,
         targetDate: defaultDate,
         subTasks: [""],
       },
@@ -209,16 +212,11 @@ const NewMeetMins = () => {
 
         </div>
         <main className="MeetTable mt-3 border-gray-900 mr-6">
-          <div className="TableTop flex flex-wrap justify-between font-semibold bg-slate-200 border  p-2 mt-4">
+          <div className="TableTop flex flex-wrap justify-between  items-center  font-semibold bg-slate-200 border  p-2 mt-4">
             <p>Minutes Code: Auto Code</p>
-            <div className="meetLocation flex">
+            <div className="meetLocation flex items-center gap-3">
               <p>Review Meeting Held at:</p>
-              <input
-                className="border-b bg-slate-100 border-b-slate-600 focus:outline-none"
-                type="text"
-                name="MeetLocation"
-                id="MeetLocation"
-              />
+              <AutoInput />
             </div>
             <p className="font-bold mr-10">Date: {currentDateTime.toLocaleString()}</p>
           </div>
@@ -445,9 +443,26 @@ const NewMeetMins = () => {
                   </td>
                   <td className="pr-6 relative -z-1">
                     <DatePicker
-                      className="-z-1"
+                      className="datepicker -z-1"
+                      showIcon
+                      selected={row.startDate}
+                      startDate={row.startDate}
+                      endDate={row.targetDate}
+                      onChange={(date) =>
+                        handleInputChangeTable2(index, "startDate", date)
+                      }
+                    />
+
+                  </td>
+                  <td className="pr-6 relative -z-1">
+                    <DatePicker
+                      className="datepicker -z-1"
                       showIcon
                       selected={row.targetDate}
+                      selectsEnd
+                      startDate={row.startDate}
+                      endDate={row.targetDate}
+                      minDate={row.startDate}
                       onSelect={(date) =>
                         handleInputChangeTable2(index, "targetDate", date)
                       }
@@ -455,30 +470,6 @@ const NewMeetMins = () => {
                       onChange={(date) =>
                         handleInputChangeTable2(index, "targetDate", date)
                       }
-                    />
-                    {/* <div className="flex w-full"> */}
-                    <button
-                      className="absolute -z-3 bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
-
-                      onClick={handleAddRow2}
-                    >
-                      <i className="bi bi-plus-lg"></i>
-
-                    </button>
-                    {/* </div> */}
-                  </td>
-                  <td className="pr-6 relative -z-1">
-                    <DatePicker
-                      className="-z-1"
-                      showIcon
-                      selected={row.targetDate}
-                    // onSelect={(date) =>
-                    //   handleInputChangeTable2(index, "targetDate", date)
-                    // }
-                    // onKeyDown={(e) => handleKeyDownTable2(e, index)}
-                    // onChange={(date) =>
-                    //   handleInputChangeTable2(index, "targetDate", date)
-                    // }
                     />
                     {/* <div className="flex w-full"> */}
                     <button
