@@ -134,7 +134,7 @@ const NewProfile = ({ user }) => {
       const db = getFirestore(app);
 
       // Add a new document in the "users" collection
-      await setDoc(doc(db, "Users", data.userID), {
+      await setDoc(doc(db, "Users", data.email), {
         employeeID: data.employeeID,
         name: data.name,
         userID:data.userID,
