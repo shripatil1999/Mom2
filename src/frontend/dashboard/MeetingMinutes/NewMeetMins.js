@@ -13,7 +13,8 @@ import AutoInput from "../../utils/elements/AutoInput";
 // import firebase from 'firebase/app';
 // import 'firebase/firestore';
 import { db } from '../../../firebase'; // Update the path
-
+import { doc, onSnapshot } from 'firebase/firestore';
+import { getDoc } from 'firebase/firestore';
 
 const Department = [
   { name: 'Software Development' },
@@ -190,31 +191,28 @@ const NewMeetMins = () => {
 
 //*********************************************** */
 
-
 const handleKeyDown = async (event, index) => {
   if (event.key === "Enter") {
     if (index === rows.length - 1) {
-      setRows((prevRows) => [
-        ...prevRows,
-        { attendeeName: "", email: "", Designation: "" },
-      ]);
-    }
-  } else if (event.key === "@") {
-    // Assuming you have a collection named 'users' in your Firestore
-    const usersCollection = db.collection('Users');
-    const query = usersCollection.limit(10); // Limiting to 10 users for simplicity
+      const userEmail = rows[index].email;
 
-    const snapshot = await query.get();
+      try {
+        const userDocRef = doc(db, 'Users', userEmail);
+        const docSnapshot = await getDoc(userDocRef);
 
-    if (!snapshot.empty) {
-      const users = snapshot.docs.map((doc) => doc.data());
-
-      // Display the user list or update the UI accordingly
-      console.log('User List:', users);
+        if (docSnapshot.exists()) {
+          const userData = docSnapshot.data();
+          // Do something with the userData
+          console.log("Fetched Data:", userData);
+        } else {
+          console.log("User does not exist");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
     }
   }
 };
-
 
 const handleAddRow = () => {
   setRows((prevRows) => [

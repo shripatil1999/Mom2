@@ -1,16 +1,20 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import 'firebase/firestore';
 import 'firebase/auth';
-import { getAuth,setPersistence, browserSessionPersistence, 
+import {
+  getAuth, setPersistence, browserSessionPersistence,
   onAuthStateChanged,
-   updateProfile  } from "firebase/auth";
-import {getStorage,ref as sRef , 
+  updateProfile
+} from "firebase/auth";
+import {
+  getStorage, ref as sRef,
   // uploadBytes,
-  getDownloadURL,  updateMetadata  } from 'firebase/storage'
+  getDownloadURL, updateMetadata
+} from 'firebase/storage'
 
 // import {useAuthState} from 'react-firebase-hooks/auth';
 // import {useCollectionData} from 'react-firebase-hooks/firestore';
@@ -32,7 +36,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const storage =getStorage();
+const storage = getStorage();
 const db = getFirestore(app);
 
 // const analytics = getAnalytics(app);
@@ -41,8 +45,8 @@ export function useAuth() {
   const [currentUser, setCurrentUser] = useState();
 
   useEffect(() => {
-    const unsubscribe  = onAuthStateChanged(auth, user => setCurrentUser(user));
-    return unsubscribe ;
+    const unsubscribe = onAuthStateChanged(auth, user => setCurrentUser(user));
+    return unsubscribe;
   }, [])
 
   return currentUser;
@@ -59,30 +63,30 @@ setPersistence(auth, browserSessionPersistence)
   });
 
 
-  export async function upload(file, currentUser, setLoading) {
-    const fileRef = sRef(storage, 'ProfilePics/' + currentUser.uid + '.png');
-  
-    setLoading(true);
-  
-    // Set the content type to 'image/png'
-    const metadata = {
-      contentType: 'image/png'
-    };
-  
-    // Update the metadata before uploading
-    await updateMetadata(fileRef, metadata);
-  
-    // Upload the file
-    // const snapshot = await uploadBytes(fileRef, file);
-    const photoURL = await getDownloadURL(fileRef);
-  
-    // Update the user's profile with the new photoURL
-    updateProfile(currentUser, { photoURL });
-    setLoading(false);
-    alert('Uploaded..!!!!');
-    var profileFetched=true;
-    return photoURL && profileFetched; 
-  }
+export async function upload(file, currentUser, setLoading) {
+  const fileRef = sRef(storage, 'ProfilePics/' + currentUser.uid + '.png');
 
-  
-  export { auth, db, storage, app, onAuthStateChanged, updateProfile };
+  setLoading(true);
+
+  // Set the content type to 'image/png'
+  const metadata = {
+    contentType: 'image/png'
+  };
+
+  // Update the metadata before uploading
+  await updateMetadata(fileRef, metadata);
+
+  // Upload the file
+  // const snapshot = await uploadBytes(fileRef, file);
+  const photoURL = await getDownloadURL(fileRef);
+
+  // Update the user's profile with the new photoURL
+  updateProfile(currentUser, { photoURL });
+  setLoading(false);
+  alert('Uploaded..!!!!');
+  var profileFetched = true;
+  return photoURL && profileFetched;
+}
+
+
+export { auth, db, storage, app, onAuthStateChanged, updateProfile };
