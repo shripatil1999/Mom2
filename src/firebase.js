@@ -31,7 +31,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+const auth = getAuth(app);
 const storage =getStorage();
 const db = getFirestore(app);
 
@@ -49,13 +49,15 @@ export function useAuth() {
 }
 
 
+// Set persistence to browser session
 setPersistence(auth, browserSessionPersistence)
   .then(() => {
-    console.log("Authentication persistence set");
+    console.log('Authentication persistence set');
   })
   .catch((error) => {
-    console.error("Error setting authentication persistence:", error);
+    console.error('Error setting authentication persistence:', error);
   });
+
 
   export async function upload(file, currentUser, setLoading) {
     const fileRef = sRef(storage, 'ProfilePics/' + currentUser.uid + '.png');
@@ -83,4 +85,4 @@ setPersistence(auth, browserSessionPersistence)
   }
 
   
-  export { db,app };
+  export { auth, db, storage, app, onAuthStateChanged, updateProfile };

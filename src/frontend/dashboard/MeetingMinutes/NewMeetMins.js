@@ -10,6 +10,9 @@ import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { format } from 'date-fns';
 import AutoInput from "../../utils/elements/AutoInput";
+// import firebase from 'firebase/app';
+// import 'firebase/firestore';
+import { db } from '../../../firebase'; // Update the path
 
 
 const Department = [
@@ -42,6 +45,10 @@ const NewMeetMins = () => {
   // Seconds calculation
   const seconds = Math.floor((time % 6000) / 100);
 
+  // New Line inputs for First Table
+  const [rows, setRows] = useState([
+    { attendeeName: "", email: "", Designation: "" },
+  ]);
 
 
   useEffect(() => {
@@ -78,11 +85,6 @@ const NewMeetMins = () => {
   };
 
 
-  // New Line inputs for First Table
-
-  const [rows, setRows] = useState([
-    { attendeeName: "", email: "", Designation: "" },
-  ]);
 
   const handleInputChange = (index, field, value) => {
     const newRows = [...rows];
@@ -90,22 +92,22 @@ const NewMeetMins = () => {
     setRows(newRows);
   };
 
-  const handleKeyDown = (event, index) => {
-    if (event.key === "Enter") {
-      if (index === rows.length - 1) {
-        setRows((prevRows) => [
-          ...prevRows,
-          { attendeeName: "", email: "", Designation: "" },
-        ]);
-      }
-    }
-  };
-  const handleAddRow = () => {
-    setRows((prevRows) => [
-      ...prevRows,
-      { attendeeName: "", email: "", Designation: "" },
-    ]);
-  };
+  // const handleKeyDown = (event, index) => {
+  //   if (event.key === "Enter") {
+  //     if (index === rows.length - 1) {
+  //       setRows((prevRows) => [
+  //         ...prevRows,
+  //         { attendeeName: "", email: "", Designation: "" },
+  //       ]);
+  //     }
+  //   }
+  // };
+  // const handleAddRow = () => {
+  //   setRows((prevRows) => [
+  //     ...prevRows,
+  //     { attendeeName: "", email: "", Designation: "" },
+  //   ]);
+  // };
 
   // New Line inputs for second Table
   const defaultDate = new Date(); // Set your default date here
@@ -184,6 +186,57 @@ const NewMeetMins = () => {
     console.log(subtasks);
   };
 
+
+
+//*********************************************** */
+
+
+const handleKeyDown = async (event, index) => {
+  if (event.key === "Enter") {
+    if (index === rows.length - 1) {
+      setRows((prevRows) => [
+        ...prevRows,
+        { attendeeName: "", email: "", Designation: "" },
+      ]);
+    }
+  } else if (event.key === "@") {
+    // Assuming you have a collection named 'users' in your Firestore
+    const usersCollection = db.collection('Users');
+    const query = usersCollection.limit(10); // Limiting to 10 users for simplicity
+
+    const snapshot = await query.get();
+
+    if (!snapshot.empty) {
+      const users = snapshot.docs.map((doc) => doc.data());
+
+      // Display the user list or update the UI accordingly
+      console.log('User List:', users);
+    }
+  }
+};
+
+
+const handleAddRow = () => {
+  setRows((prevRows) => [
+    ...prevRows,
+    { attendeeName: "", email: "", Designation: "" },
+  ]);
+};
+
+
+//*********************************************** */
+
+
+
+
+
+
+
+
+
+
+
+
   return (
     <GlobalLayout>
       <div className="p-4">
@@ -230,48 +283,40 @@ const NewMeetMins = () => {
               </tr>
             </thead>
             <tbody>
-              {rows.map((row, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>
-                    <input
-                      className=" border-b-2 bg-gray-100 border-gray-300 focus:outline-none"
-                      type="textarea"
-                      value={row.attendeeName}
-                      onChange={(e) =>
-                        handleInputChange(index, "attendeeName", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className="border-b-2 bg-gray-100 border-gray-300 focus:outline-none"
-                      type="text"
-                      value={row.email}
-                      onChange={(e) =>
-                        handleInputChange(index, "email", e.target.value)
-                      }
-                    />
-                  </td>
-                  <td className="relative">
-                    <input
-                      className="border-b-2 bg-gray-100 border-gray-300 focus:outline-none"
-                      type="text"
-                      value={row.minutes}
-                      onChange={(e) =>
-                        handleInputChange(index, "minutes", e.target.value)
-                      }
-                      onKeyDown={(e) => handleKeyDown(e, index)}
-                    />
-                    <button
-                      className="absolute bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
-                      onClick={handleAddRow}
-                    >
-                      <i className="bi bi-plus-lg"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
+            {rows.map((row, index) => (
+          <tr key={index}>
+            <td>{index + 1}</td>
+            <td>
+              <input
+                type="text"
+                value={row.attendeeName}
+                onChange={(e) => handleInputChange(index, 'attendeeName', e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                value={row.email}
+                onChange={(e) => handleInputChange(index, 'email', e.target.value)}
+              />
+            </td>
+            <td className="relative">
+              <input
+                type="text"
+                value={row.Designation}
+                onChange={(e) => handleInputChange(index, 'Designation', e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+              />
+              <button
+                className="absolute bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
+                onClick={handleAddRow}
+              >
+                <i className="bi bi-plus-lg"></i>
+              </button>
+            </td>
+          </tr>
+        ))}
             </tbody>
           </table>
 
