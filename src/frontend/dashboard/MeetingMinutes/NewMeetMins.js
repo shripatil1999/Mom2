@@ -1,3 +1,4 @@
+// };
 import React from "react";
 import GlobalLayout from "../../utils/hoc/globalLayout";
 import Dropdown from "../../utils/elements/dropdown";
@@ -10,11 +11,9 @@ import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { format } from 'date-fns';
 import AutoInput from "../../utils/elements/AutoInput";
-// import firebase from 'firebase/app';
-// import 'firebase/firestore';
-import { db } from '../../../firebase'; // Update the path
-import { doc, onSnapshot } from 'firebase/firestore';
-import { getDoc } from 'firebase/firestore';
+import { db } from "../../../firebase.js";
+import { collection, getDocs } from "firebase/firestore";
+// import { getFirestore, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 
 const Department = [
   { name: 'Software Development' },
@@ -46,11 +45,14 @@ const NewMeetMins = () => {
   // Seconds calculation
   const seconds = Math.floor((time % 6000) / 100);
 
-  // New Line inputs for First Table
-  const [rows, setRows] = useState([
-    { attendeeName: "", email: "", Designation: "" },
-  ]);
+  const [userList, setUserList] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [show, setShow] = useState(false)
+  const [chaired, setChaired] = useState("")
 
+  var fromChild = (locationFromChild) => {
+    return locationFromChild; // or set the data to a state
+  }
 
   useEffect(() => {
     // Update the current date and time every second
@@ -86,29 +88,86 @@ const NewMeetMins = () => {
   };
 
 
+  // New Line inputs for First Table
+
+  const [rows, setRows] = useState([
+    { attendeeName: "", email: "", Designation: "" },
+  ]);
+
+
+  useEffect(() => {
+    // Fetch the list of users from Firestore
+    const fetchUsers = async () => {
+      try {
+        const usersRef = collection(db, "Users");
+        const snapshot = await getDocs(usersRef);
+        const users = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setUserList(users);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+
+
+
 
   const handleInputChange = (index, field, value) => {
+
     const newRows = [...rows];
     newRows[index][field] = value;
     setRows(newRows);
+    setShow(true);
   };
 
-  // const handleKeyDown = (event, index) => {
-  //   if (event.key === "Enter") {
-  //     if (index === rows.length - 1) {
-  //       setRows((prevRows) => [
-  //         ...prevRows,
-  //         { attendeeName: "", email: "", Designation: "" },
-  //       ]);
-  //     }
-  //   }
-  // };
-  // const handleAddRow = () => {
-  //   setRows((prevRows) => [
-  //     ...prevRows,
-  //     { attendeeName: "", email: "", Designation: "" },
-  //   ]);
-  // };
+
+  const handleUserSelect = (index, selectedUserId) => {
+
+    const selectedUser = userList.find((user) => user.id === selectedUserId);
+    setRows((prevRows) => {
+      const newRows = [...prevRows];
+      newRows[index].attendeeName = selectedUser.name;
+      newRows[index].email = selectedUser.email;
+      newRows[index].designation = selectedUser.designation;
+      return newRows;
+    });
+    setSelectedUser(selectedUser);
+    setShow(false);
+  };
+
+
+  const handleKeyDown = (event, index) => {
+    if (event.key === "Enter") {
+      if (index === rows.length - 1) {
+        setRows((prevRows) => [
+          ...prevRows,
+          { attendeeName: "", email: "", designation: "" },
+        ]);
+        setShow(false);
+      }
+    }
+  };
+  const handleAddRow = () => {
+    setRows((prevRows) => [
+      ...prevRows,
+      { attendeeName: "", email: "", designation: "" },
+    ]);
+    setShow(false);
+
+  };
+
+  //Chairing the meeting
+  const handleChairmenSelect = (selectedUserId) => {
+    const selectedUser = userList.find((user) => user.id === selectedUserId);
+    setChaired(selectedUser.name || ""); // Set the name of the selected user
+    setSelectedUser(selectedUser);
+  };
+
 
   // New Line inputs for second Table
   const defaultDate = new Date(); // Set your default date here
@@ -187,54 +246,6 @@ const NewMeetMins = () => {
     console.log(subtasks);
   };
 
-
-
-//*********************************************** */
-
-const handleKeyDown = async (event, index) => {
-  if (event.key === "Enter") {
-    if (index === rows.length - 1) {
-      const userEmail = rows[index].email;
-
-      try {
-        const userDocRef = doc(db, 'Users', userEmail);
-        const docSnapshot = await getDoc(userDocRef);
-
-        if (docSnapshot.exists()) {
-          const userData = docSnapshot.data();
-          // Do something with the userData
-          console.log("Fetched Data:", userData);
-        } else {
-          console.log("User does not exist");
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    }
-  }
-};
-
-const handleAddRow = () => {
-  setRows((prevRows) => [
-    ...prevRows,
-    { attendeeName: "", email: "", Designation: "" },
-  ]);
-};
-
-
-//*********************************************** */
-
-
-
-
-
-
-
-
-
-
-
-
   return (
     <GlobalLayout>
       <div className="p-4">
@@ -267,7 +278,7 @@ const handleAddRow = () => {
             <p>Minutes Code: Auto Code</p>
             <div className="meetLocation flex items-center gap-3">
               <p>Review Meeting Held at:</p>
-              <AutoInput />
+              <AutoInput setter={fromChild} />
             </div>
             <p className="font-bold mr-10">Date: {currentDateTime.toLocaleString()}</p>
           </div>
@@ -281,45 +292,58 @@ const handleAddRow = () => {
               </tr>
             </thead>
             <tbody>
-            {rows.map((row, index) => (
-          <tr key={index}>
-            <td>{index + 1}</td>
-            <td>
-              <input
-                type="text"
-                value={row.attendeeName}
-                onChange={(e) => handleInputChange(index, 'attendeeName', e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
-              />
-            </td>
-            <td>
-              <input
-                type="text"
-                value={row.email}
-                onChange={(e) => handleInputChange(index, 'email', e.target.value)}
-              />
-            </td>
-            <td className="relative">
-              <input
-                type="text"
-                value={row.Designation}
-                onChange={(e) => handleInputChange(index, 'Designation', e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
-              />
-              <button
-                className="absolute bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
-                onClick={handleAddRow}
-              >
-                <i className="bi bi-plus-lg"></i>
-              </button>
-            </td>
-          </tr>
-        ))}
+              {rows.map((row, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <input
+                      className="border-b-2 bg-gray-100 border-gray-300 focus:outline-none"
+                      type="text"
+                      value={row.attendeeName || ""}  /* Ensure a default empty string value */
+                      onChange={(e) => handleInputChange(index, "attendeeName", e.target.value)}
+                    />
+                    {show ? <ul className="absolute z-[99] bg-white p-1 shadow-md  hidden last:block">
+                      {userList
+                        .filter((user) => user.name.toLowerCase().includes(row.attendeeName.toLowerCase()))
+                        .map((user) => (
+                          <li className="cursor-pointer p-2 hover:bg-gray-100 " key={user.id} onClick={() => {handleUserSelect(index, user.id); setShow(false)}}>
+                            {user.name.length === null ? "Not Found" : user.name}
+                          </li>
+                        ))}
+                    </ul> : ""}
+                  </td>
+                  <td>
+                    <input
+                      className="border-b-2 bg-gray-100 border-gray-300 focus:outline-none"
+                      type="text"
+                      value={row.email}
+                      readOnly
+                      onChange={(e) => handleInputChange(index, "email", e.target.value)}
+                    />
+                  </td>
+                  <td className="relative">
+                    <input
+                      className="border-b-2 bg-gray-100 border-gray-300 focus:outline-none"
+                      type="text"
+                      value={row.designation}
+                      readOnly
+                      onChange={(e) => handleInputChange(index, "designation", e.target.value)}
+                      onKeyDown={(e) => handleKeyDown(e, index)}
+                    />
+                    <button
+                      className="absolute bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
+                      onClick={handleAddRow}
+                    >
+                      <i className="bi bi-plus-lg"></i>
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
 
           {/* Second Table */}
-          <div className="p-2 bg-slate-200 flex">
+          <div className="p-2 bg-slate-200 flex relative">
             <Listbox value={selected} onChange={setSelected}>
               <div className="relative h-fit w-1/5">
                 <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
@@ -337,7 +361,7 @@ const handleAddRow = () => {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <Listbox.Options className="z-99 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                  <Listbox.Options className="z-[97] absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
                     {Department.map((person, personIdx) => (
                       <Listbox.Option
                         key={personIdx}
@@ -371,8 +395,20 @@ const handleAddRow = () => {
             <input
               type="text"
               placeholder="Chairing the Meeting"
-              className="w-full md:w-80 px-2 mx-4  rounded-lg border border-gray-100 shadow-md focus:outline-none focus:border-black"
+              className="w-full md:w-80 px-2 mx-4 rounded-lg border border-gray-100 shadow-md focus:outline-none focus:border-black"
+              value={chaired}
+              onChange={(e) => {setChaired(e.target.value);setShow(true);}}
             />
+            {show ? <ul className="absolute top-[100%] right-[50%] z-[99] bg-white p-1 shadow-md  hidden last:block">
+              {userList
+                .filter((user) => user.name.toLowerCase().includes(chaired.toLowerCase()))
+                .map((user) => (
+                  <li className="cursor-pointer p-2 hover:bg-gray-100 " key={user.id} onClick={() =>{ handleChairmenSelect(user.id); setShow(false)}}>
+                    {user.name.length === null ? "Not Found" : user.name}
+                  </li>
+                ))}
+            </ul> : ""}
+
 
           </div>
           <table style={{ width: "100%" }}>
@@ -396,7 +432,8 @@ const handleAddRow = () => {
                     <p className="text-sm">PAPL512230{index + 1}</p>
                   </td>
                   <td>
-                    <input
+                    <textarea
+                      rows="4"
                       className="border-b-2 bg-gray-100 border-gray-300 p-2 focus:outline-none"
                       type="text"
                       value={row.agenda}
@@ -430,12 +467,12 @@ const handleAddRow = () => {
                     </div>
                     <ol>
                       {/* <li key={index}>
-                        <input
-                          className="border-b border-gray-900 p-2 focus:outline-none"
-                          type="text"
-                          placeholder="Enter Subtask here"
-                        />
-                      </li> */}
+                          <input
+                            className="border-b border-gray-900 p-2 focus:outline-none"
+                            type="text"
+                            placeholder="Enter Subtask here"
+                          />
+                        </li> */}
                       {row?.subTasks.map((subtask, subIndex) => (
                         <li key={subIndex}>
                           {subIndex + 1}

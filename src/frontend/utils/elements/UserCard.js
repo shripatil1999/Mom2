@@ -26,7 +26,7 @@ const UserCard = (props) => {
               setPhone(userData.phone || '');
               setDepartment(userData.department || '');
               setDesignation(userData.designation || '');
-              console.log("Fetched Data")
+              // console.log("Fetched Data")
             }
 
           });
