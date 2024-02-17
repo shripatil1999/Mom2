@@ -94,7 +94,7 @@ const NewMeetMins = () => {
     { attendeeName: "", email: "", Designation: "" },
   ]);
 
-
+  const [turn, setTurn] = useState(false)
   useEffect(() => {
     // Fetch the list of users from Firestore
     const fetchUsers = async () => {
@@ -153,12 +153,31 @@ const NewMeetMins = () => {
     }
   };
   const handleAddRow = () => {
-    setRows((prevRows) => [
-      ...prevRows,
-      { attendeeName: "", email: "", designation: "" },
-    ]);
-    setShow(false);
+    setRows((prevRows) => {
+      const lastRow = prevRows[prevRows.length - 1];
+  
+      // Check if the last row is already an empty row
+      // console.log("row : "+firstRow)
+      if (
+        lastRow &&
+        lastRow.attendeeName === "" &&
+        prevRows.length!==1
+        // lastRow.email === "" &&
+        // lastRow.designation === ""
+      ) {
+        // Remove the last row
+        setTurn(true)
+        return prevRows.slice(0, -1);
 
+      } else {
+        // Add a new empty row
+        return [
+          ...prevRows,
+          { attendeeName: "", email: "", designation: "" },
+        ];
+      }
+    });
+    setShow(false);
   };
 
   //Chairing the meeting
@@ -334,7 +353,7 @@ const NewMeetMins = () => {
                       className="absolute bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
                       onClick={handleAddRow}
                     >
-                      <i className="bi bi-plus-lg"></i>
+                      {turn?<i className="bi bi-plus-lg"></i>:"X"}
                     </button>
                   </td>
                 </tr>
@@ -497,7 +516,7 @@ const NewMeetMins = () => {
                     <input
                       className="border-b-2 bg-gray-100 border-gray-300 p-2 focus:outline-none"
                       type="text"
-                      value={row.actionBy}
+                      value={row.actionBy|| ""}
                       onChange={(e) =>
                         handleInputChangeTable2(
                           index,
@@ -506,6 +525,15 @@ const NewMeetMins = () => {
                         )
                       }
                     />
+                    {show ?<><ul className="absolute z-[99] bg-white p-1 shadow-md  hidden last:block">
+                      {userList
+                        .filter((user) => user.name.toLowerCase().includes(row.actionBy.toLowerCase()))
+                        .map((user) => (
+                          <li className="cursor-pointer p-2 hover:bg-gray-100 " key={user.id} onClick={() => {handleUserSelect(index, user.id); setShow(false)}}>
+                            {user.name.length === null ? "Not Found" : user.name}
+                          </li>
+                        ))}
+                    </ul></>:""}
                   </td>
                   <td>
                     <input
