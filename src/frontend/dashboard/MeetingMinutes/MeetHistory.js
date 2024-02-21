@@ -8,22 +8,22 @@ const MeetHistory = () => {
 
   const [meetings, setMeetings] = useState()
 
-  useEffect(() => {
-    const fetchMeetings = async = () => {
-      try {
-        const usersRef = collection(db, "Users");
-        const snapshot = await getDocs(usersRef);
-        const users = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setUserList(users);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
-    fetchMeetings();
-  }, [])
+  // useEffect(() => {
+  //   const fetchMeetings = async = () => {
+  //     try {
+  //       const usersRef = collection(db, "Users");
+  //       const snapshot = await getDocs(usersRef);
+  //       const users = snapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
+  //       setUserList(users);
+  //     } catch (error) {
+  //       console.error("Error fetching users:", error);
+  //     }
+  //   };
+  //   fetchMeetings();
+  // }, [])
 
 
   const [selectedDate, setSelectedDate] = useState(new Date());
