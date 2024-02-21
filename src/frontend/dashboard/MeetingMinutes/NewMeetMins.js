@@ -13,11 +13,12 @@ import { format } from "date-fns";
 import AutoInput from "../../utils/elements/AutoInput";
 import { db } from "../../../firebase.js";
 import { collection, getDocs, doc, setDoc } from "firebase/firestore";
-// import { getFirestore, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import { useAlert } from "react-alert";
 
 const Department = [
+  { name: "Other" },
   { name: "Software Development" },
   { name: "Hardware Development" },
   { name: "Information Technology" },
@@ -31,7 +32,7 @@ const Department = [
 ];
 
 const NewMeetMins = () => {
-  const [selected, setSelected] = useState(Department[0]);
+  const [selectedDept, setSelectedDept] = useState(Department[0]);
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   // state to store time
   const [time, setTime] = useState(0);
@@ -45,18 +46,17 @@ const NewMeetMins = () => {
   const seconds = Math.floor((time % 6000) / 100);
 
   const [userList, setUserList] = useState([]);
-  const [selectedUser, setSelectedUser] = useState([]);
-  const [selectedUser2, setSelectedUser2] = useState();
-  const [show, setShow] = useState(false);
+  // const [selectedUser, setSelectedUser] = useState([]);
+  // const [selectedUser2, setSelectedUser2] = useState();
   const [chaired, setChaired] = useState("");
   let [count, setCount] = useState(0);
   const [meetLocation, setMeetLocation] = useState();
-  // const [actionBy, setActionBy] = useState("")
-  // const [taskUID, setTaskUID] = useState()
+  const alert = useAlert();
+
   var fromChild = (locationFromChild) => {
-    setMeetLocation(locationFromChild); // or set the data to a state
+    setMeetLocation(locationFromChild); // set the data to a state from child
   };
-  let taskUID;
+
   useEffect(() => {
     // Update the current date and time every second
     const intervalId = setInterval(() => {
@@ -81,22 +81,6 @@ const NewMeetMins = () => {
     setIsRunning(!isRunning);
   };
 
-  // Method to reset timer back to 0
-  // const reset = () => {
-  //   alert(
-  //     "This Meeting was " +
-  //       hours +
-  //       " Hours " +
-  //       minutes +
-  //       " Minutes " +
-  //       seconds +
-  //       " Seconds long"
-  //   );
-  //   setTime(0);
-
-  // };
-
-  // New Line inputs for First Table
 
   const [rows, setRows] = useState([
     {
@@ -105,7 +89,7 @@ const NewMeetMins = () => {
       designation: "",
     },
   ]);
-  const [turn, setTurn] = useState(false);
+
   useEffect(() => {
     // Fetch the list of users from Firestore
     const fetchUsers = async () => {
@@ -128,7 +112,7 @@ const NewMeetMins = () => {
     const newRows = [...rows];
     newRows[index][field] = value;
     setRows(newRows);
-    setShow(true);
+
   };
 
   const handleUserSelect = (index, selectedUserId) => {
@@ -140,9 +124,9 @@ const NewMeetMins = () => {
       newRows[index].designation = selectedUser.designation;
       return newRows;
     });
-    setSelectedUser(selectedUser.name);
-    console.log(selectedUser)
-    setShow(false);
+    // setSelectedUser(selectedUser.name);
+
+    ;
   };
 
   const handleAddRow = () => {
@@ -152,12 +136,10 @@ const NewMeetMins = () => {
       // Check if the last row is already an empty row
       if (
         lastRow &&
-        lastRow.attendeeName === "" &&
-        lastRow.email === "" &&
-        lastRow.designation === ""
+        lastRow.attendeeName === ""
       ) {
         // Remove the last row
-        return prevRows.slice(0, -1);
+        return prevRows.slice(0, 1);
       } else {
         // Add a new empty row
         return [...prevRows, {
@@ -173,7 +155,7 @@ const NewMeetMins = () => {
   const handleChairmenSelect = (selectedUserId) => {
     const selectedUser = userList.find((user) => user.id === selectedUserId);
     setChaired(selectedUser.name || ""); // Set the name of the selected user
-    setSelectedUser(selectedUser);
+    // setSelectedUser(selectedUser);
   };
 
 
@@ -184,7 +166,7 @@ const NewMeetMins = () => {
       agenda: "",
       discussionPoints: "",
       actionBy: "",
-      supporters: [""], // Initialize as an empty array
+      supporters: [""],
       startDate: defaultDate,
       targetDate: defaultDate,
       subTasks: [""],
@@ -197,9 +179,18 @@ const NewMeetMins = () => {
 
   const handleInputChangeTable2 = (index, field, value) => {
     const newRows = [...table2Rows];
-    newRows[index][field] = value;
+    if (field === 'subTasks') {
+      const subTasksArray = value.split('\n');
+      newRows[index][field] = subTasksArray.filter((subTask) => subTask.trim() !== '');
+    } else {
+      newRows[index][field] = value;
+    }
     setTable2Rows(newRows);
-    setShow(true);
+
+    // Check if the field is 'subTasks'
+
+
+
   };
 
   //Action By
@@ -213,33 +204,10 @@ const NewMeetMins = () => {
       newRows[index].actionBy = selectedActionBy.name;
       return newRows;
     });
-    setSelectedUser2(selectedActionBy);
-    setShow(false);
+    // setSelectedUser2(selectedActionBy);
+    ;
   };
 
-  const handleSupporterSelect = (index, selectedUserId) => {
-    const selectedSupporter = userList.find(
-      (user) => user.id === selectedUserId
-    );
-    setTable2Rows((prevRows) => {
-      const newRows = [...prevRows];
-      newRows[index] = {
-        ...newRows[index],
-        supporters: [
-          ...(newRows[index].supporters || []),
-          selectedSupporter.name,
-        ],
-      };
-      return newRows;
-    });
-    setSelectedSupporters((prevSupporters) => [
-      ...prevSupporters,
-      selectedSupporter,
-    ]);
-    console.log(selectedSupporter.name)
-    setSupportValue(" "); // Clear the input value after selection
-    setShow(false);
-  };
 
   const handleKeyDownTable2 = (event, index) => {
     if (event.key === "Enter") {
@@ -276,28 +244,23 @@ const NewMeetMins = () => {
   };
 
   // Subtask New Line Creation
-  const [subtasks, setSubtasks] = useState([]);
+  const [subtasks, setSubtasks] = useState([{ subTasks: [""] }]);
 
   const addSubtask = (index) => {
-    const updatedSubtasks = [...table2Rows];
-
-    const ROW_DATA = [...table2Rows][index];
-    const TEMP_DATA = { ...ROW_DATA, subTasks: [...ROW_DATA?.subTasks, ""] };
-    updatedSubtasks[index] = TEMP_DATA;
-    setTable2Rows(updatedSubtasks);
-
-    console.log(TEMP_DATA);
+    setTable2Rows((prevRows) => {
+      const updatedRows = [...prevRows];
+      updatedRows[index].subTasks.push("");
+      return updatedRows;
+    });
   };
 
   const handleSubtaskChange = (index, subIndex, value) => {
-    const updatedSubtasks = [...table2Rows];
-    var PARTICULAR_OBJECT = updatedSubtasks[index];
-    PARTICULAR_OBJECT.subTasks[subIndex] = value;
-    updatedSubtasks[index] = PARTICULAR_OBJECT;
-    setSubtasks(updatedSubtasks);
-    console.log(subtasks);
+    setTable2Rows((prevRows) => {
+      const updatedRows = [...prevRows];
+      updatedRows[index].subTasks[subIndex] = value;
+      return updatedRows;
+    });
   };
-
   const AutoMeetCode = format(new Date(), "ddMMyyhh") + count;
   const supportersArray = selectedSupporter.map((supporter) => supporter.name);
 
@@ -307,40 +270,62 @@ const NewMeetMins = () => {
     designation: row.designation,
   }));
 
-  const subtaskArray = (table2Rows === null ? table2Rows?.subTasks.map((subtask, subIndex) => ({
-    subtaskIndex: subIndex,
-    subtaskName: subtask,
-  })) : null);
 
-  const taskArray = table2Rows.map((row) => ({
-    taskUID: {
-      taskUID,
-      agenda: row.agenda,
-      description: row.discussionPoints,
-    },
-  }));
+
+  const subtaskArray = subtasks.map((subtaskList) =>
+    subtaskList.subTasks.map((subtask) => ({
+      subtaskName: subtask,
+    }))
+  );
+
+  // console.log(subtasks.subTasks)
+  // console.log(subtaskArray.subtaskName)
+  // console.log(table2Rows.subTasks.subTasks)
+  const taskUID = "T" + AutoMeetCode + count + 1;
+  // const taskArray = table2Rows.map((row, index) => ({
+  //   taskUID: taskUID,
+  //   agenda: row.agenda || "",
+  //   description: row.discussionPoints || "",
+  //   subTasks: subtaskArray || [], // Use subtasks array for the corresponding task
+  //   actionBy: row.actionBy || " ",
+  //   startDate: row.startDate,
+  //   targetDate: row.targetDate,
+  // }));
+
 
   const submitMeeting = async () => {
     try {
+      const taskUID = "T" + AutoMeetCode + count + 1;
 
-      await setDoc(doc(db, "Meetings", AutoMeetCode), {
+      const meetingData = {
         meetCode: AutoMeetCode,
         duration: hours + ":" + minutes + ":" + seconds,
-        location: meetLocation,
+        location: meetLocation || " ",
         meetDateTime: currentDateTime.toLocaleString(),
-        attendees: attendeesArray || [], // Store attendees information in Firestore
-        supporter: supportersArray || [],
-        // actionBy : actionBy,
+        attendees: attendeesArray || [],
+        chaired: chaired,
+        department: selectedDept.name,
+        tasks: table2Rows.map((row) => ({
+          taskUID: taskUID,
+          agenda: row.agenda || "",
+          description: row.discussionPoints || "",
+          subTasks: row.subTasks || [], // Include subtasks for each task
+          actionBy: row.actionBy || " ",
+          supporters: row.supporters || [],
+          startDate: row.startDate,
+          targetDate: row.targetDate,
+        })),
+      };
 
-      });
-      console.log(selectedSupporter.name)
-      setCount(count + 1)
+      await setDoc(doc(db, "Meetings", AutoMeetCode), meetingData);
+      alert.success("Meeting updated successfully !");
+      setCount(count + 1);
       setTime(0);
     } catch (error) {
+      alert.error("Error updating Meeting !! Please try again.");
       console.error("Unable to upload a Meetings", error);
     }
-
-  }
+  };
 
   return (
     <GlobalLayout>
@@ -450,7 +435,7 @@ const NewMeetMins = () => {
                       className="absolute bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
                       onClick={handleAddRow}
                     >
-                      {turn ? <i className="bi bi-plus-lg"></i> : "X"}
+                      <i className="bi bi-plus-lg"></i>
                     </button>
                   </td>
                 </tr>
@@ -460,10 +445,10 @@ const NewMeetMins = () => {
 
           {/* Second Table */}
           <div className="p-2 bg-slate-200 flex relative">
-            <Listbox value={selected} onChange={setSelected}>
+            <Listbox value={selectedDept} onChange={setSelectedDept}>
               <div className="relative h-[50px] w-1/5">
                 <Listbox.Button className="relative w-full h-[55px] cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                  <span className="block truncate">{selected.name}</span>
+                  <span className="block truncate">{selectedDept.name}</span>
                   <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                     <ChevronUpDownIcon
                       className="h-5 w-5 text-gray-400"
@@ -478,7 +463,7 @@ const NewMeetMins = () => {
                   leaveTo="opacity-0"
                 >
                   <Listbox.Options className="z-[97] absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                    {Department.map((person, personIdx) => (
+                    {Department.map((dept, personIdx) => (
                       <Listbox.Option
                         key={personIdx}
                         className={({ active }) =>
@@ -487,7 +472,7 @@ const NewMeetMins = () => {
                             : "text-gray-900"
                           }`
                         }
-                        value={person}
+                        value={dept}
                       >
                         {({ selected }) => (
                           <>
@@ -495,7 +480,7 @@ const NewMeetMins = () => {
                               className={`block truncate ${selected ? "font-medium" : "font-normal"
                                 }`}
                             >
-                              {person.name}
+                              {dept.name}
                             </span>
                             {selected ? (
                               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-600">
@@ -558,10 +543,7 @@ const NewMeetMins = () => {
               {table2Rows.map((row, index) => (
                 <tr key={index}>
                   <td>
-                    {/* PAPL512230 */
-
-                    }
-                    <p className="text-sm">{taskUID = "T" + AutoMeetCode + index + 1}</p>
+                    <p className="text-sm">{taskUID}</p>
                   </td>
                   <td>
                     <textarea
@@ -596,8 +578,9 @@ const NewMeetMins = () => {
                       >
                         Subtasks +
                       </button>
+
                     </div>
-                    <ol>
+                    <div>
                       {/* <li key={index}>
                           <input
                             className="border-b border-gray-900 p-2 focus:outline-none"
@@ -605,25 +588,19 @@ const NewMeetMins = () => {
                             placeholder="Enter Subtask here"
                           />
                         </li> */}
-                      {row?.subTasks.map((subtask, subIndex) => (
-                        <li key={subIndex}>
-                          {subIndex + 1}
+                      {row.subTasks.map((subtask, subIndex) => (
+                        <div key={subIndex}>
+
                           <input
-                            className="border-b-2 bg-gray-100 border-gray-300 p-2 mb-3 focus:outline-none"
+                            key={subIndex}
+                            className="w-full border-b-2 bg-gray-100 border-gray-300 p-2 focus:outline-none"
                             type="text"
-                            placeholder="Enter Subtask here"
                             value={subtask}
-                            onChange={(e) =>
-                              handleSubtaskChange(
-                                index,
-                                subIndex,
-                                e.target.value
-                              )
-                            }
+                            onChange={(e) => handleSubtaskChange(index, subIndex, e.target.value)}
                           />
-                        </li>
+                        </div>
                       ))}
-                    </ol>
+                    </div>
                   </td>
                   <td>
                     <Autocomplete
@@ -655,49 +632,28 @@ const NewMeetMins = () => {
                     />
                   </td>
                   <td>
-                    <div className="">
-                      <input
-                        className="border-b-2 bg-gray-100 w-[100%] border-gray-300 p-2 focus:outline-none"
-                        type="text"
-                        value={row.supporters} // Check if row.supporters is an array
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          setSupportValue(value); // Use callback function to get the updated value
-                          handleInputChangeTable2(index, "supporters", value);
-                        }}
-                      />
-                      {show ? (
-                        <ul className="absolute z-[99] bg-white p-1 shadow-md hidden last:block">
-                          {userList
-                            .filter((user) =>
-                              user.name
-                                .toLowerCase()
-                                .includes(supportValue.toLowerCase())
-                            )
-                            .map((user) => (
-                              <li
-                                className="cursor-pointer p-2 hover:bg-gray-100 "
-                                key={user.id}
-                                onClick={() => {
-                                  handleSupporterSelect(index, user.id);
-                                  setShow(false);
-                                }}
-                              >
-                                {user.name.length === null
-                                  ? "Not Found"
-                                  : user.name}
-                              </li>
-                            ))}
-                        </ul>
-                      ) : (
-                        ""
+
+                    <Autocomplete
+                      multiple
+                      id="tags-standard"
+                      sx={{ width: '100%' }}
+                      options={userList.map((user) => user.name)}
+                      getOptionLabel={(option) => option || ""}
+                      value={row.supporters ? row.supporters : []}
+                      onChange={(event, newValue) => {
+                        handleInputChangeTable2(index, "supporters", newValue);
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="standard"
+                          label="Multiple values"
+                          placeholder="Favorites"
+                          sx={{ width: '100%' }}
+
+                        />
                       )}
-                    </div>
-                    <ul className="">
-                      {selectedSupporter.map((supporter, index) => (
-                        <li className="p-1 border rounded shadow-sm my-1" key={index}>{index + ". " + supporter.name}</li>
-                      ))}
-                    </ul>
+                    />
                   </td>
 
                   <td className="pr-6 relative -z-1">
@@ -807,7 +763,7 @@ export default NewMeetMins;
 //   const [userList, setUserList] = useState([]);
 //   const [selectedUser, setSelectedUser] = useState([]);
 //   const [selectedUser2, setSelectedUser2] = useState(null);
-//   const [show, setShow] = useState(false);
+//   const [show, State(false);
 //   const [chaired, setChaired] = useState("");
 //   let [count, setCount] = useState(0);
 //   const [meetLocation, setMeetLocation] = useState();
@@ -885,7 +841,7 @@ export default NewMeetMins;
 //     const newRows = [...rows];
 //     newRows[index][field] = value;
 //     setRows(newRows);
-//     setShow(true);
+//
 //   };
 
 //   const handleUserSelect = (index, selectedUserId) => {
@@ -898,7 +854,7 @@ export default NewMeetMins;
 //       return newRows;
 //     });
 //     setSelectedUser(selectedUser);
-//     setShow(false);
+//     ;
 //   };
 
 //   const handleKeyDown = (event, index) => {
@@ -908,7 +864,7 @@ export default NewMeetMins;
 //           ...prevRows,
 //           { attendeeName: "", email: "", designation: "" },
 //         ]);
-//         setShow(false);
+//         ;
 //       }
 //     }
 //   };
@@ -933,7 +889,7 @@ export default NewMeetMins;
 //         return [...prevRows, { attendeeName: "", email: "", designation: "" }];
 //       }
 //     });
-//     setShow(false);
+//     ;
 //   };
 
 //   //Chairing the meeting
@@ -965,7 +921,7 @@ export default NewMeetMins;
 //     const newRows = [...table2Rows];
 //     newRows[index][field] = value;
 //     setTable2Rows(newRows);
-//     setShow(true);
+//
 //   };
 
 //   //Action By
@@ -980,7 +936,7 @@ export default NewMeetMins;
 //       return newRows;
 //     });
 //     setSelectedUser2(selectedActionBy);
-//     setShow(false);
+//     ;
 //   };
 
 //   const handleSupporterSelect = (index, selectedUserId) => {
@@ -1004,7 +960,7 @@ export default NewMeetMins;
 //     ]);
 //     console.log(selectedSupporter.name)
 //     setSupportValue(" "); // Clear the input value after selection
-//     setShow(false);
+//     ;
 //   };
 
 //   const handleKeyDownTable2 = (event, index) => {
@@ -1167,7 +1123,7 @@ export default NewMeetMins;
 //                               key={user.id}
 //                               onClick={() => {
 //                                 handleUserSelect(index, user.id);
-//                                 setShow(false);
+//                                 ;
 //                               }}
 //                             >
 //                               {user.name.length === null
@@ -1276,7 +1232,7 @@ export default NewMeetMins;
 //               value={chaired}
 //               onChange={(e) => {
 //                 setChaired(e.target.value);
-//                 setShow(true);
+//
 //               }}
 //             />
 //             {show ? (
@@ -1291,7 +1247,7 @@ export default NewMeetMins;
 //                       key={user.id}
 //                       onClick={() => {
 //                         handleChairmenSelect(user.id);
-//                         setShow(false);
+//                         ;
 //                       }}
 //                     >
 //                       {user.name.length === null ? "Not Found" : user.name}
@@ -1411,7 +1367,7 @@ export default NewMeetMins;
 //                               key={user.id}
 //                               onClick={() => {
 //                                 handleActionBySelect(index, user.id);
-//                                 setShow(false);
+//                                 ;
 //                               }}
 //                             >
 //                               {user.name.length === null
@@ -1450,7 +1406,7 @@ export default NewMeetMins;
 //                                 key={user.id}
 //                                 onClick={() => {
 //                                   handleSupporterSelect(index, user.id);
-//                                   setShow(false);
+//                                   ;
 //                                 }}
 //                               >
 //                                 {user.name.length === null
