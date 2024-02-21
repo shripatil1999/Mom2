@@ -56,7 +56,7 @@ const NewMeetMins = () => {
   var fromChild = (locationFromChild) => {
     setMeetLocation(locationFromChild); // or set the data to a state
   };
-  let taskUID;
+
   useEffect(() => {
     // Update the current date and time every second
     const intervalId = setInterval(() => {
@@ -277,7 +277,6 @@ const NewMeetMins = () => {
 
   // Subtask New Line Creation
   const [subtasks, setSubtasks] = useState([]);
-
   const addSubtask = (index) => {
     const updatedSubtasks = [...table2Rows];
 
@@ -306,19 +305,22 @@ const NewMeetMins = () => {
     email: row.email,
     designation: row.designation,
   }));
-
-  const subtaskArray = (table2Rows === null ? table2Rows?.subTasks.map((subtask, subIndex) => ({
-    subtaskIndex: subIndex,
+  const subtaskArray = subtasks.map((subtask) => ({
     subtaskName: subtask,
-  })) : null);
-
-  const taskArray = table2Rows.map((row) => ({
-    taskUID: {
-      taskUID,
-      agenda: row.agenda,
-      description: row.discussionPoints,
-    },
   }));
+  // console.log(subtaskArray.subtaskName)
+  // console.log(table2Rows.subTasks.subTasks)
+  const taskUID = "T" + AutoMeetCode + count + 1;
+  const taskArray = table2Rows.map((row, index) => ({
+    taskUID: taskUID,
+    agenda: row.agenda || "",
+    description: row.discussionPoints || "",
+    subTasks: subtaskArray || [], // Use subtasks array for the corresponding task
+    actionBy: row.actionBy || " ",
+    startDate: row.startDate,
+    targetDate: row.targetDate,
+  }));
+
 
   const submitMeeting = async () => {
     try {
@@ -326,12 +328,10 @@ const NewMeetMins = () => {
       await setDoc(doc(db, "Meetings", AutoMeetCode), {
         meetCode: AutoMeetCode,
         duration: hours + ":" + minutes + ":" + seconds,
-        location: meetLocation,
+        location: meetLocation || " ",
         meetDateTime: currentDateTime.toLocaleString(),
         attendees: attendeesArray || [], // Store attendees information in Firestore
-        supporter: supportersArray || [],
-        // actionBy : actionBy,
-
+        tasks: taskArray || [],
       });
       console.log(selectedSupporter.name)
       setCount(count + 1)
@@ -558,10 +558,7 @@ const NewMeetMins = () => {
               {table2Rows.map((row, index) => (
                 <tr key={index}>
                   <td>
-                    {/* PAPL512230 */
-
-                    }
-                    <p className="text-sm">{taskUID = "T" + AutoMeetCode + index + 1}</p>
+                    <p className="text-sm">{taskUID}</p>
                   </td>
                   <td>
                     <textarea
