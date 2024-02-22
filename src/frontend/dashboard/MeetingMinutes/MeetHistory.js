@@ -3,28 +3,36 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import GlobalLayout from "../../utils/hoc/globalLayout";
 import tasksData from "./tasksData.json";
+import { db } from "../../../firebase.js";
+import { collection, getDocs, onSnapshot, doc } from "firebase/firestore";
+import { format } from "date-fns";
 
 const MeetHistory = () => {
 
-  const [meetings, setMeetings] = useState()
+  const [meetings, setMeetings] = useState("")
+  const meetDate = format(new Date(), "dd-MM-yyyy");
+  console.log(meetDate)
+  const fetchMeetings = async () => {
+    try {
+      const meetings = await onSnapshot(doc(db, "Meetings", meetDate), (doc) => {
+        console.log("Current data: ", doc.data());
+        setMeetings(meetings);
+      });
 
-  // useEffect(() => {
-  //   const fetchMeetings = async = () => {
-  //     try {
-  //       const usersRef = collection(db, "Users");
-  //       const snapshot = await getDocs(usersRef);
-  //       const users = snapshot.docs.map((doc) => ({
-  //         id: doc.id,
-  //         ...doc.data(),
-  //       }));
-  //       setUserList(users);
-  //     } catch (error) {
-  //       console.error("Error fetching users:", error);
-  //     }
-  //   };
-  //   fetchMeetings();
-  // }, [])
 
+      // const snapshot = await getDocs(meetRef);
+      // const meetings = snapshot.docs.map((doc) => doc.data());
+      // setMeetings(meetings);
+      // console.log("nope"+meetings)
+
+
+
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  console.log("nope" + meetings)
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedMeeting, setSelectedMeeting] = useState(null);
@@ -58,6 +66,8 @@ const MeetHistory = () => {
     updateSelectedMeeting(selectedDate);
   }, [selectedDate]); // Empty dependency array ensures it runs only once on mount
 
+
+
   return (
     <GlobalLayout>
       <div className="flex">
@@ -75,7 +85,7 @@ const MeetHistory = () => {
             />
             <button
               className="bg-blue-500 h-fit px-2 py-1 text-white rounded"
-              onClick={handleTodayClick}
+              onClick={fetchMeetings}
             >
               Today
             </button>
@@ -120,6 +130,15 @@ const MeetHistory = () => {
         </div>
 
         {/* ************************ DISPLAY *********************************** */}
+        {meetings.meetDate.Meet.map((muid) => (
+          <>
+            {muid.name}
+          </>
+        ))}
+
+
+
+
         {selectedMeeting && (
           <div className="w-3/4 p-4 m-2 shadow-sm border bg-slate-50 border-blue-600">
             <div className="flex justify-between">

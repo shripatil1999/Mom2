@@ -12,7 +12,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { format } from "date-fns";
 import AutoInput from "../../utils/elements/AutoInput";
 import { db } from "../../../firebase.js";
-import { collection, getDocs, doc, setDoc } from "firebase/firestore";
+import { collection, getDocs, doc, setDoc, updateDoc, addDoc } from "firebase/firestore";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useAlert } from "react-alert";
@@ -60,7 +60,7 @@ const NewMeetMins = () => {
   useEffect(() => {
     // Update the current date and time every second
     const intervalId = setInterval(() => {
-      setCurrentDateTime(format(new Date(), "dd/MM/yyyy, hh:mm a"));
+      setCurrentDateTime(format(new Date(), "dd-MM-yyyy,hh:mma"));
     }, 1000);
 
     // Clean up the interval when the component unmounts
@@ -291,11 +291,14 @@ const NewMeetMins = () => {
   //   startDate: row.startDate,
   //   targetDate: row.targetDate,
   // }));
+  // Extracting date in the format "DD-MM-YYYY"
 
 
   const submitMeeting = async () => {
     try {
       const taskUID = "T" + AutoMeetCode + count + 1;
+      const meetID = currentDateTime + AutoMeetCode;
+      const formattedDate = format(new Date(), "dd-MM-yyyy");
 
       const meetingData = {
         meetCode: AutoMeetCode,
@@ -313,11 +316,12 @@ const NewMeetMins = () => {
           actionBy: row.actionBy || " ",
           supporters: row.supporters || [],
           startDate: row.startDate,
-          targetDate: row.targetDate,
+          targetDate: row.targetDate, // Include subtasks for each task
         })),
+
       };
 
-      await setDoc(doc(db, "Meetings", AutoMeetCode), meetingData);
+      await setDoc(doc(db, "Meetings", formattedDate,"Meet", AutoMeetCode), meetingData);
       alert.success("Meeting updated successfully !");
       setCount(count + 1);
       setTime(0);
