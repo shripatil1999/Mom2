@@ -11,7 +11,7 @@ const MeetHistory = () => {
 
   const [meetings, setMeetings] = useState("")
   const meetDate = format(new Date(), "dd-MM-yyyy");
-  console.log(meetDate)
+  // console.log(meetDate)
   const fetchMeetings = async () => {
     try {
       const meetings = await onSnapshot(doc(db, "Meetings", meetDate), (doc) => {
@@ -19,18 +19,28 @@ const MeetHistory = () => {
         setMeetings(meetings);
       });
 
-
-      // const snapshot = await getDocs(meetRef);
-      // const meetings = snapshot.docs.map((doc) => doc.data());
-      // setMeetings(meetings);
-      // console.log("nope"+meetings)
-
-
-
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
+
+
+  useEffect(() => {
+    const fetchUsers2 = async () => {
+      try {
+        const usersRef = collection(db, "Meetings");
+        const snapshot = await getDocs(usersRef);
+        const meetings = snapshot.docs.map((doc) => (doc.data()
+        ));
+        setMeetings(meetings);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+    fetchUsers2();
+  }, []);
+
+
 
   console.log("nope" + meetings)
 
@@ -130,11 +140,11 @@ const MeetHistory = () => {
         </div>
 
         {/* ************************ DISPLAY *********************************** */}
-        {meetings.meetDate.Meet.map((muid) => (
+        {/* {meetings.meetDate.Meet.map((muid) => (
           <>
             {muid.name}
           </>
-        ))}
+        ))} */}
 
 
 
