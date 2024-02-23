@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {  signOut } from "firebase/auth";
-import {auth} from '../../firebase';
+import { signOut } from "firebase/auth";
+import { auth } from '../../firebase';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from 'react-alert'
 
@@ -29,17 +29,17 @@ const Navbar = () => {
     setSubmenuHidden2(!submenuHidden2);
   };
 
- 
-    const handleLogout = () => {               
-        signOut(auth).then(() => {
-        // Sign-out successful.
-            navigate("/");
-            // console.log("Signed out successfully")
-            alert.success("Signed out successfully");
-        }).catch((error) => {
-        // An error happened.
-        });
-    }
+
+  const handleLogout = () => {
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      navigate("/");
+      // console.log("Signed out successfully")
+      alert.success("Signed out successfully");
+    }).catch((error) => {
+      // An error happened.
+    });
+  }
 
 
   return (
@@ -105,7 +105,7 @@ const Navbar = () => {
         {/* Meeting Minutes */}
         <div className="my-4 bg-gray-600 h-[1px]"></div>
         <div
-          className="p-2.5 mt-3 flex items-center rounded px-4 duration-300 cursor-pointer hover:bg-[#33769B] text-white"
+          className="p-2.5 mt-3 flex items-center rounded px-4 duration-300 cursor-pointer hover:bg-[#33769B] focus:bg-[#33769B] text-white"
           onClick={toggleSubmenu2}
         >
           <i className="bi bi-pencil-square"></i>
@@ -133,6 +133,12 @@ const Navbar = () => {
             className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1"
           >
             Meeting History
+          </Link>
+          <Link
+            to="/meethistory2"
+            className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1"
+          >
+            Dummy Meet History
           </Link>
         </div>
 

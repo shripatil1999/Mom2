@@ -4,45 +4,17 @@ import "react-datepicker/dist/react-datepicker.css";
 import GlobalLayout from "../../utils/hoc/globalLayout";
 import tasksData from "./tasksData.json";
 import { db } from "../../../firebase.js";
-import { query, collection, getDocs, onSnapshot, doc } from "firebase/firestore";
+import { query, collection, getDocs } from "firebase/firestore";
 import { format } from "date-fns";
 
 const MeetHistory = () => {
 
-  // const [meetings, setMeetings] = useState("")
-  // const meetDate = format(new Date(), "dd-MM-yyyy");
-  // // console.log(meetDate)
-  // const fetchMeetings = async () => {
-  //   try {
-  //     const meetings = await onSnapshot(doc(db, "Meetings", meetDate), (doc) => {
-  //       console.log("Current data: ", doc.data());
-  //       setMeetings(meetings);
-  //     });
 
-  //   } catch (error) {
-  //     console.error("Error fetching users:", error);
-  //   }
-  // };
+  const [meetings, setMeetings] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedMeeting, setSelectedMeeting] = useState(null);
 
 
-  // useEffect(() => {
-  //   const fetchUsers2 = async () => {
-  //     try {
-  //       const usersRef = collection(db, "Meetings");
-  //       const snapshot = await getDocs(usersRef);
-  //       const meetings = snapshot.data();
-  //       setMeetings(meetings);
-  //     } catch (error) {
-  //       console.error("Error fetching users:", error);
-  //     }
-  //   };
-  //   fetchUsers2();
-  // }, []);
-
-
-
-  // console.log("nope" + meetings)
-  const meetings = [];
   useEffect(() => {
     async function fetchMeeting() {
       try {
@@ -51,19 +23,20 @@ const MeetHistory = () => {
         querySnapshot.forEach((doc) => {
           meetings.push(doc.data());
         });
-        console.log("meet details", meetings);
+        // console.log("meet details", meetings);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching Meeting:", error);
       }
     }
 
     fetchMeeting()
-  }, []);
+  }, [meetings]);
+
+  // console.log("meet 2", meetings);
 
 
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedMeeting, setSelectedMeeting] = useState(null);
+
 
   const handleTabClick = (date) => {
     setSelectedDate(date);
@@ -76,7 +49,8 @@ const MeetHistory = () => {
   };
 
   const updateSelectedMeeting = (date) => {
-    const dateObject = tasksData.dates.find((d) => {
+
+    const dateObject = meetings.find((d) => {
       const formattedDate = new Date(d.date).toISOString().split("T")[0];
       return formattedDate === date.toISOString().split("T")[0];
     });
@@ -93,6 +67,9 @@ const MeetHistory = () => {
     // Load details of the first meeting when the component mounts
     updateSelectedMeeting(selectedDate);
   }, [selectedDate]); // Empty dependency array ensures it runs only once on mount
+
+
+
 
   console.log(selectedDate)
 
