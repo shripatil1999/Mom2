@@ -4,45 +4,63 @@ import "react-datepicker/dist/react-datepicker.css";
 import GlobalLayout from "../../utils/hoc/globalLayout";
 import tasksData from "./tasksData.json";
 import { db } from "../../../firebase.js";
-import { collection, getDocs, onSnapshot, doc } from "firebase/firestore";
+import { query, collection, getDocs, onSnapshot, doc } from "firebase/firestore";
 import { format } from "date-fns";
 
 const MeetHistory = () => {
 
-  const [meetings, setMeetings] = useState("")
-  const meetDate = format(new Date(), "dd-MM-yyyy");
-  // console.log(meetDate)
-  const fetchMeetings = async () => {
-    try {
-      const meetings = await onSnapshot(doc(db, "Meetings", meetDate), (doc) => {
-        console.log("Current data: ", doc.data());
-        setMeetings(meetings);
-      });
+  // const [meetings, setMeetings] = useState("")
+  // const meetDate = format(new Date(), "dd-MM-yyyy");
+  // // console.log(meetDate)
+  // const fetchMeetings = async () => {
+  //   try {
+  //     const meetings = await onSnapshot(doc(db, "Meetings", meetDate), (doc) => {
+  //       console.log("Current data: ", doc.data());
+  //       setMeetings(meetings);
+  //     });
 
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error("Error fetching users:", error);
+  //   }
+  // };
 
 
+  // useEffect(() => {
+  //   const fetchUsers2 = async () => {
+  //     try {
+  //       const usersRef = collection(db, "Meetings");
+  //       const snapshot = await getDocs(usersRef);
+  //       const meetings = snapshot.data();
+  //       setMeetings(meetings);
+  //     } catch (error) {
+  //       console.error("Error fetching users:", error);
+  //     }
+  //   };
+  //   fetchUsers2();
+  // }, []);
+
+
+
+  // console.log("nope" + meetings)
+  const meetings = [];
   useEffect(() => {
-    const fetchUsers2 = async () => {
+    async function fetchMeeting() {
       try {
-        const usersRef = collection(db, "Meetings");
-        const snapshot = await getDocs(usersRef);
-        const meetings = snapshot.docs.map((doc) => (doc.data()
-        ));
-        setMeetings(meetings);
+        const querySnapshot = await getDocs(query(collection(db, "Meetings", "22-02-2024", "Meet")));
+
+        querySnapshot.forEach((doc) => {
+          meetings.push(doc.data());
+        });
+        console.log("meet details", meetings);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
-    };
-    fetchUsers2();
+    }
+
+    fetchMeeting()
   }, []);
 
 
-
-  console.log("nope" + meetings)
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedMeeting, setSelectedMeeting] = useState(null);
@@ -76,7 +94,7 @@ const MeetHistory = () => {
     updateSelectedMeeting(selectedDate);
   }, [selectedDate]); // Empty dependency array ensures it runs only once on mount
 
-
+  console.log(selectedDate)
 
   return (
     <GlobalLayout>
@@ -95,7 +113,7 @@ const MeetHistory = () => {
             />
             <button
               className="bg-blue-500 h-fit px-2 py-1 text-white rounded"
-              onClick={fetchMeetings}
+              onClick={handleTodayClick}
             >
               Today
             </button>
