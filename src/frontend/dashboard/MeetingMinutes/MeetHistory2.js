@@ -70,12 +70,21 @@ const MeetHistory = () => {
                 />
                 {docIDs && (
                     docIDs.map((id, index) => (
-                        <li key={index}>{id}</li>
+                        <div key={index}>
+                            <li>{index}: {id}</li>
+                            {
+                                meetings.map((meet, index) => (
+                                    meet.meetCode == id && (
+                                        <li key={index}>
+                                            Department: {meet.department}
+                                        </li>)
+                                ))}
+                        </div>
                     ))
                 )}
 
 
-                <p>Hello</p>
+
             </div>
         </GlobalLayout>
     );
