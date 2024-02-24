@@ -1,42 +1,13 @@
+
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import GlobalLayout from "../../utils/hoc/globalLayout";
 import tasksData from "./tasksData.json";
-import { db } from "../../../firebase.js";
-import { query, collection, getDocs } from "firebase/firestore";
-import { format } from "date-fns";
 
 const MeetHistory = () => {
-
-
-  const [meetings, setMeetings] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedMeeting, setSelectedMeeting] = useState(null);
-
-
-  useEffect(() => {
-    async function fetchMeeting() {
-      try {
-        const querySnapshot = await getDocs(query(collection(db, "Meetings", "22-02-2024", "Meet")));
-
-        querySnapshot.forEach((doc) => {
-          meetings.push(doc.data());
-        });
-        // console.log("meet details", meetings);
-      } catch (error) {
-        console.error("Error fetching Meeting:", error);
-      }
-    }
-
-    fetchMeeting()
-  }, [meetings]);
-
-  // console.log("meet 2", meetings);
-
-
-
-
 
   const handleTabClick = (date) => {
     setSelectedDate(date);
@@ -49,8 +20,7 @@ const MeetHistory = () => {
   };
 
   const updateSelectedMeeting = (date) => {
-
-    const dateObject = meetings.find((d) => {
+    const dateObject = tasksData.dates.find((d) => {
       const formattedDate = new Date(d.date).toISOString().split("T")[0];
       return formattedDate === date.toISOString().split("T")[0];
     });
@@ -67,11 +37,6 @@ const MeetHistory = () => {
     // Load details of the first meeting when the component mounts
     updateSelectedMeeting(selectedDate);
   }, [selectedDate]); // Empty dependency array ensures it runs only once on mount
-
-
-
-
-  console.log(selectedDate)
 
   return (
     <GlobalLayout>
@@ -135,15 +100,6 @@ const MeetHistory = () => {
         </div>
 
         {/* ************************ DISPLAY *********************************** */}
-        {/* {meetings.meetDate.Meet.map((muid) => (
-          <>
-            {muid.name}
-          </>
-        ))} */}
-
-
-
-
         {selectedMeeting && (
           <div className="w-3/4 p-4 m-2 shadow-sm border bg-slate-50 border-blue-600">
             <div className="flex justify-between">
@@ -251,10 +207,40 @@ export default MeetHistory;
 // import "react-datepicker/dist/react-datepicker.css";
 // import GlobalLayout from "../../utils/hoc/globalLayout";
 // import tasksData from "./tasksData.json";
+// import { db } from "../../../firebase.js";
+// import { query, collection, getDocs } from "firebase/firestore";
+// import { format } from "date-fns";
 
 // const MeetHistory = () => {
+
+
+//   const [meetings, setMeetings] = useState([]);
 //   const [selectedDate, setSelectedDate] = useState(new Date());
 //   const [selectedMeeting, setSelectedMeeting] = useState(null);
+
+
+//   useEffect(() => {
+//     async function fetchMeeting() {
+//       try {
+//         const querySnapshot = await getDocs(query(collection(db, "Meetings", "22-02-2024", "Meet")));
+
+//         querySnapshot.forEach((doc) => {
+//           meetings.push(doc.data());
+//         });
+//         // console.log("meet details", meetings);
+//       } catch (error) {
+//         console.error("Error fetching Meeting:", error);
+//       }
+//     }
+
+//     fetchMeeting()
+//   }, [meetings]);
+
+//   // console.log("meet 2", meetings);
+
+
+
+
 
 //   const handleTabClick = (date) => {
 //     setSelectedDate(date);
@@ -267,7 +253,8 @@ export default MeetHistory;
 //   };
 
 //   const updateSelectedMeeting = (date) => {
-//     const dateObject = tasksData.dates.find((d) => {
+
+//     const dateObject = meetings.find((d) => {
 //       const formattedDate = new Date(d.date).toISOString().split("T")[0];
 //       return formattedDate === date.toISOString().split("T")[0];
 //     });
@@ -284,6 +271,11 @@ export default MeetHistory;
 //     // Load details of the first meeting when the component mounts
 //     updateSelectedMeeting(selectedDate);
 //   }, [selectedDate]); // Empty dependency array ensures it runs only once on mount
+
+
+
+
+//   console.log(selectedDate)
 
 //   return (
 //     <GlobalLayout>
@@ -347,6 +339,15 @@ export default MeetHistory;
 //         </div>
 
 //         {/* ************************ DISPLAY *********************************** */}
+//         {/* {meetings.meetDate.Meet.map((muid) => (
+//           <>
+//             {muid.name}
+//           </>
+//         ))} */}
+
+
+
+
 //         {selectedMeeting && (
 //           <div className="w-3/4 p-4 m-2 shadow-sm border bg-slate-50 border-blue-600">
 //             <div className="flex justify-between">
@@ -446,3 +447,5 @@ export default MeetHistory;
 // };
 
 // export default MeetHistory;
+
+
