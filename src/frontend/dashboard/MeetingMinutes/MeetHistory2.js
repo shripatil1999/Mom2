@@ -11,6 +11,7 @@ const MeetHistory = () => {
     const [meetings, setMeetings] = useState([]);
     const [docIDs, setDocIDs] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedMeeting, setSelectedMeeting] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -98,21 +99,21 @@ const MeetHistory = () => {
 
                                 {/* Meeting card */}
                                 <div className="flex flex-col mt-3">
-                                    {date.meetings.map((meeting, index) => (
-                                        <div
-                                            key={index}
-                                            className={`text-lg font-semibold p-3 text-center cursor-pointer border-1 my-2 ${selectedMeeting === meeting
-                                                ? "bg-[#f1f5f9] shadow-sm border-blue-600"
-                                                : ""
-                                                }`}
-                                            onClick={() => setSelectedMeeting(meeting)}
-                                        >
-                                            <p className="text-left text-gray-800">{meeting.name}</p>
-                                            <p className="text-xs text-right mt-2 text-gray-600">
-                                                4.00 PM to 6.00 PM
-                                            </p>
-                                        </div>
-                                    ))}
+
+                                    <div
+
+                                        className={`text-lg font-semibold p-3 text-center cursor-pointer border-1 my-2 ${selectedMeeting === meet
+                                            ? "bg-[#f1f5f9] shadow-sm border-blue-600"
+                                            : ""
+                                            }`}
+                                        onClick={() => setSelectedMeeting(meet)}
+                                    >
+                                        <p className="text-left text-gray-800">{meet.meetDateTime}</p>
+                                        <p className="text-xs text-right mt-2 text-gray-600">
+                                            4.00 PM to 6.00 PM
+                                        </p>
+                                    </div>
+
                                 </div>
 
                             </div>
