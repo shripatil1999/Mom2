@@ -9,9 +9,9 @@ import { auth } from "../../firebase";
 
 const Home = () => {
 
-    
-    const user = auth.currentUser;
 
+    const user = auth.currentUser;
+    console.log("ok:"+user.displayName)
 
 
 
@@ -19,6 +19,7 @@ const Home = () => {
         <GlobalLayout>
             <div className="upperFeature mt-4 flex flex-row justify-between">
                 <p className='font-bold'>Welcome, {user.displayName}</p>
+
                 <SearchFilter />
             </div>
             <div className="shadow-lg mr-6">
@@ -50,7 +51,7 @@ const Home = () => {
                     <div className="TaskDetails mt-5">
                         <Accordion />
                     </div>
-                    
+
                 </div>
             </div>
         </GlobalLayout >
