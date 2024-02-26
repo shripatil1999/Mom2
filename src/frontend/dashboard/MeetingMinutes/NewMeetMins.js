@@ -12,7 +12,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { format } from "date-fns";
 import AutoInput from "../../utils/elements/AutoInput";
 import { db } from "../../../firebase.js";
-import { collection, getDocs, doc, setDoc, updateDoc, addDoc } from "firebase/firestore";
+import { collection, getDocs, doc, setDoc} from "firebase/firestore";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useAlert } from "react-alert";
@@ -173,9 +173,9 @@ const NewMeetMins = () => {
     },
   ]);
   // console.log(table2Rows.subTasks)
-  const [selectedSupporter, setSelectedSupporters] = useState([]);
 
-  const [supportValue, setSupportValue] = useState("");
+
+
 
   const handleInputChangeTable2 = (index, field, value) => {
     const newRows = [...table2Rows];
@@ -243,8 +243,6 @@ const NewMeetMins = () => {
     ]);
   };
 
-  // Subtask New Line Creation
-  const [subtasks, setSubtasks] = useState([{ subTasks: [""] }]);
 
   const addSubtask = (index) => {
     setTable2Rows((prevRows) => {
@@ -262,7 +260,7 @@ const NewMeetMins = () => {
     });
   };
   const AutoMeetCode = format(new Date(), "ddMMyyhh") + count;
-  const supportersArray = selectedSupporter.map((supporter) => supporter.name);
+
 
   const attendeesArray = rows.map((row) => ({
     attendeeName: row.attendeeName,
@@ -272,11 +270,11 @@ const NewMeetMins = () => {
 
 
 
-  const subtaskArray = subtasks.map((subtaskList) =>
-    subtaskList.subTasks.map((subtask) => ({
-      subtaskName: subtask,
-    }))
-  );
+  // const subtaskArray = subtasks.map((subtaskList) =>
+  //   subtaskList.subTasks.map((subtask) => ({
+  //     subtaskName: subtask,
+  //   }))
+  // );
 
   // console.log(subtasks.subTasks)
   // console.log(subtaskArray.subtaskName)
@@ -297,7 +295,6 @@ const NewMeetMins = () => {
   const submitMeeting = async () => {
     try {
       const taskUID = "T" + AutoMeetCode + count + 1;
-      const meetID = currentDateTime + AutoMeetCode;
       const formattedDate = format(new Date(), "dd-MM-yyyy");
 
       const meetingData = {
