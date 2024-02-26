@@ -135,15 +135,6 @@ const MeetHistory = () => {
         </div>
 
         {/* ************************ DISPLAY *********************************** */}
-        {/* {meetings.meetDate.Meet.map((muid) => (
-          <>
-            {muid.name}
-          </>
-        ))} */}
-
-
-
-
         {selectedMeeting && (
           <div className="w-3/4 p-4 m-2 shadow-sm border bg-slate-50 border-blue-600">
             <div className="flex justify-between">

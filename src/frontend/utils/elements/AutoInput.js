@@ -25,7 +25,7 @@ const AutoInput = ({ setter }) => {
 
         useEffect(()=>{
             setter(selected.Location);
-        },[selected.Location])
+        },[setter,selected.Location])
  
 
   return (
