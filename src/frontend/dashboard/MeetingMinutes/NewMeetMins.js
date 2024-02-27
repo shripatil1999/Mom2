@@ -12,7 +12,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { format } from "date-fns";
 import AutoInput from "../../utils/elements/AutoInput";
 import { db } from "../../../firebase.js";
-import { collection, getDocs, doc, setDoc} from "firebase/firestore";
+import { collection, getDocs, doc, setDoc } from "firebase/firestore";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useAlert } from "react-alert";
@@ -52,7 +52,7 @@ const NewMeetMins = () => {
   let [count, setCount] = useState(0);
   const [meetLocation, setMeetLocation] = useState();
   const alert = useAlert();
-
+  const [meetName, setMeetName] = useState("")
   var fromChild = (locationFromChild) => {
     setMeetLocation(locationFromChild); // set the data to a state from child
   };
@@ -318,7 +318,7 @@ const NewMeetMins = () => {
 
       };
 
-      await setDoc(doc(db, "Meetings", formattedDate,"Meet", AutoMeetCode), meetingData);
+      await setDoc(doc(db, "Meetings", formattedDate, "Meet", AutoMeetCode), meetingData);
       alert.success("Meeting updated successfully !");
       setCount(count + 1);
       setTime(0);
@@ -359,6 +359,13 @@ const NewMeetMins = () => {
         <main className="MeetTable mt-3 border-gray-900 mr-6">
           <div className="TableTop flex flex-wrap justify-between  items-center  font-semibold bg-slate-200 border  p-2 mt-4">
             <p>Minutes Code: {AutoMeetCode}</p>
+            <input
+
+              className="w-fit border-b-2 bg-gray-100 border-gray-300 p-2 my-1 focus:outline-none"
+              type="text"
+              value={meetName}
+              onChange={(e) => setMeetName(e.target.value)}
+            />
             <div className="meetLocation flex items-center gap-3">
               <p>Review Meeting Held at:</p>
               <AutoInput setter={fromChild} />
@@ -594,7 +601,7 @@ const NewMeetMins = () => {
 
                           <input
                             key={subIndex}
-                            className="w-full border-b-2 bg-gray-100 border-gray-300 p-2 focus:outline-none"
+                            className="w-full border-b-2 bg-gray-100 border-gray-300 p-2 my-1 focus:outline-none"
                             type="text"
                             value={subtask}
                             onChange={(e) => handleSubtaskChange(index, subIndex, e.target.value)}
