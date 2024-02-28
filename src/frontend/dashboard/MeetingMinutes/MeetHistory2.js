@@ -126,6 +126,7 @@ const MeetHistory = () => {
     useEffect(() => {
         // Load details of the first meeting when the component mounts
         updateSelectedMeeting(selectedDate);
+
     }, [selectedDate, updateSelectedMeeting]); // Empty dependency array ensures it runs only once on mount
 
 
@@ -172,7 +173,7 @@ const MeetHistory = () => {
                                             }`}
                                         onClick={() => setSelectedMeeting(meet)}
                                     >
-                                        <p className="text-left text-gray-800">{meet.meetDateTime}</p>
+                                        <p className="text-left text-gray-800">{meet.meetName}</p>
                                         <p className="text-xs text-right mt-2 text-gray-600">
                                             Duration:{meet.duration}
                                         </p>
@@ -213,7 +214,7 @@ const MeetHistory = () => {
                             <p><span className="font-semibold uppercase">Meeting held at: </span> {selectedMeeting.location}</p>
                         </div>
                         <h2 className="text-2xl text-blue-950 font-bold my-4">
-                            {selectedMeeting && ` ${selectedMeeting.meetDateTime}`}{" "}
+                            {selectedMeeting && ` ${selectedMeeting.meetName}`}{" "}
                         </h2>
                         <div className="flex justify-between">
                             <div className="chairing mb-2 w-1/3">
@@ -252,7 +253,8 @@ const MeetHistory = () => {
                                                     <p>ACTION BY: </p>
 
                                                     <span className="border-1 text-base font-normal bg-pink-100 border-pink-600 p-2 m-1 shadow-sm shadow-pink-700">
-                                                        {selectedMeeting.actionBy}
+                                                        {task.actionBy}
+
                                                     </span>
 
                                                 </div>

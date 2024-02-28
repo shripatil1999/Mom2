@@ -53,6 +53,7 @@ const NewMeetMins = () => {
   const [meetLocation, setMeetLocation] = useState();
   const alert = useAlert();
   const [meetName, setMeetName] = useState("")
+
   var fromChild = (locationFromChild) => {
     setMeetLocation(locationFromChild); // set the data to a state from child
   };
@@ -299,6 +300,7 @@ const NewMeetMins = () => {
 
       const meetingData = {
         meetCode: AutoMeetCode,
+        meetName: meetName,
         duration: hours + ":" + minutes + ":" + seconds,
         location: meetLocation || " ",
         meetDateTime: currentDateTime.toLocaleString(),

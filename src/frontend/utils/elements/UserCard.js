@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import { app, auth,} from '../../../firebase';
+import { app, auth, } from '../../../firebase';
 import { getFirestore, doc, onSnapshot } from 'firebase/firestore';
 
 const UserCard = (props) => {
@@ -8,32 +8,32 @@ const UserCard = (props) => {
   const [phone, setPhone] = useState('');
   const [employeeID, setEmployeeID] = useState('');
   const [email, setEmail] = useState('');
-  const [department, setDepartment] = useState('');  
-  const [designation, setDesignation]=useState('')
+  const [department, setDepartment] = useState('');
+  const [designation, setDesignation] = useState('')
   const user = auth.currentUser;
 
-        // Fetch user data
-   
-        useEffect(() => {
-          const db = getFirestore(app);
-          const userDocRef = doc(db, 'Users', user.email);
-          const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
-            if (docSnapshot.exists()) {
-              const userData = docSnapshot.data();
-              setName(userData.name || ''); 
-              setEmployeeID(userData.employeeID || '');
-              setEmail(userData.email || '');
-              setPhone(userData.phone || '');
-              setDepartment(userData.department || '');
-              setDesignation(userData.designation || '');
-              // console.log("Fetched Data")
-            }
+  // Fetch user data
 
-          });
-        
+  useEffect(() => {
+    const db = getFirestore(app);
+    const userDocRef = doc(db, 'Users', user.email);
+    const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const userData = docSnapshot.data();
+        setName(userData.name || '');
+        setEmployeeID(userData.employeeID || '');
+        setEmail(userData.email || '');
+        setPhone(userData.phone || '');
+        setDepartment(userData.department || '');
+        setDesignation(userData.designation || '');
+        // console.log("Fetched Data")
+      }
 
-          return () => unsubscribe();
-        }, [user.email]);
+    });
+
+
+    return () => unsubscribe();
+  }, [user.email]);
 
 
 
@@ -45,19 +45,19 @@ const UserCard = (props) => {
             <img
               className="w-32 h-32 rounded-full mx-auto"
               src={props.userPic}
-              alt="John Doe"
+              alt="User Pic"
             />
           </div>
           <div className="p-2">
             <h3 className="text-center text-xl text-gray-900 font-medium leading-8">
-            {name}
+              {name}
             </h3>
             <div className="text-center text-gray-500 text-xs font-bold">
-            <p>{designation}</p>
+              <p>{designation}</p>
             </div>
             <table className="text-xs my-3">
               <tbody>
-              <tr>
+                <tr>
                   <td className="px-1 py-2 border-0 text-gray-700 font-bold">
                     Employee ID:
                   </td>
