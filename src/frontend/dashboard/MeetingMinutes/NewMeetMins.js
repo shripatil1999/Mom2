@@ -365,6 +365,7 @@ const NewMeetMins = () => {
 
               className="w-fit border-b-2 bg-gray-100 border-gray-300 p-2 my-1 focus:outline-none"
               type="text"
+              placeholder="Meet Name"
               value={meetName}
               onChange={(e) => setMeetName(e.target.value)}
             />

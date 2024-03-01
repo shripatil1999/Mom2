@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import GlobalLayout from "../../utils/hoc/globalLayout";
 import tasksData from "./tasksData.json";
-import { db } from "../../../firebase.js";
+import { db,auth } from "../../../firebase.js";
 import { query, collection, getDocs } from "firebase/firestore";
 import { format } from "date-fns";
 
