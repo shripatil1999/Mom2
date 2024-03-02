@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { signOut } from "firebase/auth";
-import { auth } from '../../firebase';
-import { useNavigate } from 'react-router-dom';
-import { useAlert } from 'react-alert'
+import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
+import { useAlert } from "react-alert";
 
 // import 'bootstrap-icons/font/bootstrap-icons.css';
 // import './App.css'; // Assuming you have your TailwindCSS styles in a separate file
@@ -12,8 +12,7 @@ const Navbar = () => {
   const [submenuHidden, setSubmenuHidden] = useState(false);
   const [sidebarHidden, setSidebarHidden] = useState(false);
   const navigate = useNavigate();
-  const alert = useAlert()
-
+  const alert = useAlert();
 
   const toggleSubmenu = () => {
     setSubmenuHidden(!submenuHidden);
@@ -29,18 +28,18 @@ const Navbar = () => {
     setSubmenuHidden2(!submenuHidden2);
   };
 
-
   const handleLogout = () => {
-    signOut(auth).then(() => {
-      // Sign-out successful.
-      navigate("/");
-      // console.log("Signed out successfully")
-      alert.success("Signed out successfully");
-    }).catch((error) => {
-      // An error happened.
-    });
-  }
-
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+        navigate("/");
+        // console.log("Signed out successfully")
+        alert.success("Signed out successfully");
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
 
   return (
     <div className="bg-[#252c48] w-fit h-fit">
@@ -57,8 +56,8 @@ const Navbar = () => {
             display: "none",
           },
           /* Hide scrollbar for IE, Edge, and Firefox */
-          msOverflowStyle: "none", /* IE and Edge */
-          scrollbarWidth: "none", /* Firefox */
+          msOverflowStyle: "none" /* IE and Edge */,
+          scrollbarWidth: "none" /* Firefox */,
         }}
         className={`sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[270px] overflow-y-auto text-center bg-[#252c48] ${sidebarHidden ? "hidden" : ""
           }`}
@@ -184,13 +183,22 @@ const Navbar = () => {
           className={`text-left flex flex-col text-sm mt-2 w-4/5 mx-auto text-gray-200 font-bold ${submenuHidden ? "hidden" : ""
             }`}
         >
-          <Link to='/overview' className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1">
+          <Link
+            to="/overview"
+            className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1"
+          >
             Overview
           </Link>
-          <Link to='/Analytics' className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1 active:bg-[#33769B] focus:bg-[#33769B]">
+          <Link
+            to="/Analytics"
+            className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1 active:bg-[#33769B] focus:bg-[#33769B]"
+          >
             Analytics
           </Link>
-          <Link to='/performance' className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1">
+          <Link
+            to="/performance"
+            className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1"
+          >
             Performance Metrics
           </Link>
         </div>

@@ -13,8 +13,8 @@ import { format } from "date-fns";
 import AutoInput from "../../utils/elements/AutoInput";
 import { db } from "../../../firebase.js";
 import { collection, getDocs, doc, setDoc } from "firebase/firestore";
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 import { useAlert } from "react-alert";
 
 const Department = [
@@ -52,7 +52,7 @@ const NewMeetMins = () => {
   let [count, setCount] = useState(0);
   const [meetLocation, setMeetLocation] = useState();
   const alert = useAlert();
-  const [meetName, setMeetName] = useState("")
+  const [meetName, setMeetName] = useState("");
 
   var fromChild = (locationFromChild) => {
     setMeetLocation(locationFromChild); // set the data to a state from child
@@ -81,7 +81,6 @@ const NewMeetMins = () => {
   const startAndStop = () => {
     setIsRunning(!isRunning);
   };
-
 
   const [rows, setRows] = useState([
     {
@@ -113,7 +112,6 @@ const NewMeetMins = () => {
     const newRows = [...rows];
     newRows[index][field] = value;
     setRows(newRows);
-
   };
 
   const handleUserSelect = (index, selectedUserId) => {
@@ -126,8 +124,6 @@ const NewMeetMins = () => {
       return newRows;
     });
     // setSelectedUser(selectedUser.name);
-
-    ;
   };
 
   const handleAddRow = () => {
@@ -135,19 +131,19 @@ const NewMeetMins = () => {
       const lastRow = prevRows[prevRows.length - 1];
 
       // Check if the last row is already an empty row
-      if (
-        lastRow &&
-        lastRow.attendeeName === ""
-      ) {
+      if (lastRow && lastRow.attendeeName === "") {
         // Remove the last row
         return prevRows.slice(0, 1);
       } else {
         // Add a new empty row
-        return [...prevRows, {
-          attendeeName: "",
-          email: "",
-          designation: "",
-        }];
+        return [
+          ...prevRows,
+          {
+            attendeeName: "",
+            email: "",
+            designation: "",
+          },
+        ];
       }
     });
   };
@@ -158,7 +154,6 @@ const NewMeetMins = () => {
     setChaired(selectedUser.name || ""); // Set the name of the selected user
     // setSelectedUser(selectedUser);
   };
-
 
   // New Line inputs for second Table
   const defaultDate = new Date(); // Set your default date here
@@ -175,23 +170,19 @@ const NewMeetMins = () => {
   ]);
   // console.log(table2Rows.subTasks)
 
-
-
-
   const handleInputChangeTable2 = (index, field, value) => {
     const newRows = [...table2Rows];
-    if (field === 'subTasks') {
-      const subTasksArray = value.split('\n');
-      newRows[index][field] = subTasksArray.filter((subTask) => subTask.trim() !== '');
+    if (field === "subTasks") {
+      const subTasksArray = value.split("\n");
+      newRows[index][field] = subTasksArray.filter(
+        (subTask) => subTask.trim() !== ""
+      );
     } else {
       newRows[index][field] = value;
     }
     setTable2Rows(newRows);
 
     // Check if the field is 'subTasks'
-
-
-
   };
 
   //Action By
@@ -206,9 +197,7 @@ const NewMeetMins = () => {
       return newRows;
     });
     // setSelectedUser2(selectedActionBy);
-    ;
   };
-
 
   const handleKeyDownTable2 = (event, index) => {
     if (event.key === "Enter") {
@@ -244,7 +233,6 @@ const NewMeetMins = () => {
     ]);
   };
 
-
   const addSubtask = (index) => {
     setTable2Rows((prevRows) => {
       const updatedRows = [...prevRows];
@@ -262,14 +250,11 @@ const NewMeetMins = () => {
   };
   const AutoMeetCode = format(new Date(), "ddMMyyhh") + count;
 
-
   const attendeesArray = rows.map((row) => ({
     attendeeName: row.attendeeName,
     email: row.email,
     designation: row.designation,
   }));
-
-
 
   // const subtaskArray = subtasks.map((subtaskList) =>
   //   subtaskList.subTasks.map((subtask) => ({
@@ -291,12 +276,26 @@ const NewMeetMins = () => {
   //   targetDate: row.targetDate,
   // }));
   // Extracting date in the format "DD-MM-YYYY"
+  const mappedTask = {
+    tasks: table2Rows.map((row) => ({
+      taskUID: taskUID,
+      agenda: row.agenda || "",
+      description: row.discussionPoints || "",
+      subTasks: row.subTasks || [], // Include subtasks for each task
+      actionBy: row.actionBy || " ",
+      supporters: row.supporters || [],
+      startDate: row.startDate,
+      targetDate: row.targetDate, // Include subtasks for each task
+    })),
+  };
 
+  // console.log("Task", mappedTask)
 
   const submitMeeting = async () => {
     try {
       const taskUID = "T" + AutoMeetCode + count + 1;
       const formattedDate = format(new Date(), "dd-MM-yyyy");
+
 
       const meetingData = {
         meetCode: AutoMeetCode,
@@ -317,10 +316,16 @@ const NewMeetMins = () => {
           startDate: row.startDate,
           targetDate: row.targetDate, // Include subtasks for each task
         })),
-
       };
 
-      await setDoc(doc(db, "Meetings", formattedDate, "Meet", AutoMeetCode), meetingData);
+      await setDoc(
+        doc(db, "Meetings", formattedDate, "Meet", AutoMeetCode),
+        meetingData
+      );
+
+      await setDoc(doc(db, "Tasks", AutoMeetCode), mappedTask)
+
+
       alert.success("Meeting updated successfully !");
       setCount(count + 1);
       setTime(0);
@@ -362,7 +367,6 @@ const NewMeetMins = () => {
           <div className="TableTop flex flex-wrap justify-between  items-center  font-semibold bg-slate-200 border  p-2 mt-4">
             <p>Minutes Code: {AutoMeetCode}</p>
             <input
-
               className="w-fit border-b-2 bg-gray-100 border-gray-300 p-2 my-1 focus:outline-none"
               type="text"
               placeholder="Meet Name"
@@ -402,23 +406,27 @@ const NewMeetMins = () => {
                           {...params}
                           label="Attendee Name"
                           onChange={(e) =>
-                            handleInputChange(index, "attendeeName", e.target.value)
+                            handleInputChange(
+                              index,
+                              "attendeeName",
+                              e.target.value
+                            )
                           }
                         />
                       )}
-
                       onChange={(event, newValue) => {
                         handleInputChange(index, "attendeeName", newValue);
                       }}
                       onBlur={() => {
                         // This will be triggered when the Autocomplete loses focus
-                        const selectedUserId = userList.find(user => user.name === row.attendeeName)?.id;
+                        const selectedUserId = userList.find(
+                          (user) => user.name === row.attendeeName
+                        )?.id;
                         if (selectedUserId) {
                           handleUserSelect(index, selectedUserId);
                         }
                       }}
                     />
-
                   </td>
                   <td>
                     <input
@@ -440,7 +448,6 @@ const NewMeetMins = () => {
                       onChange={(e) =>
                         handleInputChange(index, "designation", e.target.value)
                       }
-
                     />
                     <button
                       className="absolute bottom-3 -right-3 px-1 bg-slate-200 border border-gray-900 rounded-full flex items-center"
@@ -513,15 +520,14 @@ const NewMeetMins = () => {
               disablePortal
               id={`combo-box-demo-chairmen`}
               options={userList.map((user) => user.name)}
-              sx={{ width: 200, height: 50, background: '#ffff', }}
-
+              sx={{ width: 200, height: 50, background: "#ffff" }}
               value={chaired === "" ? null : chaired}
               renderInput={(params) => (
                 <TextField
                   {...params}
                   label="Chairman Name"
                   onChange={(e) => setChaired(e.target.value)}
-                  sx={{ background: '#ffff', borderRadius: '10px' }}
+                  sx={{ background: "#ffff", borderRadius: "10px" }}
                 />
               )}
               onChange={(e, newValue) => {
@@ -529,7 +535,9 @@ const NewMeetMins = () => {
               }}
               onBlur={() => {
                 // This will be triggered when the Autocomplete loses focus
-                const selectedUserId = userList.find((user) => user.name === chaired)?.id;
+                const selectedUserId = userList.find(
+                  (user) => user.name === chaired
+                )?.id;
                 if (selectedUserId) {
                   handleChairmenSelect(selectedUserId);
                 }
@@ -589,7 +597,6 @@ const NewMeetMins = () => {
                       >
                         Subtasks +
                       </button>
-
                     </div>
                     <div>
                       {/* <li key={index}>
@@ -601,13 +608,18 @@ const NewMeetMins = () => {
                         </li> */}
                       {row.subTasks.map((subtask, subIndex) => (
                         <div key={subIndex}>
-
                           <input
                             key={subIndex}
                             className="w-full border-b-2 bg-gray-100 border-gray-300 p-2 my-1 focus:outline-none"
                             type="text"
                             value={subtask}
-                            onChange={(e) => handleSubtaskChange(index, subIndex, e.target.value)}
+                            onChange={(e) =>
+                              handleSubtaskChange(
+                                index,
+                                subIndex,
+                                e.target.value
+                              )
+                            }
                           />
                         </div>
                       ))}
@@ -618,24 +630,29 @@ const NewMeetMins = () => {
                       disablePortal
                       id={`combo-box-demo-${index}`}
                       options={userList.map((user) => user.name)}
-                      sx={{ width: '100%' }}
+                      sx={{ width: "100%" }}
                       value={row.actionBy === "" ? null : row.actionBy}
                       renderInput={(params) => (
                         <TextField
                           {...params}
                           label="Action By"
                           onChange={(e) =>
-                            handleInputChangeTable2(index, "actionBy", e.target.value)
+                            handleInputChangeTable2(
+                              index,
+                              "actionBy",
+                              e.target.value
+                            )
                           }
                         />
                       )}
-
                       onChange={(event, newValue) => {
                         handleInputChangeTable2(index, "actionBy", newValue);
                       }}
                       onBlur={() => {
                         // This will be triggered when the Autocomplete loses focus
-                        const selectedUserId = userList.find(user => user.name === row.attendeeName)?.id;
+                        const selectedUserId = userList.find(
+                          (user) => user.name === row.attendeeName
+                        )?.id;
                         if (selectedUserId) {
                           handleActionBySelect(index, selectedUserId);
                         }
@@ -643,11 +660,10 @@ const NewMeetMins = () => {
                     />
                   </td>
                   <td>
-
                     <Autocomplete
                       multiple
                       id="tags-standard"
-                      sx={{ width: '100%' }}
+                      sx={{ width: "100%" }}
                       options={userList.map((user) => user.name)}
                       getOptionLabel={(option) => option || ""}
                       value={row.supporters ? row.supporters : []}
@@ -660,8 +676,7 @@ const NewMeetMins = () => {
                           variant="standard"
                           label="Multiple values"
                           placeholder="Favorites"
-                          sx={{ width: '100%' }}
-
+                          sx={{ width: "100%" }}
                         />
                       )}
                     />
@@ -725,8 +740,6 @@ const NewMeetMins = () => {
 
 export default NewMeetMins;
 
-
-
 // import React from "react";
 // import GlobalLayout from "../../utils/hoc/globalLayout";
 // import Dropdown from "../../utils/elements/dropdown";
@@ -742,7 +755,6 @@ export default NewMeetMins;
 // import { db } from "../../../firebase.js";
 // import { collection, getDocs, doc, setDoc } from "firebase/firestore";
 // // import { getFirestore, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
-
 
 // const Department = [
 //   { name: "Software Development" },
@@ -1033,8 +1045,6 @@ export default NewMeetMins;
 
 //   const AutoMeetCode = format(new Date(), "ddMMyyhh") + count;
 //   const supportersArray = selectedSupporter.map((supporter) => supporter.name);
-
-
 
 //   const submitMeeting = async () => {
 //     try {

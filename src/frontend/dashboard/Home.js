@@ -11,8 +11,8 @@ const Home = () => {
 
 
     const user = auth.currentUser;
-    console.log("ok:"+user.displayName)
-
+    console.log("ok:", user.displayName)
+    console.log(user)
 
 
     return (

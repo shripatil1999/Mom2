@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import GlobalLayout from "../utils/hoc/globalLayout";
 import { Menu, Transition, Popover } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
@@ -9,13 +9,16 @@ import "react-datepicker/dist/react-datepicker.css";
 import Attachment from "../utils/elements/Attachment";
 import SubtaskForm from "../utils/elements/SubtaskForm";
 import { FolderArrowDownIcon } from "@heroicons/react/24/solid";
-import { storage, auth } from '../../firebase.js'; // Import your Firebase storage instance
-
+import { storage, auth } from "../../firebase.js"; // Import your Firebase storage instance
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase.js";
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 const TaskDetails = () => {
+  const [tasks, setTasks] = useState([]);
   const [selectedTab, setSelectedTab] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -23,6 +26,7 @@ const TaskDetails = () => {
   const [comments, setComments] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
+
   const currentUser = auth.currentUser;
   // Function to add a new comment to the list
   const addComment = () => {
@@ -57,7 +61,8 @@ const TaskDetails = () => {
   const clearComment = () => {
     setComment("");
   };
-
+  // console.log(currentUser.displayName);
+  // console.log(currentUser);
 
   const handleFileUpload = (event) => {
     const files = event.target.files;
@@ -80,11 +85,73 @@ const TaskDetails = () => {
   const handleUpload = async () => {
     setUploading(true);
 
-
-
     setUploadedFiles([]);
   };
 
+
+  const fetchTasks = async (currentUser) => {
+    try {
+      const currentUserUid = currentUser.uid;
+
+      // Query tasks where the current user is in supporters or is the actionBy user
+      const tasksQuery = query(
+        collection(db, "Tasks"),
+        where("supporters", "array-contains", currentUserUid),
+        where("actionBy", "==", currentUserUid)
+      );
+
+      // Fetch tasks based on the query
+      const tasksSnapshot = await getDocs(tasksQuery);
+
+      // Extract task data from the snapshot
+      const tasks = tasksSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+      return tasks;
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+      throw error; // Rethrow the error to handle it in the calling code if needed
+    }
+  };
+  fetchTasks()
+  // Example usage:
+  // Assuming currentUser is the object representing the current user
+
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+
+        const unsubscribe = onSnapshot(doc(db, "Tasks"), (doc) => {
+
+          setTasks(doc.data());
+
+        });
+
+        // const q = query(collection(db, "Tasks"));
+        // const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        //   const fetchedMeetings = [];
+
+
+        //   querySnapshot.forEach((doc) => {
+        //     fetchedMeetings.push(doc.data());
+
+        //   });
+        // });
+
+        return () => {
+          // Cleanup the subscription when the component unmounts
+          unsubscribe();
+        };
+      } catch (error) {
+        console.error("Error fetching Tasks:", error);
+      }
+    };
+    fetchData();
+  }, []);
+  console.log("tasks", tasks)
   return (
     <GlobalLayout>
       <div className="flex border-transparent rounded shadow-lg p-3">
@@ -184,7 +251,8 @@ const TaskDetails = () => {
                 <Tab className="" key={index}>
                   {({ selected }) => (
                     <div
-                      className={'' +
+                      className={
+                        "" +
                         (selected
                           ? " bg-light-900 text-blue-900 border-2 border-blue-600 bg-sky-100 shadow "
                           : "text-[#252c48] border-2 border-gray-100  hover:bg-white/[2] hover:text-[#252c48]")
@@ -217,9 +285,7 @@ const TaskDetails = () => {
               {/* Render content based on selected tab */}
 
               <div className="main-body p-2 ">
-
                 <div className="tasks">
-
                   {/* {taskData[selectedTab].subtasks.map((subtask, index) => (
                   <p key={index}>{subtask}</p>
                 ))} */}
@@ -243,7 +309,6 @@ const TaskDetails = () => {
                     <div className="supporter">
                       <p>
                         Supporter <i className="bi bi-person-circle"></i>
-
                       </p>
                     </div>
                   </div>
@@ -392,7 +457,9 @@ const TaskDetails = () => {
                               {/* Display chat message */}
                               <div className="flex-1 w-3/4 bg-indigo-400 text-white p-2 rounded-lg mb-2 relative">
                                 <p className="text-base">{c.text}</p>
-                                <p className="text-sm text-end">{c.timestamp}</p>
+                                <p className="text-sm text-end">
+                                  {c.timestamp}
+                                </p>
                               </div>
                             </div>
                           ))}
@@ -617,12 +684,19 @@ const TaskDetails = () => {
                             <div className="FilesView w-full flex justify-start gap-3 mt-2">
                               {/* Display the uploaded files */}
                               {uploadedFiles.map((file, index) => (
-                                <img key={index} src={`/images/icons/${file.type === 'application/pdf' ? 'pdf' : 'word'}.png`} alt="" />
+                                <img
+                                  key={index}
+                                  src={`/images/icons/${file.type === "application/pdf"
+                                    ? "pdf"
+                                    : "word"
+                                    }.png`}
+                                  alt=""
+                                />
                               ))}
                             </div>
                           </div>
                           <div
-                            style={{ border: 'dashed 1px gray' }}
+                            style={{ border: "dashed 1px gray" }}
                             className="m-4 w-1/2 flex justify-center rounded-lg border-gray-900/25 px-6 py-10"
                             onDragOver={handleDragOver}
                             onDrop={handleDrop}
@@ -659,7 +733,7 @@ const TaskDetails = () => {
                               disabled={uploading || uploadedFiles.length === 0}
                               className="bg-indigo-500 text-white font-semibold px-4 py-2 rounded-md focus:outline-none"
                             >
-                              {uploading ? 'Uploading...' : 'Upload'}
+                              {uploading ? "Uploading..." : "Upload"}
                             </button>
                           </div>
                         </Tab.Panel>
@@ -667,7 +741,6 @@ const TaskDetails = () => {
                     </Tab.Group>
                   </div>
                 </div>
-
               </div>
             </>
           )}

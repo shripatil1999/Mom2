@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import GlobalLayout from "../../utils/hoc/globalLayout";
-
 import { db } from "../../../firebase.js";
 import { query, collection, onSnapshot } from "firebase/firestore";
 import { parseISO, format } from "date-fns";
