@@ -10,9 +10,11 @@ import Attachment from "../utils/elements/Attachment";
 import SubtaskForm from "../utils/elements/SubtaskForm";
 import { FolderArrowDownIcon } from "@heroicons/react/24/solid";
 import { storage, auth } from "../../firebase.js"; // Import your Firebase storage instance
-import { doc, onSnapshot } from "firebase/firestore";
+import { onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase.js";
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -89,32 +91,34 @@ const TaskDetails = () => {
   };
 
 
-  const fetchTasks = async (currentUser) => {
+  const fetchTasks = async () => {
     try {
-      const currentUserUid = currentUser.uid;
+      const user = currentUser.displayName; // Assuming displayName is the user identifier
 
-      // Query tasks where the current user is in supporters or is the actionBy user
-      const tasksQuery = query(
-        collection(db, "Tasks"),
-        where("supporters", "array-contains", currentUserUid),
-        where("actionBy", "==", currentUserUid)
-      );
+      // Reference the "Tasks" collection and a specific document ID
+      const taskDocumentRef = doc(db, "Tasks", "020324051");
 
-      // Fetch tasks based on the query
-      const tasksSnapshot = await getDocs(tasksQuery);
+      // Fetch the specific task document
+      const taskDoc = await getDoc(taskDocumentRef);
 
-      // Extract task data from the snapshot
-      const tasks = tasksSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-      return tasks;
+      // Check if the document exists by verifying if data() returns a non-null value
+      if (taskDoc && taskDoc.data() !== null) {
+        const taskData = { id: taskDoc.id, ...taskDoc.data() };
+        console.log(taskData); // Log or use the task data as needed
+        return [taskData]; // Return as an array for consistency with the previous structure
+      } else {
+        console.log("Task document not found");
+        return [];
+      }
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      console.error("Error fetching task:", error);
       throw error; // Rethrow the error to handle it in the calling code if needed
     }
   };
-  fetchTasks()
-  // Example usage:
-  // Assuming currentUser is the object representing the current user
+
+  // Call the fetchTasks function
+  fetchTasks();
+
 
 
 
