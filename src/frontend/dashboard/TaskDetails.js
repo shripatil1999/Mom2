@@ -9,12 +9,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import Attachment from "../utils/elements/Attachment";
 import SubtaskForm from "../utils/elements/SubtaskForm";
 import { FolderArrowDownIcon } from "@heroicons/react/24/solid";
-import { storage, auth } from "../../firebase.js"; // Import your Firebase storage instance
-import { onSnapshot } from "firebase/firestore";
+import { auth } from "../../firebase.js"; // Import your Firebase storage instance
+import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase.js";
-import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
-
-
+import { getDoc } from 'firebase/firestore';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -96,7 +94,7 @@ const TaskDetails = () => {
       const user = currentUser.displayName; // Assuming displayName is the user identifier
 
       // Reference the "Tasks" collection and a specific document ID
-      const taskDocumentRef = doc(db, "Tasks", "020324051");
+      const taskDocumentRef = doc(db, "Tasks", "030324100");
 
       // Fetch the specific task document
       const taskDoc = await getDoc(taskDocumentRef);
@@ -104,12 +102,23 @@ const TaskDetails = () => {
       // Check if the document exists by verifying if data() returns a non-null value
       if (taskDoc && taskDoc.data() !== null) {
         const taskData = { id: taskDoc.id, ...taskDoc.data() };
-        console.log(taskData); // Log or use the task data as needed
-        return [taskData]; // Return as an array for consistency with the previous structure
+
+        const matchingTasks = taskData.tasks.filter((task) => {
+          return task.actionBy === user || (task.supporters && task.supporters.includes(user));
+        });
+
+        if (matchingTasks.length > 0) {
+          setTasks(matchingTasks);
+        } else {
+          console.log("No matching tasks found");
+        }
+
+        return [taskData];
       } else {
         console.log("Task document not found");
         return [];
       }
+
     } catch (error) {
       console.error("Error fetching task:", error);
       throw error; // Rethrow the error to handle it in the calling code if needed
@@ -119,43 +128,41 @@ const TaskDetails = () => {
   // Call the fetchTasks function
   fetchTasks();
 
+  // console.log("Task", tasks);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
 
 
+  //       const unsubscribe = onSnapshot(doc(db, "Tasks"), (doc) => {
+
+  //         setTasks(doc.data());
+
+  //       });
+
+  //       // const q = query(collection(db, "Tasks"));
+  //       // const unsubscribe = onSnapshot(q, (querySnapshot) => {
+  //       //   const fetchedMeetings = [];
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
+  //       //   querySnapshot.forEach((doc) => {
+  //       //     fetchedMeetings.push(doc.data());
 
+  //       //   });
+  //       // });
 
-        const unsubscribe = onSnapshot(doc(db, "Tasks"), (doc) => {
-
-          setTasks(doc.data());
-
-        });
-
-        // const q = query(collection(db, "Tasks"));
-        // const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        //   const fetchedMeetings = [];
-
-
-        //   querySnapshot.forEach((doc) => {
-        //     fetchedMeetings.push(doc.data());
-
-        //   });
-        // });
-
-        return () => {
-          // Cleanup the subscription when the component unmounts
-          unsubscribe();
-        };
-      } catch (error) {
-        console.error("Error fetching Tasks:", error);
-      }
-    };
-    fetchData();
-  }, []);
-  console.log("tasks", tasks)
+  //       return () => {
+  //         // Cleanup the subscription when the component unmounts
+  //         unsubscribe();
+  //       };
+  //     } catch (error) {
+  //       console.error("Error fetching Tasks:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+  // console.log("tasks", tasks)
   return (
     <GlobalLayout>
       <div className="flex border-transparent rounded shadow-lg p-3">
