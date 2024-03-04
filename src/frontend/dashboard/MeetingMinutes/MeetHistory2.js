@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import GlobalLayout from "../../utils/hoc/globalLayout";
 import { db } from "../../../firebase.js";
 import { query, collection, onSnapshot } from "firebase/firestore";
-import { parseISO, format } from "date-fns";
+import { format } from "date-fns";
 
 const MeetHistory = () => {
     const [meetings, setMeetings] = useState([]);
@@ -124,6 +124,11 @@ const MeetHistory = () => {
         updateSelectedMeeting(selectedDate);
     }, [selectedDate, updateSelectedMeeting]); // Empty dependency array ensures it runs only once on mount
 
+    const formatTimeStamp = (timestamp) => {
+        const date = new Date(timestamp * 1000);
+        return format(date, 'dd-MM-yyyy hh-mm a')
+    }
+
     return (
         <GlobalLayout>
             <div className="flex">
@@ -217,7 +222,7 @@ const MeetHistory = () => {
                                     <span className="font-semibold uppercase">
                                         Duration of the Meeting:
                                     </span>{" "}
-                                   {selectedMeeting.duration}
+                                    {selectedMeeting.duration}
                                 </p>
                             </div>
                             <div className="flex justify-between my-2">
@@ -289,13 +294,13 @@ const MeetHistory = () => {
                                                             <span className="font-semibold uppercase">
                                                                 Start Date:{" "}
                                                             </span>
-                                                            {task.startDate.seconds}
+                                                            {formatTimeStamp(task.startDate.seconds)}
                                                         </p>
                                                         <p className="start">
                                                             <span className="font-semibold uppercase">
                                                                 Target Date:{" "}
                                                             </span>
-                                                            {task.targetDate.seconds}
+                                                            {formatTimeStamp(task.targetDate.seconds)}
                                                         </p>
                                                     </div>
                                                     <div className="supporter my-2 ml-auto flex items-center">

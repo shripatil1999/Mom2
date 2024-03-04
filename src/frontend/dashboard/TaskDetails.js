@@ -9,10 +9,16 @@ import "react-datepicker/dist/react-datepicker.css";
 import Attachment from "../utils/elements/Attachment";
 import SubtaskForm from "../utils/elements/SubtaskForm";
 import { FolderArrowDownIcon } from "@heroicons/react/24/solid";
-import { auth } from "../../firebase.js"; // Import your Firebase storage instance
-import { doc, onSnapshot } from "firebase/firestore";
-import { db } from "../../firebase.js";
-import { getDoc } from 'firebase/firestore';
+import { auth, db } from "../../firebase.js";
+import {
+  doc,
+  // onSnapshot,
+  getDoc,
+  collection,
+  getDocs,
+} from "firebase/firestore";
+import { format } from "date-fns";
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -26,8 +32,10 @@ const TaskDetails = () => {
   const [comments, setComments] = useState([]);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [documentIds, setDocumentIds] = useState([]);
 
   const currentUser = auth.currentUser;
+  const user = currentUser.displayName;
   // Function to add a new comment to the list
   const addComment = () => {
     // Check if the comment is not empty
@@ -42,20 +50,7 @@ const TaskDetails = () => {
       setComment("");
     }
   };
-  const taskData = [
-    {
-      taskName: "Task Name 1",
-      subtasks: ["Subtask 1", "Subtask 2", "Subtask 3"],
-    },
-    {
-      taskName: "Task Name 2",
-      subtasks: ["Subtask 1", "Subtask 2", "Subtask 3"],
-    },
-    {
-      taskName: "Task Name 3",
-      subtasks: ["Subtask 1", "Subtask 2", "Subtask 3"],
-    },
-  ];
+
 
   // Function to clear the current comment input
   const clearComment = () => {
@@ -88,52 +83,102 @@ const TaskDetails = () => {
     setUploadedFiles([]);
   };
 
+  useEffect(() => {
+    const fetchTaskDocumentIds = async () => {
+      try {
+        const tasksCollectionRef = collection(db, "Tasks");
 
-  const fetchTasks = async () => {
-    try {
-      const user = currentUser.displayName; // Assuming displayName is the user identifier
+        // Fetch all documents from the "Tasks" collection
+        const tasksSnapshot = await getDocs(tasksCollectionRef);
 
-      // Reference the "Tasks" collection and a specific document ID
-      const taskDocumentRef = doc(db, "Tasks", "030324100");
+        // Extract document IDs from the snapshot
+        const ids = tasksSnapshot.docs.map((doc) => doc.id);
 
-      // Fetch the specific task document
-      const taskDoc = await getDoc(taskDocumentRef);
+        // Set the document IDs in the state
+        setDocumentIds(ids);
+      } catch (error) {
+        console.error("Error fetching document IDs:", error);
+      }
+    };
 
-      // Check if the document exists by verifying if data() returns a non-null value
-      if (taskDoc && taskDoc.data() !== null) {
-        const taskData = { id: taskDoc.id, ...taskDoc.data() };
+    // Call the function to fetch document IDs
+    fetchTaskDocumentIds();
+  }, []); // Empty dependency array ensures that this effect runs once on component mount
 
-        const matchingTasks = taskData.tasks.filter((task) => {
-          return task.actionBy === user || (task.supporters && task.supporters.includes(user));
-        });
 
-        if (matchingTasks.length > 0) {
-          setTasks(matchingTasks);
-        } else {
-          console.log("No matching tasks found");
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const fetchedTasks = [];
+
+        // Loop through each document ID
+        for (const id of documentIds) {
+          // Reference the "Tasks" collection and a specific document ID
+          const taskDocumentRef = doc(db, "Tasks", id);
+
+          // Fetch the specific task document
+          const taskDoc = await getDoc(taskDocumentRef);
+
+          // Check if the document exists by verifying if data() returns a non-null value
+          if (taskDoc && taskDoc.data()) {
+            const taskData = { id: taskDoc.id, ...taskDoc.data() };
+            console.log("taskData", taskData);
+
+            // Check if taskData.tasks is defined before filtering tasks
+            if (taskData.tasks && Array.isArray(taskData.tasks)) {
+              const matchingTasks = taskData.tasks.filter((task) => {
+                return (
+                  task.actionBy === user ||
+                  (task.supporters && task.supporters.includes(user))
+                );
+              });
+
+              fetchedTasks.push(...matchingTasks);
+
+              if (matchingTasks.length > 0) {
+                console.log(`Matching tasks found for document ID: ${id}`);
+              } else {
+                console.log(`No matching tasks found for document ID: ${id}`);
+              }
+            } else {
+              console.log(
+                `Task data or tasks array is undefined for document ID: ${id}`
+              );
+            }
+          } else {
+            console.log(`Task document not found for document ID: ${id}`);
+          }
         }
 
-        return [taskData];
-      } else {
-        console.log("Task document not found");
-        return [];
+        // Set the tasks in the state
+        setTasks(fetchedTasks);
+        console.log("tasks from Matching ", fetchedTasks);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
       }
+    };
 
-    } catch (error) {
-      console.error("Error fetching task:", error);
-      throw error; // Rethrow the error to handle it in the calling code if needed
+    // Call the function to fetch tasks when documentIds changes
+    if (documentIds.length > 0) {
+      fetchTasks();
     }
-  };
+  }, [documentIds, user]); // Trigger the effect when documentIds or user changes
+
+  const formatTimeStamp = (timestamp) => {
+    const date = new Date(timestamp * 1000);
+    return format(date, 'dd-MM-yyyy hh-mm a')
+  }
+  // formatTimeStamp()
+  // console.log(tasks)
 
   // Call the fetchTasks function
-  fetchTasks();
+  // fetchTasks();
 
   // console.log("Task", tasks);
 
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
-
 
   //       const unsubscribe = onSnapshot(doc(db, "Tasks"), (doc) => {
 
@@ -144,7 +189,6 @@ const TaskDetails = () => {
   //       // const q = query(collection(db, "Tasks"));
   //       // const unsubscribe = onSnapshot(q, (querySnapshot) => {
   //       //   const fetchedMeetings = [];
-
 
   //       //   querySnapshot.forEach((doc) => {
   //       //     fetchedMeetings.push(doc.data());
@@ -166,6 +210,14 @@ const TaskDetails = () => {
   return (
     <GlobalLayout>
       <div className="flex border-transparent rounded shadow-lg p-3">
+        {/* <div>
+          <h1>Tasks:</h1>
+          <ul>
+            {tasks && (tasks.map((task) => (
+              <li key={task.taskUID}>ok:{task.actionBy}</li>)
+            ))}
+          </ul>
+        </div> */}
         <div className="sidebar border w-1/5">
           <div className="side-header border-b p-2.5 w-full">
             <Menu as="div" className="relative inline-block text-left w-full">
@@ -258,7 +310,7 @@ const TaskDetails = () => {
               defaultIndex={selectedTab}
               onChange={(index) => setSelectedTab(index)}
             >
-              {taskData.map((task, index) => (
+              {tasks.map((task, index) => (
                 <Tab className="" key={index}>
                   {({ selected }) => (
                     <div
@@ -269,13 +321,13 @@ const TaskDetails = () => {
                           : "text-[#252c48] border-2 border-gray-100  hover:bg-white/[2] hover:text-[#252c48]")
                       }
                     >
-                      <p className="font-bold m-1">{task.taskName}</p>
+                      <p className="font-bold m-1">{task.agenda}</p>
                       <ul>
-                        {task.subtasks.map((subtask, index) => (
+                        {/* {task.subtasks.map((subtask, index) => (
                           <li className="m-1" key={index}>
                             {subtask}
                           </li>
-                        ))}
+                        ))} */}
                       </ul>
                     </div>
                   )}
@@ -284,12 +336,13 @@ const TaskDetails = () => {
             </Tab.Group>
           </div>
         </div>
+
         <div className="main w-4/5 border-y border-r">
           {selectedTab >= 0 && (
             <>
               <div className="main-title flex justify-between border-b p-2 ">
                 <p className="text-lg font-bold">
-                  {taskData[selectedTab].taskName}
+                  Task ID:{tasks[selectedTab]?.taskUID}
                 </p>
                 <SearchFilter />
               </div>
@@ -299,8 +352,24 @@ const TaskDetails = () => {
                 <div className="tasks">
                   {/* {taskData[selectedTab].subtasks.map((subtask, index) => (
                   <p key={index}>{subtask}</p>
-                ))} */}
-
+                 ))} */}
+                  {/* <div>
+                    <h1>Tasks</h1>
+                    <ul>
+                      {
+                        tasks.tasks.map((id) => (
+                          <li key={id}>{id}</li>
+                        ))}
+                    </ul>
+                  </div> */}
+                  {/* <div>
+                    <h1>Document IDs from Tasks Collection:</h1>
+                    <ul>
+                      {documentIds.map((id) => (
+                        <li key={id}>{id}</li>
+                      ))}
+                    </ul>
+                  </div> */}
                   <div className="first-strip shadow-sm  flex items-center justify-between p-2 border px-4 ">
                     <div className="dropdown">
                       <select
@@ -316,22 +385,29 @@ const TaskDetails = () => {
                         <option value="">Completed</option>
                       </select>
                     </div>
-                    <p>Subtask ({taskData[selectedTab].subtasks.length})</p>
-                    <div className="supporter">
-                      <p>
-                        Supporter <i className="bi bi-person-circle"></i>
-                      </p>
+                    <p>Subtask ({tasks[selectedTab]?.subTasks?.length || 0})</p>
+                    <div className="supporters mb-1 flex items-center">
+                      <p>Supporters: </p>
+
+                      {tasks[selectedTab]?.supporters.map(supports => (
+                        <span className="border-1 text-base font-normal bg-pink-100 border-pink-600 p-2 m-1 shadow-sm shadow-pink-700">
+                          {supports}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
                   <div className="second-strip shadow-sm flex items-center p-2 border px-4 mt-3">
                     <p className="font-bold">Description:</p> &nbsp;&nbsp;
-                    <p>Description We'll be shown here. </p>
+                    <p>{tasks[selectedTab]?.description}</p>
                   </div>
 
                   <div className="third-strip shadow-sm flex flex-col gap-2.5 first-letter: p-2 border px-4 mt-3">
                     <p className="font-bold ">Task Information</p>
-                    <p>User : &nbsp;&nbsp;&nbsp;{"Mr. XYZ"}</p>
+                    <p>Action By : &nbsp;&nbsp;&nbsp;
+                      <span className="border-1 text-base font-normal bg-blue-100 border-blue-600 p-2 m-1 shadow-sm shadow-blue-700">
+                        {tasks[selectedTab]?.actionBy}
+                      </span></p>
                     <div className="flex gap-3">
                       <p>Priority : </p>
                       <select
@@ -511,123 +587,49 @@ const TaskDetails = () => {
                         </Tab.Panel>
                         <Tab.Panel className="p-3">
                           <div className=" flex flex-col gap-2 p-2.5 m-3 border-b-2 bg-gray-100 border-gray-400">
-                            <Popover className="relative">
-                              <Popover.Button className="bg-white p-1.5 shadow-sm">
-                                {"Subtask 1"}
-                              </Popover.Button>
-                              <Transition
-                                enter="transition duration-100 ease-out"
-                                enterFrom="transform scale-95 opacity-0"
-                                enterTo="transform scale-100 opacity-100"
-                                leave="transition duration-75 ease-out"
-                                leaveFrom="transform scale-100 opacity-100"
-                                leaveTo="transform scale-95 opacity-0"
-                              ></Transition>
-                              <Popover.Panel className="absolute z-10 bg-white p-3 card shadow">
-                                <div className="cardTitle flex flex-col gap-3">
-                                  <div className="flex">
-                                    <p className="font-semibold">
-                                      Task name: &nbsp;
-                                    </p>
-                                    <p> {" Task Name"}</p>
-                                  </div>
-                                  <div className="flex">
-                                    <p className="font-semibold">
-                                      Target Date: &nbsp;
-                                    </p>
-                                    <p> {" Target Date"} </p>
-                                  </div>
-                                  <div className="">
-                                    <p className="font-semibold ">
-                                      Description:{" "}
-                                    </p>
-                                    <p>
-                                      {
-                                        "Small Description about the task will be appeared here..."
-                                      }
-                                    </p>
-                                  </div>
-                                </div>
-                              </Popover.Panel>
-                            </Popover>
-                            <Popover className="relative">
-                              <Popover.Button className="bg-white p-1.5 shadow-sm">
-                                {"Subtask 2"}
-                              </Popover.Button>
-                              <Transition
-                                enter="transition duration-100 ease-out"
-                                enterFrom="transform scale-95 opacity-0"
-                                enterTo="transform scale-100 opacity-100"
-                                leave="transition duration-75 ease-out"
-                                leaveFrom="transform scale-100 opacity-100"
-                                leaveTo="transform scale-95 opacity-0"
-                              ></Transition>
-                              <Popover.Panel className="absolute z-10 bg-white p-3 card shadow">
-                                <div className="cardTitle flex flex-col gap-3">
-                                  <div className="flex">
-                                    <p className="font-semibold">
-                                      Task name: &nbsp;
-                                    </p>
-                                    <p> {" Task Name"}</p>
-                                  </div>
-                                  <div className="flex">
-                                    <p className="font-semibold">
-                                      Target Date: &nbsp;
-                                    </p>
-                                    <p> {" Target Date"} </p>
-                                  </div>
-                                  <div className="">
-                                    <p className="font-semibold ">
-                                      Description:{" "}
-                                    </p>
-                                    <p>
-                                      {
-                                        "Small Description about the task will be appeared here..."
-                                      }
-                                    </p>
-                                  </div>
-                                </div>
-                              </Popover.Panel>
-                            </Popover>
-                            <Popover className="relative">
-                              <Popover.Button className="bg-white p-1.5 shadow-sm">
-                                {"Subtask 3  "}
-                              </Popover.Button>
-                              <Transition
-                                enter="transition duration-100 ease-out"
-                                enterFrom="transform scale-95 opacity-0"
-                                enterTo="transform scale-100 opacity-100"
-                                leave="transition duration-75 ease-out"
-                                leaveFrom="transform scale-100 opacity-100"
-                                leaveTo="transform scale-95 opacity-0"
-                              ></Transition>
-                              <Popover.Panel className="absolute z-10 bg-white p-3 card shadow">
-                                <div className="cardTitle flex flex-col gap-3">
-                                  <div className="flex">
-                                    <p className="font-semibold">
-                                      Task name: &nbsp;
-                                    </p>
-                                    <p> {" Task Name"}</p>
-                                  </div>
-                                  <div className="flex">
-                                    <p className="font-semibold">
-                                      Target Date: &nbsp;
-                                    </p>
-                                    <p> {" Target Date"} </p>
-                                  </div>
-                                  <div className="">
-                                    <p className="font-semibold ">
-                                      Description:{" "}
-                                    </p>
-                                    <p>
-                                      {
-                                        "Small Description about the task will be appeared here..."
-                                      }
-                                    </p>
-                                  </div>
-                                </div>
-                              </Popover.Panel>
-                            </Popover>
+                            {
+                              tasks[selectedTab]?.subTasks?.map(subtask => (
+                                <Popover className="relative">
+                                  <Popover.Button className="bg-white p-1.5 shadow-sm">
+                                    {subtask === "" ? "No tasks" : subtask}
+                                  </Popover.Button>
+                                  <Transition
+                                    enter="transition duration-100 ease-out"
+                                    enterFrom="transform scale-95 opacity-0"
+                                    enterTo="transform scale-100 opacity-100"
+                                    leave="transition duration-75 ease-out"
+                                    leaveFrom="transform scale-100 opacity-100"
+                                    leaveTo="transform scale-95 opacity-0"
+                                  ></Transition>
+                                  <Popover.Panel className="absolute z-10 bg-white p-3 card shadow">
+                                    <div className="cardTitle flex flex-col gap-3">
+                                      <div className="flex">
+                                        <p className="font-semibold">
+                                          Task name: &nbsp;
+                                        </p>
+                                        <p> {" Task Name"}</p>
+                                      </div>
+                                      <div className="flex">
+                                        <p className="font-semibold">
+                                          Target Date: &nbsp;
+                                        </p>
+                                        <p> {" Target Date"} </p>
+                                      </div>
+                                      <div className="">
+                                        <p className="font-semibold ">
+                                          Description:{" "}
+                                        </p>
+                                        <p>
+                                          {
+                                            "Small Description about the task will be appeared here..."
+                                          }
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </Popover.Panel>
+                                </Popover>
+                              ))
+                            }
                           </div>
                           <div className="addTask flex w-full h-full my-10 justify-center items-center">
                             <button

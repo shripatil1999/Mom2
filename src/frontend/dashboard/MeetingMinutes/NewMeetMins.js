@@ -296,7 +296,6 @@ const NewMeetMins = () => {
       const taskUID = "T" + AutoMeetCode + count + 1;
       const formattedDate = format(new Date(), "dd-MM-yyyy");
 
-
       const meetingData = {
         meetCode: AutoMeetCode,
         meetName: meetName,
@@ -323,8 +322,7 @@ const NewMeetMins = () => {
         meetingData
       );
 
-      await setDoc(doc(db, "Tasks", AutoMeetCode), mappedTask)
-
+      await setDoc(doc(db, "Tasks", AutoMeetCode), mappedTask);
 
       alert.success("Meeting updated successfully !");
       setCount(count + 1);
@@ -418,10 +416,7 @@ const NewMeetMins = () => {
                         handleInputChange(index, "attendeeName", newValue);
                       }}
                       onBlur={() => {
-                        // This will be triggered when the Autocomplete loses focus
-                        const selectedUserId = userList.find(
-                          (user) => user.name === row.attendeeName
-                        )?.id;
+                        const selectedUserId = userList.find((user) => user.name === row.attendeeName)?.id;
                         if (selectedUserId) {
                           handleUserSelect(index, selectedUserId);
                         }
@@ -534,7 +529,6 @@ const NewMeetMins = () => {
                 setChaired(newValue);
               }}
               onBlur={() => {
-                // This will be triggered when the Autocomplete loses focus
                 const selectedUserId = userList.find(
                   (user) => user.name === chaired
                 )?.id;
@@ -649,7 +643,6 @@ const NewMeetMins = () => {
                         handleInputChangeTable2(index, "actionBy", newValue);
                       }}
                       onBlur={() => {
-                        // This will be triggered when the Autocomplete loses focus
                         const selectedUserId = userList.find(
                           (user) => user.name === row.attendeeName
                         )?.id;
