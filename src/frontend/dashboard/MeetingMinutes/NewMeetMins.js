@@ -256,44 +256,27 @@ const NewMeetMins = () => {
     designation: row.designation,
   }));
 
-  // const subtaskArray = subtasks.map((subtaskList) =>
-  //   subtaskList.subTasks.map((subtask) => ({
-  //     subtaskName: subtask,
-  //   }))
-  // );
-
-  // console.log(subtasks.subTasks)
-  // console.log(subtaskArray.subtaskName)
-  // console.log(table2Rows.subTasks.subTasks)
   const taskUID = "T" + AutoMeetCode + count + 1;
-  // const taskArray = table2Rows.map((row, index) => ({
-  //   taskUID: taskUID,
-  //   agenda: row.agenda || "",
-  //   description: row.discussionPoints || "",
-  //   subTasks: subtaskArray || [], // Use subtasks array for the corresponding task
-  //   actionBy: row.actionBy || " ",
-  //   startDate: row.startDate,
-  //   targetDate: row.targetDate,
-  // }));
-  // Extracting date in the format "DD-MM-YYYY"
+
   const mappedTask = {
-    tasks: table2Rows.map((row) => ({
+    [`${taskUID}`]: table2Rows.map((row) => ({
       taskUID: taskUID,
       agenda: row.agenda || "",
       description: row.discussionPoints || "",
-      subTasks: row.subTasks || [], // Include subtasks for each task
+      subTasks: row.subTasks || [],
       actionBy: row.actionBy || " ",
       supporters: row.supporters || [],
       startDate: row.startDate,
-      targetDate: row.targetDate, // Include subtasks for each task
+      targetDate: row.targetDate,
+      meetCode: AutoMeetCode,
     })),
   };
 
-  // console.log("Task", mappedTask)
+  console.log("Task", mappedTask)
 
   const submitMeeting = async () => {
     try {
-      const taskUID = "T" + AutoMeetCode + count + 1;
+      // const taskUID = "T" + AutoMeetCode + count + 1;
       const formattedDate = format(new Date(), "dd-MM-yyyy");
 
       const meetingData = {
@@ -306,7 +289,7 @@ const NewMeetMins = () => {
         chaired: chaired,
         department: selectedDept.name,
         tasks: table2Rows.map((row) => ({
-          taskUID: taskUID,
+          taskUID: taskUID + count,
           agenda: row.agenda || "",
           description: row.discussionPoints || "",
           subTasks: row.subTasks || [], // Include subtasks for each task

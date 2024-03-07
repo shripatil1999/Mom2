@@ -16,7 +16,9 @@ import {
   getDoc,
   collection,
   getDocs,
+  updateDoc
 } from "firebase/firestore";
+
 import { format } from "date-fns";
 
 
@@ -33,6 +35,9 @@ const TaskDetails = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [documentIds, setDocumentIds] = useState([]);
+  const [status, setStatus] = useState('Ongoing')
+  const [priority, setPriority] = useState("Low")
+
 
   const currentUser = auth.currentUser;
   const user = currentUser.displayName;
@@ -105,6 +110,7 @@ const TaskDetails = () => {
     fetchTaskDocumentIds();
   }, []); // Empty dependency array ensures that this effect runs once on component mount
 
+  // console.log(documentIds)
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -122,7 +128,7 @@ const TaskDetails = () => {
           // Check if the document exists by verifying if data() returns a non-null value
           if (taskDoc && taskDoc.data()) {
             const taskData = { id: taskDoc.id, ...taskDoc.data() };
-            console.log("taskData", taskData);
+            // console.log("taskData", taskData);
 
             // Check if taskData.tasks is defined before filtering tasks
             if (taskData.tasks && Array.isArray(taskData.tasks)) {
@@ -134,7 +140,7 @@ const TaskDetails = () => {
               });
 
               fetchedTasks.push(...matchingTasks);
-
+              console.log("fetched", fetchedTasks)
               if (matchingTasks.length > 0) {
                 console.log(`Matching tasks found for document ID: ${id}`);
               } else {
@@ -152,6 +158,7 @@ const TaskDetails = () => {
 
         // Set the tasks in the state
         setTasks(fetchedTasks);
+
         console.log("tasks from Matching ", fetchedTasks);
       } catch (error) {
         console.error("Error fetching tasks:", error);
@@ -162,51 +169,32 @@ const TaskDetails = () => {
     if (documentIds.length > 0) {
       fetchTasks();
     }
+    updateTasks();
   }, [documentIds, user]); // Trigger the effect when documentIds or user changes
 
   const formatTimeStamp = (timestamp) => {
     const date = new Date(timestamp * 1000);
     return format(date, 'dd-MM-yyyy hh-mm a')
   }
-  // formatTimeStamp()
-  // console.log(tasks)
 
-  // Call the fetchTasks function
-  // fetchTasks();
+  const updateTasks = async (meetCode, taskId) => {
+    try {
+      // Using the state values for status and priority
+      const taskDocumentRef = doc(db, "Tasks", `${meetCode}/tasks/${taskId}`);
 
-  // console.log("Task", tasks);
+      await updateDoc(taskDocumentRef, {
+        status: status,
+        priority: priority,
+      });
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
+      console.log(`Task with ID ${taskId} successfully updated to status: ${status}, priority: ${priority}`);
+    } catch (error) {
+      console.error(`Error updating task with ID ${taskId}:`, error);
+    }
+  };
+  console.log(status)
 
-  //       const unsubscribe = onSnapshot(doc(db, "Tasks"), (doc) => {
 
-  //         setTasks(doc.data());
-
-  //       });
-
-  //       // const q = query(collection(db, "Tasks"));
-  //       // const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  //       //   const fetchedMeetings = [];
-
-  //       //   querySnapshot.forEach((doc) => {
-  //       //     fetchedMeetings.push(doc.data());
-
-  //       //   });
-  //       // });
-
-  //       return () => {
-  //         // Cleanup the subscription when the component unmounts
-  //         unsubscribe();
-  //       };
-  //     } catch (error) {
-  //       console.error("Error fetching Tasks:", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-  // console.log("tasks", tasks)
   return (
     <GlobalLayout>
       <div className="flex border-transparent rounded shadow-lg p-3">
@@ -375,14 +363,12 @@ const TaskDetails = () => {
                       <select
                         id="status"
                         name="status"
+                        onChange={e => setStatus(e.target.value)}
                         className="w-fit h-10 border-transparency focus:outline-none bg-white focus:border-black text-black rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
                       >
-                        <option value="All" defaultValue="0">
-                          All
-                        </option>
-                        <option value="">Ongoing</option>
-                        <option value="">Overdue</option>
-                        <option value="">Completed</option>
+                        <option value="Ongoing">Ongoing</option>
+                        <option value="Overdue">Overdue</option>
+                        <option value="Completed">Completed</option>
                       </select>
                     </div>
                     <p>Subtask ({tasks[selectedTab]?.subTasks?.length || 0})</p>
@@ -413,13 +399,14 @@ const TaskDetails = () => {
                       <select
                         id="priority"
                         name="priority"
+                        onChange={e => setPriority(e.target.value)}
                         className="w-fit focus:outline-none bg-white focus:border-black text-black rounded p-2 md:px-3 py-0 md:py-1 tracking-wider"
                       >
-                        <option value="All" defaultValue="0">
+                        <option value="Low" defaultValue="0">
                           Low
                         </option>
-                        <option value="">Medium</option>
-                        <option value="">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
                       </select>
                     </div>
 
@@ -754,6 +741,16 @@ const TaskDetails = () => {
                     </Tab.Group>
                   </div>
                 </div>
+              </div>
+              <div className="updateBtn flex justify-center">
+                <button
+                  type="button"
+                  className="rounded bg-[#252c48] px-3 py-2 my-3 text-lg font-medium text-white hover:bg-[#252c48ce]"
+                  onClick={() => updateTasks(tasks[selectedTab]?.meetCode, tasks[selectedTab]?.taskUID)}
+                >
+                  Update
+                </button>
+                {console.log(tasks[selectedTab]?.taskUID)}
               </div>
             </>
           )}
