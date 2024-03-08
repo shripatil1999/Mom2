@@ -256,10 +256,14 @@ const NewMeetMins = () => {
     designation: row.designation,
   }));
 
-  const taskUID = "T" + AutoMeetCode + count + 1;
+  const taskUID = `T${AutoMeetCode}${count}`;
 
-  const mappedTask = {
-    [`${taskUID}`]: table2Rows.map((row) => ({
+  const mappedTask = {};
+
+  table2Rows.forEach((row, index) => {
+    const taskUID = `T${AutoMeetCode}${count}${index + 1}`;
+
+    mappedTask[taskUID] = {
       taskUID: taskUID,
       agenda: row.agenda || "",
       description: row.discussionPoints || "",
@@ -269,14 +273,13 @@ const NewMeetMins = () => {
       startDate: row.startDate,
       targetDate: row.targetDate,
       meetCode: AutoMeetCode,
-    })),
-  };
+    };
+  });
 
   console.log("Task", mappedTask)
 
   const submitMeeting = async () => {
     try {
-      // const taskUID = "T" + AutoMeetCode + count + 1;
       const formattedDate = format(new Date(), "dd-MM-yyyy");
 
       const meetingData = {
@@ -288,16 +291,21 @@ const NewMeetMins = () => {
         attendees: attendeesArray || [],
         chaired: chaired,
         department: selectedDept.name,
-        tasks: table2Rows.map((row) => ({
-          taskUID: taskUID + count,
-          agenda: row.agenda || "",
-          description: row.discussionPoints || "",
-          subTasks: row.subTasks || [], // Include subtasks for each task
-          actionBy: row.actionBy || " ",
-          supporters: row.supporters || [],
-          startDate: row.startDate,
-          targetDate: row.targetDate, // Include subtasks for each task
-        })),
+        tasks: table2Rows.map((row, index) => {
+          const taskUID = `T${AutoMeetCode}${count}${index + 1}`;
+
+          return {
+            taskUID: taskUID,
+            agenda: row.agenda || "",
+            description: row.discussionPoints || "",
+            subTasks: row.subTasks || [],
+            actionBy: row.actionBy || " ",
+            supporters: row.supporters || [],
+            startDate: row.startDate,
+            targetDate: row.targetDate,
+            meetCode: AutoMeetCode,
+          };
+        }),
       };
 
       await setDoc(
@@ -311,11 +319,10 @@ const NewMeetMins = () => {
       setCount(count + 1);
       setTime(0);
     } catch (error) {
-      alert.error("Error updating Meeting !! Please try again.");
+      alert.error("Error updating Meeting! Please try again.");
       console.error("Unable to upload a Meetings", error);
     }
   };
-
   return (
     <GlobalLayout>
       <div className="p-4">
