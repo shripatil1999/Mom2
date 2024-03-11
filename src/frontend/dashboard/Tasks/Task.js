@@ -1,8 +1,8 @@
-import { React, } from "react";
-import GlobalLayout from "../utils/hoc/globalLayout";
-import SearchFilter from "../utils/elements/SearchFilter";
+import React from "react";
+import GlobalLayout from "../../utils/hoc/globalLayout";
+import SearchFilter from "../../utils/elements/SearchFilter";
 import { Link } from "react-router-dom";
-import Dropdown from '../utils/elements/dropdown'
+import Dropdown from '../../utils/elements/dropdown'
 
 
 const TaskDetails = {

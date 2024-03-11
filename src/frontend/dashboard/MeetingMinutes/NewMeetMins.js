@@ -16,6 +16,8 @@ import { collection, getDocs, doc, setDoc } from "firebase/firestore";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { useAlert } from "react-alert";
+import ConfirmAlert from "../../utils/elements/Alerts/ConfirmAlert";
+import Modal from '../../utils/elements/Modal';
 
 const Department = [
   { name: "Other" },
@@ -53,6 +55,9 @@ const NewMeetMins = () => {
   const [meetLocation, setMeetLocation] = useState();
   const alert = useAlert();
   const [meetName, setMeetName] = useState("");
+  // const [openSaveAlert, setOpenSaveAlert] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+
 
   var fromChild = (locationFromChild) => {
     setMeetLocation(locationFromChild); // set the data to a state from child
@@ -82,6 +87,9 @@ const NewMeetMins = () => {
     setIsRunning(!isRunning);
   };
 
+
+
+
   const [rows, setRows] = useState([
     {
       attendeeName: "",
@@ -106,6 +114,8 @@ const NewMeetMins = () => {
       }
     };
     fetchUsers();
+    console.log("Alert is calling")
+    // openAlert()
   }, []);
 
   const handleInputChange = (index, field, value) => {
@@ -162,7 +172,8 @@ const NewMeetMins = () => {
       agenda: "",
       discussionPoints: "",
       actionBy: "",
-      supporters: [""],
+      // supporters: [""],
+      supporters: [],
       startDate: defaultDate,
       targetDate: defaultDate,
       subTasks: [""],
@@ -276,7 +287,7 @@ const NewMeetMins = () => {
     };
   });
 
-  console.log("Task", mappedTask)
+  // console.log("Task", mappedTask)
 
   const submitMeeting = async () => {
     try {
@@ -318,11 +329,25 @@ const NewMeetMins = () => {
       alert.success("Meeting updated successfully !");
       setCount(count + 1);
       setTime(0);
+      setModalOpen(false)
     } catch (error) {
       alert.error("Error updating Meeting! Please try again.");
       console.error("Unable to upload a Meetings", error);
     }
   };
+
+
+  // const openAlert = () => {
+  //   setOpenSaveAlert(true);
+  //   console.log("this is from console log alert")
+  //   return (<ConfirmAlert />)
+  // };
+  // // openAlert()
+
+  // const closeAlert = () => {
+  //   setOpenSaveAlert(false);
+  // };
+
   return (
     <GlobalLayout>
       <div className="p-4">
@@ -333,6 +358,7 @@ const NewMeetMins = () => {
             project2="Project Number 2"
             project3="Project Number 3"
           />
+          <ConfirmAlert />
 
           <div className="stopwatch-container flex items-center font-semibold">
             <p className="stopwatch-time">
@@ -658,7 +684,7 @@ const NewMeetMins = () => {
                           {...params}
                           variant="standard"
                           label="Multiple values"
-                          placeholder="Favorites"
+                          placeholder="Supporters"
                           sx={{ width: "100%" }}
                         />
                       )}
@@ -709,11 +735,20 @@ const NewMeetMins = () => {
           </table>
           <div className="save-meet flex justify-end">
             <button
-              onClick={submitMeeting}
+              // onClick={openAlert}
               className="mt-3 rounded bg-[#252c48] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#252c48ce]"
             >
               Save Meeting
             </button>
+
+            {/* <ConfirmAlert /> */}
+            <button onClick={() => setModalOpen(true)}>Open the Modal</button>
+
+            {isModalOpen && (
+              <Modal onClose={() => setModalOpen(false)} saveMeet={() => submitMeeting()}>
+                <p>Once you save the Meeting you can not add any more Agenda items. Please confirm....!</p>
+              </Modal>
+            )}
           </div>
         </main>
       </div>

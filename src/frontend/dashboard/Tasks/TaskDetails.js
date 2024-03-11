@@ -1,15 +1,15 @@
 import React, { useState, Fragment, useEffect } from "react";
-import GlobalLayout from "../utils/hoc/globalLayout";
+import GlobalLayout from "../../utils/hoc/globalLayout.js";
 import { Menu, Transition, Popover } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import SearchFilter from "../utils/elements/SearchFilter";
+import SearchFilter from "../../utils/elements/SearchFilter.js";
 import DatePicker from "react-datepicker";
 import { Tab } from "@headlessui/react";
 import "react-datepicker/dist/react-datepicker.css";
-import Attachment from "../utils/elements/Attachment";
-import SubtaskForm from "../utils/elements/SubtaskForm";
+import Attachment from "../../utils/elements/Attachment.js";
+import SubtaskForm from "../../utils/elements/SubtaskForm.js";
 import { FolderArrowDownIcon } from "@heroicons/react/24/solid";
-import { auth, db } from "../../firebase.js";
+import { auth, db } from "../../../firebase.js";
 import {
   doc,
   // onSnapshot,

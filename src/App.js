@@ -10,11 +10,11 @@ import "./App.css";
 import Login from "./frontend/loginpage/login";
 import Home from "./frontend/dashboard/Home";
 import Main from "./frontend/dashboard/Main";
-import Task from "./frontend/dashboard/Task";
+import Task from "./frontend/dashboard//Tasks/Task";
 import NewMeetMins from "./frontend/dashboard/MeetingMinutes/NewMeetMins";
 import MeetHistory from "./frontend/dashboard/MeetingMinutes/MeetHistory";
 import MeetHistory2 from "./frontend/dashboard/MeetingMinutes/MeetHistory2";
-import TaskDetails from "./frontend/dashboard/TaskDetails";
+import TaskDetails from "./frontend/dashboard/Tasks/TaskDetails";
 import Overview from "./frontend/dashboard/Analytics-Reports/Overview";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -30,7 +30,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    
+
 
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (!user) {
@@ -73,7 +73,7 @@ function App() {
           <Route path="projects" element={<Projects />} />
           <Route path="profile" element={<Profile />} />
           <Route path="newProfile" element={<NewProfile />} />
-          
+
         </Route>
       </Routes>
     </>
@@ -82,7 +82,7 @@ function App() {
 
 function ProtectedRoutes() {
   const user = auth.currentUser;
-  
+
   return user ? <Outlet user={user} /> : <Navigate to="/login" replace />;
 }
 
