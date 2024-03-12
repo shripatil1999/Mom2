@@ -17,7 +17,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { useAlert } from "react-alert";
 import ConfirmAlert from "../../utils/elements/Alerts/ConfirmAlert";
-import Modal from '../../utils/elements/Modal';
+import Modal from "../../utils/elements/Alerts/modalConfirm.js";
+import { useForm, Controller } from "react-hook-form";
 
 const Department = [
   { name: "Other" },
@@ -55,9 +56,13 @@ const NewMeetMins = () => {
   const [meetLocation, setMeetLocation] = useState();
   const alert = useAlert();
   const [meetName, setMeetName] = useState("");
-  // const [openSaveAlert, setOpenSaveAlert] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
-
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
 
   var fromChild = (locationFromChild) => {
     setMeetLocation(locationFromChild); // set the data to a state from child
@@ -87,9 +92,6 @@ const NewMeetMins = () => {
     setIsRunning(!isRunning);
   };
 
-
-
-
   const [rows, setRows] = useState([
     {
       attendeeName: "",
@@ -114,7 +116,7 @@ const NewMeetMins = () => {
       }
     };
     fetchUsers();
-    console.log("Alert is calling")
+    console.log("Alert is calling");
     // openAlert()
   }, []);
 
@@ -329,28 +331,16 @@ const NewMeetMins = () => {
       alert.success("Meeting updated successfully !");
       setCount(count + 1);
       setTime(0);
-      setModalOpen(false)
+      setModalOpen(false);
     } catch (error) {
       alert.error("Error updating Meeting! Please try again.");
       console.error("Unable to upload a Meetings", error);
     }
   };
 
-
-  // const openAlert = () => {
-  //   setOpenSaveAlert(true);
-  //   console.log("this is from console log alert")
-  //   return (<ConfirmAlert />)
-  // };
-  // // openAlert()
-
-  // const closeAlert = () => {
-  //   setOpenSaveAlert(false);
-  // };
-
   return (
     <GlobalLayout>
-      <div className="p-4">
+      <div className="p-4" >
         <div className="mt-3 TopFeatures flex flex-row flex-wrap justify-between">
           <p className="font-bold text-lg">Meeting Minutes</p>
           <Dropdown
@@ -380,13 +370,29 @@ const NewMeetMins = () => {
         <main className="MeetTable mt-3 border-gray-900 mr-6">
           <div className="TableTop flex flex-wrap justify-between  items-center  font-semibold bg-slate-200 border  p-2 mt-4">
             <p>Minutes Code: {AutoMeetCode}</p>
-            <input
-              className="w-fit border-b-2 bg-gray-100 border-gray-300 p-2 my-1 focus:outline-none"
-              type="text"
-              placeholder="Meet Name"
-              value={meetName}
-              onChange={(e) => setMeetName(e.target.value)}
-            />
+            <div className="">
+              <Controller
+                control={control}
+                name="meetName"
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    className="w-fit border-b-2 bg-gray-100 border-gray-300 p-2 my-1 focus:outline-none"
+                    type="text"
+                    placeholder="Meet Name"
+                    onChange={(e) => setMeetName(e.target.value)}
+                  />
+                )}
+              // rules={{ required: "Meet Name is required" }}
+              />
+              {errors.meetName && (
+                <p className=" bottom-0 text-red-500 font-semibold" >
+                  <i className="bi bi-exclamation-circle mr-2"></i>{" "}
+                  {errors.meetName.message}
+                </p>
+              )}
+            </div>
+
             <div className="meetLocation flex items-center gap-3">
               <p>Review Meeting Held at:</p>
               <AutoInput setter={fromChild} />
@@ -432,7 +438,9 @@ const NewMeetMins = () => {
                         handleInputChange(index, "attendeeName", newValue);
                       }}
                       onBlur={() => {
-                        const selectedUserId = userList.find((user) => user.name === row.attendeeName)?.id;
+                        const selectedUserId = userList.find(
+                          (user) => user.name === row.attendeeName
+                        )?.id;
                         if (selectedUserId) {
                           handleUserSelect(index, selectedUserId);
                         }
@@ -735,18 +743,22 @@ const NewMeetMins = () => {
           </table>
           <div className="save-meet flex justify-end">
             <button
-              // onClick={openAlert}
+              type="button"
+              onClick={() => setModalOpen(true)}
               className="mt-3 rounded bg-[#252c48] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#252c48ce]"
             >
               Save Meeting
             </button>
 
-            {/* <ConfirmAlert /> */}
-            <button onClick={() => setModalOpen(true)}>Open the Modal</button>
-
             {isModalOpen && (
-              <Modal onClose={() => setModalOpen(false)} saveMeet={() => submitMeeting()}>
-                <p>Once you save the Meeting you can not add any more Agenda items. Please confirm....!</p>
+              <Modal
+                onClose={() => setModalOpen(false)}
+                saveMeet={() => handleSubmit(submitMeeting)()}
+              >
+                <p>
+                  Once you save the Meeting, you cannot add any more Agenda
+                  items. Please confirm....!
+                </p>
               </Modal>
             )}
           </div>

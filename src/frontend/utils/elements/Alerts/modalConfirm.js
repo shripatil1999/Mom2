@@ -1,6 +1,16 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
+
+// for Modal reusability
+// https://deadsimplechat.com/blog/creating-a-reusable-pop-up-modal-in-react-from-scratch/
 
 function Modal({ children, onClose, saveMeet }) {
+
+    const btnRef = useRef();
+
+    useEffect(() => {
+        btnRef.current.focus();
+    }, [])
+
     return (
         <div className='z-[115]' style={styles.overlay}>
             <div style={styles.modal}>
@@ -12,10 +22,10 @@ function Modal({ children, onClose, saveMeet }) {
                 </div>
                 <div className="row">
                     <div className="col-sm-6 text-left">
-                        <button className='btn btn-danger' style={styles.noButton} onClick={onClose}>No</button>
+                        <button className='btn btn-success' style={styles.saveButton} onClick={saveMeet}>Yes</button>
                     </div>
                     <div className="col-sm-6 text-right">
-                        <button className='btn btn-success' style={styles.saveButton} onClick={saveMeet}>Yes</button>
+                        <button className='btn btn-danger' style={styles.noButton} onClick={onClose} ref={btnRef}>No</button>
                     </div>
                 </div>
 
@@ -46,33 +56,6 @@ const styles = {
         width: '100%',
         maxWidth: '500px'
     },
-    // closeButton: {
-    //     position: 'absolute',
-    //     top: '10px',
-    //     right: '10px',
-    //     background: 'red',
-    //     border: 'none',
-    //     fontSize: '18px',
-    //     cursor: 'pointer'
-    // },
-    // saveButton: {
-    //     position: 'absolute',
-    //     bottom: '10px',
-    //     right: '10px',
-    //     // background: 'green',
-    //     border: 'none',
-    //     fontSize: '18px',
-    //     cursor: 'pointer'
-    // },
-    // noButton: {
-    //     position: 'absolute',
-    //     bottom: '5px',
-    //     left: '10px',
-    //     // background: 'red',
-    //     border: 'none',
-    //     fontSize: '18px',
-    //     cursor: 'pointer'
-    // }
 };
 
 export default Modal;
