@@ -16,7 +16,6 @@ import { collection, getDocs, doc, setDoc } from "firebase/firestore";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { useAlert } from "react-alert";
-import ConfirmAlert from "../../utils/elements/Alerts/ConfirmAlert";
 import Modal from "../../utils/elements/Alerts/modalConfirm.js";
 import { useForm, Controller } from "react-hook-form";
 
@@ -348,7 +347,6 @@ const NewMeetMins = () => {
             project2="Project Number 2"
             project3="Project Number 3"
           />
-          <ConfirmAlert />
 
           <div className="stopwatch-container flex items-center font-semibold">
             <p className="stopwatch-time">
@@ -383,7 +381,7 @@ const NewMeetMins = () => {
                     onChange={(e) => setMeetName(e.target.value)}
                   />
                 )}
-              // rules={{ required: "Meet Name is required" }}
+                rules={{ required: "Meet Name is required" }}
               />
               {errors.meetName && (
                 <p className=" bottom-0 text-red-500 font-semibold" >
