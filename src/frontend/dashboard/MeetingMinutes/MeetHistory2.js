@@ -11,9 +11,7 @@ const MeetHistory = () => {
     const [docIDs, setDocIDs] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedMeeting, setSelectedMeeting] = useState(null);
-    // const [datesOfMeet, setDatesOfMeet] = useState([])
-    const currentDate = format(new Date(), "dd-MM-yyyy");
-    // console.log(currentDate)
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -342,7 +340,9 @@ const MeetHistory = () => {
                     )
                 )}
             </div>
-        </GlobalLayout>
+
+
+        </GlobalLayout >
     );
 };
 

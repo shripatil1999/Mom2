@@ -12,7 +12,6 @@ import Home from "./frontend/dashboard/Home";
 import Main from "./frontend/dashboard/Main";
 import Task from "./frontend/dashboard//Tasks/Task";
 import NewMeetMins from "./frontend/dashboard/MeetingMinutes/NewMeetMins";
-import MeetHistory from "./frontend/dashboard/MeetingMinutes/MeetHistory";
 import MeetHistory2 from "./frontend/dashboard/MeetingMinutes/MeetHistory2";
 import TaskDetails from "./frontend/dashboard/Tasks/TaskDetails";
 import Overview from "./frontend/dashboard/Analytics-Reports/Overview";
@@ -62,9 +61,7 @@ function App() {
           <Route path="main" element={<Main />} />
           <Route path="task" element={<Task />} />
           <Route path="newmeetmins" element={<NewMeetMins />} />
-          <Route path="meethistory" element={<MeetHistory />} />
           <Route path="meethistory2" element={<MeetHistory2 />} />
-
           <Route path="taskdetails" element={<TaskDetails />} />
           <Route path="overview" element={<Overview />} />
           <Route path="analytics" element={<Analytics />} />
