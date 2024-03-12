@@ -1,27 +1,25 @@
 import React, { useState, Fragment, useEffect } from "react";
-import GlobalLayout from "../utils/hoc/globalLayout";
+import GlobalLayout from "../../utils/hoc/globalLayout.js";
 import { Menu, Transition, Popover } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import SearchFilter from "../utils/elements/SearchFilter";
+import SearchFilter from "../../utils/elements/SearchFilter.js";
 import DatePicker from "react-datepicker";
 import { Tab } from "@headlessui/react";
 import "react-datepicker/dist/react-datepicker.css";
-import Attachment from "../utils/elements/Attachment";
-import SubtaskForm from "../utils/elements/SubtaskForm";
+import Attachment from "../../utils/elements/Attachment.js";
+import SubtaskForm from "../../utils/elements/SubtaskForm.js";
 import { FolderArrowDownIcon } from "@heroicons/react/24/solid";
-
-import { auth, db } from "../../firebase.js";
+import { auth, db } from "../../../firebase.js";
 import {
   doc,
   // onSnapshot,
   getDoc,
   collection,
   getDocs,
+  setDoc
 } from "firebase/firestore";
-import { format } from "date-fns";
 
-
-
+// import { format } from "date-fns";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -36,6 +34,8 @@ const TaskDetails = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [documentIds, setDocumentIds] = useState([]);
+  const [status, setStatus] = useState("Ongoing");
+  const [priority, setPriority] = useState("Low");
 
   const currentUser = auth.currentUser;
   const user = currentUser.displayName;
@@ -54,13 +54,10 @@ const TaskDetails = () => {
     }
   };
 
-
   // Function to clear the current comment input
   const clearComment = () => {
     setComment("");
   };
-  // console.log(currentUser.displayName);
-  // console.log(currentUser);
 
   const handleFileUpload = (event) => {
     const files = event.target.files;
@@ -85,30 +82,25 @@ const TaskDetails = () => {
 
     setUploadedFiles([]);
   };
-
   useEffect(() => {
     const fetchTaskDocumentIds = async () => {
       try {
         const tasksCollectionRef = collection(db, "Tasks");
-
-
         // Fetch all documents from the "Tasks" collection
         const tasksSnapshot = await getDocs(tasksCollectionRef);
-
         // Extract document IDs from the snapshot
         const ids = tasksSnapshot.docs.map((doc) => doc.id);
-
         // Set the document IDs in the state
         setDocumentIds(ids);
       } catch (error) {
         console.error("Error fetching document IDs:", error);
       }
     };
-
     // Call the function to fetch document IDs
     fetchTaskDocumentIds();
-  }, []); // Empty dependency array ensures that this effect runs once on component mount
+  }, []);
 
+  // console.log(documentIds)
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -126,28 +118,29 @@ const TaskDetails = () => {
           // Check if the document exists by verifying if data() returns a non-null value
           if (taskDoc && taskDoc.data()) {
             const taskData = { id: taskDoc.id, ...taskDoc.data() };
-            console.log("taskData", taskData);
 
-            // Check if taskData.tasks is defined before filtering tasks
-            if (taskData.tasks && Array.isArray(taskData.tasks)) {
-              const matchingTasks = taskData.tasks.filter((task) => {
+            // Check if taskData is defined before processing tasks
+            // console.log("keys", Object.entries(taskData))
+            if (taskData && Object.keys(taskData).length > 0) {
+              // Extract tasks from the mappedTask structure
+              const tasks = Object.values(taskData);
+
+              // Filter tasks based on user
+              const matchingTasks = tasks.filter((task) => {
                 return (
                   task.actionBy === user ||
                   (task.supporters && task.supporters.includes(user))
                 );
               });
 
-              fetchedTasks.push(...matchingTasks);
-
               if (matchingTasks.length > 0) {
+                fetchedTasks.push(...matchingTasks);
                 console.log(`Matching tasks found for document ID: ${id}`);
               } else {
                 console.log(`No matching tasks found for document ID: ${id}`);
               }
             } else {
-              console.log(
-                `Task data or tasks array is undefined for document ID: ${id}`
-              );
+              console.log(`Task data is undefined or empty for document ID: ${id}`);
             }
           } else {
             console.log(`Task document not found for document ID: ${id}`);
@@ -155,7 +148,9 @@ const TaskDetails = () => {
         }
 
         // Set the tasks in the state
+        setPriority("data", fetchedTasks)
         setTasks(fetchedTasks);
+
         console.log("tasks from Matching ", fetchedTasks);
       } catch (error) {
         console.error("Error fetching tasks:", error);
@@ -168,53 +163,46 @@ const TaskDetails = () => {
     }
   }, [documentIds, user]); // Trigger the effect when documentIds or user changes
 
+  const updateTasks = async (meetCode, taskId) => {
+    try {
 
-  const formatTimeStamp = (timestamp) => {
-    const date = new Date(timestamp * 1000);
-    return format(date, 'dd-MM-yyyy hh-mm a')
-  }
-  // formatTimeStamp()
-  // console.log(tasks)
+      const taskDocumentRef = doc(db, "Tasks", meetCode);
+      const taskDoc = await getDoc(taskDocumentRef);
+
+      if (taskDoc.exists()) {
+        const updatedTasks = Object.entries(taskDoc.data()).map(([taskUID, task]) => {
+          if (taskUID === taskId) {
+            return {
+              ...task,
+              status: status,
+              priority: priority,
+            };
+          }
+          return task;
+        });
+
+        const updatedTaskObject = updatedTasks.reduce((acc, task) => {
+          acc[task.taskUID] = task;
+          return acc;
+        }, {});
+
+        await setDoc(taskDocumentRef, updatedTaskObject);
+
+        console.log(
+          `Task with ID ${taskId} successfully updated to status: ${status}, priority: ${priority}`
+        );
+      } else {
+        console.error(`Task document not found for meetCode: ${meetCode}`);
+      }
+    } catch (error) {
+      console.error(`Error updating task with ID ${taskId}:`, error);
+    }
+  };
 
 
-  // Call the fetchTasks function
-  // fetchTasks();
+  // Call the update function with your dynamic status and priority values
+  // updateTasks(meetCode, taskId, status, priority);
 
-
-  // console.log("Task", tasks);
-
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-
-  //       const unsubscribe = onSnapshot(doc(db, "Tasks"), (doc) => {
-
-  //         setTasks(doc.data());
-
-  //       });
-
-  //       // const q = query(collection(db, "Tasks"));
-  //       // const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  //       //   const fetchedMeetings = [];
-
-  //       //   querySnapshot.forEach((doc) => {
-  //       //     fetchedMeetings.push(doc.data());
-
-  //       //   });
-  //       // });
-
-  //       return () => {
-  //         // Cleanup the subscription when the component unmounts
-  //         unsubscribe();
-  //       };
-  //     } catch (error) {
-  //       console.error("Error fetching Tasks:", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-  // console.log("tasks", tasks)
   return (
     <GlobalLayout>
       <div className="flex border-transparent rounded shadow-lg p-3">
@@ -383,21 +371,19 @@ const TaskDetails = () => {
                       <select
                         id="status"
                         name="status"
+                        onChange={(e) => setStatus(e.target.value)}
                         className="w-fit h-10 border-transparency focus:outline-none bg-white focus:border-black text-black rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
                       >
-                        <option value="All" defaultValue="0">
-                          All
-                        </option>
-                        <option value="">Ongoing</option>
-                        <option value="">Overdue</option>
-                        <option value="">Completed</option>
+                        <option value="Ongoing">Ongoing</option>
+                        <option value="Overdue">Overdue</option>
+                        <option value="Completed">Completed</option>
                       </select>
                     </div>
                     <p>Subtask ({tasks[selectedTab]?.subTasks?.length || 0})</p>
                     <div className="supporters mb-1 flex items-center">
                       <p>Supporters: </p>
 
-                      {tasks[selectedTab]?.supporters.map(supports => (
+                      {tasks[selectedTab]?.supporters.map((supports) => (
                         <span className="border-1 text-base font-normal bg-pink-100 border-pink-600 p-2 m-1 shadow-sm shadow-pink-700">
                           {supports}
                         </span>
@@ -412,25 +398,33 @@ const TaskDetails = () => {
 
                   <div className="third-strip shadow-sm flex flex-col gap-2.5 first-letter: p-2 border px-4 mt-3">
                     <p className="font-bold ">Task Information</p>
-                    <p>Action By : &nbsp;&nbsp;&nbsp;
-                      <span className="border-1 text-base font-normal bg-blue-100 border-blue-600 p-2 m-1 shadow-sm shadow-blue-700">
+                    <p>
+                      Action By : &nbsp;&nbsp;&nbsp;
+                      {tasks[selectedTab]?.actionBy && (<span className="border-1 text-base font-normal bg-blue-100 border-blue-600 p-2 m-1 shadow-sm shadow-blue-700">
                         {tasks[selectedTab]?.actionBy}
-                      </span></p>
+                      </span>)
+                      }
+                    </p>
                     <div className="flex gap-3">
                       <p>Priority : </p>
                       <select
                         id="priority"
+                        // value={priority}
                         name="priority"
+                        onChange={(e) => setPriority(e.target.value)}
                         className="w-fit focus:outline-none bg-white focus:border-black text-black rounded p-2 md:px-3 py-0 md:py-1 tracking-wider"
+                        defaultValue={tasks[selectedTab]?.priority || "Low"}
                       >
-                        <option value="All" defaultValue="0">
+                        <option value="Low" >
                           Low
                         </option>
-                        <option value="">Medium</option>
-                        <option value="">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
                       </select>
                     </div>
-
+                    {
+                      console.log("priority", tasks[selectedTab]?.priority)
+                    }
                     <div className="flex items-center gap-3">
                       <p>Start Date : </p>
                       <DatePicker
@@ -595,49 +589,47 @@ const TaskDetails = () => {
                         </Tab.Panel>
                         <Tab.Panel className="p-3">
                           <div className=" flex flex-col gap-2 p-2.5 m-3 border-b-2 bg-gray-100 border-gray-400">
-                            {
-                              tasks[selectedTab]?.subTasks?.map(subtask => (
-                                <Popover className="relative">
-                                  <Popover.Button className="bg-white p-1.5 shadow-sm">
-                                    {subtask === "" ? "No tasks" : subtask}
-                                  </Popover.Button>
-                                  <Transition
-                                    enter="transition duration-100 ease-out"
-                                    enterFrom="transform scale-95 opacity-0"
-                                    enterTo="transform scale-100 opacity-100"
-                                    leave="transition duration-75 ease-out"
-                                    leaveFrom="transform scale-100 opacity-100"
-                                    leaveTo="transform scale-95 opacity-0"
-                                  ></Transition>
-                                  <Popover.Panel className="absolute z-10 bg-white p-3 card shadow">
-                                    <div className="cardTitle flex flex-col gap-3">
-                                      <div className="flex">
-                                        <p className="font-semibold">
-                                          Task name: &nbsp;
-                                        </p>
-                                        <p> {" Task Name"}</p>
-                                      </div>
-                                      <div className="flex">
-                                        <p className="font-semibold">
-                                          Target Date: &nbsp;
-                                        </p>
-                                        <p> {" Target Date"} </p>
-                                      </div>
-                                      <div className="">
-                                        <p className="font-semibold ">
-                                          Description:{" "}
-                                        </p>
-                                        <p>
-                                          {
-                                            "Small Description about the task will be appeared here..."
-                                          }
-                                        </p>
-                                      </div>
+                            {tasks[selectedTab]?.subTasks?.map((subtask) => (
+                              <Popover className="relative">
+                                <Popover.Button className="bg-white p-1.5 shadow-sm">
+                                  {subtask === "" ? "No tasks" : subtask}
+                                </Popover.Button>
+                                <Transition
+                                  enter="transition duration-100 ease-out"
+                                  enterFrom="transform scale-95 opacity-0"
+                                  enterTo="transform scale-100 opacity-100"
+                                  leave="transition duration-75 ease-out"
+                                  leaveFrom="transform scale-100 opacity-100"
+                                  leaveTo="transform scale-95 opacity-0"
+                                ></Transition>
+                                <Popover.Panel className="absolute z-10 bg-white p-3 card shadow">
+                                  <div className="cardTitle flex flex-col gap-3">
+                                    <div className="flex">
+                                      <p className="font-semibold">
+                                        Task name: &nbsp;
+                                      </p>
+                                      <p> {" Task Name"}</p>
                                     </div>
-                                  </Popover.Panel>
-                                </Popover>
-                              ))
-                            }
+                                    <div className="flex">
+                                      <p className="font-semibold">
+                                        Target Date: &nbsp;
+                                      </p>
+                                      <p> {" Target Date"} </p>
+                                    </div>
+                                    <div className="">
+                                      <p className="font-semibold ">
+                                        Description:{" "}
+                                      </p>
+                                      <p>
+                                        {
+                                          "Small Description about the task will be appeared here..."
+                                        }
+                                      </p>
+                                    </div>
+                                  </div>
+                                </Popover.Panel>
+                              </Popover>
+                            ))}
                           </div>
                           <div className="addTask flex w-full h-full my-10 justify-center items-center">
                             <button
@@ -763,6 +755,21 @@ const TaskDetails = () => {
                   </div>
                 </div>
               </div>
+              <div className="updateBtn flex justify-center">
+                <button
+                  type="button"
+                  className="rounded bg-[#252c48] px-3 py-2 my-3 text-lg font-medium text-white hover:bg-[#252c48ce]"
+                  onClick={() =>
+                    updateTasks(
+                      tasks[selectedTab]?.meetCode,
+                      tasks[selectedTab]?.taskUID
+                    )
+                  }
+                >
+                  Update
+                </button>
+                {console.log(tasks[selectedTab]?.taskUID)}
+              </div>
             </>
           )}
         </div>
@@ -772,5 +779,3 @@ const TaskDetails = () => {
 };
 
 export default TaskDetails;
-
-

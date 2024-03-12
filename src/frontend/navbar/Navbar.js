@@ -127,17 +127,17 @@ const Navbar = () => {
           >
             New Meeting Minutes
           </Link>
-          <Link
+          {/* <Link
             to="/meethistory"
             className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1"
           >
             Meeting History
-          </Link>
+          </Link> */}
           <Link
             to="/meethistory2"
             className="cursor-pointer p-2 hover:bg-[#33769B] rounded mt-1"
           >
-            Dummy Meet History
+            Meeting History
           </Link>
         </div>
 

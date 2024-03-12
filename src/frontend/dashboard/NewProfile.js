@@ -145,7 +145,7 @@ const NewProfile = ({ user }) => {
         password: data.password,
         phone: data.phone,
       });
-
+      console.log("error", errors)
 
       form.reset();
 
