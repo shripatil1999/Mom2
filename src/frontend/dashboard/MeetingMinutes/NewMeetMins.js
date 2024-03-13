@@ -19,6 +19,7 @@ import { useAlert } from "react-alert";
 import ConfirmAlert from "../../utils/elements/Alerts/ConfirmAlert";
 import Modal from "../../utils/elements/Alerts/modalConfirm.js";
 import { useForm, Controller } from "react-hook-form";
+import { Input } from "@mui/material";
 
 const Department = [
   { name: "Other" },
@@ -62,7 +63,11 @@ const NewMeetMins = () => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      meetName: "",
+    }
+  });
 
   var fromChild = (locationFromChild) => {
     setMeetLocation(locationFromChild); // set the data to a state from child
@@ -291,7 +296,8 @@ const NewMeetMins = () => {
 
   // console.log("Task", mappedTask)
 
-  const submitMeeting = async () => {
+  const submitMeeting = async (data) => {
+    //console.log(data)
     try {
       const formattedDate = format(new Date(), "dd-MM-yyyy");
 
@@ -340,7 +346,7 @@ const NewMeetMins = () => {
 
   return (
     <GlobalLayout>
-      <div className="p-4" >
+      <form className="p-4" onSubmit={handleSubmit(submitMeeting)} >
         <div className="mt-3 TopFeatures flex flex-row flex-wrap justify-between">
           <p className="font-bold text-lg">Meeting Minutes</p>
           <Dropdown
@@ -374,16 +380,16 @@ const NewMeetMins = () => {
               <Controller
                 control={control}
                 name="meetName"
+                rules={{ required: true }}
                 render={({ field }) => (
-                  <input
+                  <Input
                     {...field}
                     className="w-fit border-b-2 bg-gray-100 border-gray-300 p-2 my-1 focus:outline-none"
-                    type="text"
-                    placeholder="Meet Name"
-                    onChange={(e) => setMeetName(e.target.value)}
+                  // type="text"
+                  // placeholder="Meet Name"
+                  // onChange={(e) => setMeetName(e.target.value)}
                   />
                 )}
-              // rules={{ required: "Meet Name is required" }}
               />
               {errors.meetName && (
                 <p className=" bottom-0 text-red-500 font-semibold" >
@@ -743,8 +749,8 @@ const NewMeetMins = () => {
           </table>
           <div className="save-meet flex justify-end">
             <button
-              type="button"
-              onClick={() => setModalOpen(true)}
+              type="submit"
+              // onClick={() => setModalOpen(true)}
               className="mt-3 rounded bg-[#252c48] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#252c48ce]"
             >
               Save Meeting
@@ -763,7 +769,7 @@ const NewMeetMins = () => {
             )}
           </div>
         </main>
-      </div>
+      </form>
     </GlobalLayout>
   );
 };
