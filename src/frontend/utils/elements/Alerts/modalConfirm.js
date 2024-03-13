@@ -22,7 +22,7 @@ function Modal({ children, onClose, saveMeet }) {
                 </div>
                 <div className="row">
                     <div className="col-sm-6 text-left">
-                        <button className='btn btn-success' style={styles.saveButton} onClick={saveMeet}>Yes</button>
+                        <button className='btn btn-success' type='submit' style={styles.saveButton} onClick={saveMeet}>Yes</button>
                     </div>
                     <div className="col-sm-6 text-right">
                         <button className='btn btn-danger' style={styles.noButton} onClick={onClose} ref={btnRef}>No</button>
