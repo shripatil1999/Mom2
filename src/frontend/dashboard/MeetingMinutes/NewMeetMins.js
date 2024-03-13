@@ -1,4 +1,4 @@
-// };
+
 import React from "react";
 import GlobalLayout from "../../utils/hoc/globalLayout";
 import Dropdown from "../../utils/elements/dropdown";
@@ -18,6 +18,7 @@ import TextField from "@mui/material/TextField";
 import { useAlert } from "react-alert";
 import Modal from "../../utils/elements/Alerts/modalConfirm.js";
 import { useForm, Controller } from "react-hook-form";
+import { Input } from "@mui/material";
 
 const Department = [
   { name: "Other" },
@@ -54,14 +55,17 @@ const NewMeetMins = () => {
   let [count, setCount] = useState(0);
   const [meetLocation, setMeetLocation] = useState();
   const alert = useAlert();
-  const [meetName, setMeetName] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    // defaultValues: {
+    //   meetName: "",
+    // }
+  });
 
   var fromChild = (locationFromChild) => {
     setMeetLocation(locationFromChild); // set the data to a state from child
@@ -290,13 +294,14 @@ const NewMeetMins = () => {
 
   // console.log("Task", mappedTask)
 
-  const submitMeeting = async () => {
+  const submitMeeting = async (data) => {
+    //console.log(data)
     try {
       const formattedDate = format(new Date(), "dd-MM-yyyy");
 
       const meetingData = {
         meetCode: AutoMeetCode,
-        meetName: meetName,
+        meetName: data.meetName,
         duration: hours + ":" + minutes + ":" + seconds,
         location: meetLocation || " ",
         meetDateTime: currentDateTime.toLocaleString(),
@@ -339,7 +344,7 @@ const NewMeetMins = () => {
 
   return (
     <GlobalLayout>
-      <div className="p-4" >
+      <form className="p-4" onSubmit={handleSubmit(submitMeeting)} >
         <div className="mt-3 TopFeatures flex flex-row flex-wrap justify-between">
           <p className="font-bold text-lg">Meeting Minutes</p>
           <Dropdown
@@ -347,6 +352,7 @@ const NewMeetMins = () => {
             project2="Project Number 2"
             project3="Project Number 3"
           />
+
 
           <div className="stopwatch-container flex items-center font-semibold">
             <p className="stopwatch-time">
@@ -372,16 +378,16 @@ const NewMeetMins = () => {
               <Controller
                 control={control}
                 name="meetName"
+                rules={{ required: "Meet Name is required" }}
                 render={({ field }) => (
-                  <input
+                  <Input
                     {...field}
                     className="w-fit border-b-2 bg-gray-100 border-gray-300 p-2 my-1 focus:outline-none"
-                    type="text"
+                    // type="text"
                     placeholder="Meet Name"
-                    onChange={(e) => setMeetName(e.target.value)}
+                  // onChange={(e) => setMeetName(e.target.value)}
                   />
                 )}
-                rules={{ required: "Meet Name is required" }}
               />
               {errors.meetName && (
                 <p className=" bottom-0 text-red-500 font-semibold" >
@@ -449,7 +455,7 @@ const NewMeetMins = () => {
                     <input
                       className="border-b-2 bg-gray-100 border-gray-300 focus:outline-none"
                       type="text"
-                      value={row.email}
+                      value={row.name?.length === 0 ? " " : row.email}
                       readOnly
                       onChange={(e) =>
                         handleInputChange(index, "email", e.target.value)
@@ -751,7 +757,7 @@ const NewMeetMins = () => {
             {isModalOpen && (
               <Modal
                 onClose={() => setModalOpen(false)}
-                saveMeet={() => handleSubmit(submitMeeting)()}
+                saveMeet={() => { handleSubmit(submitMeeting)(); setModalOpen(false) }}
               >
                 <p>
                   Once you save the Meeting, you cannot add any more Agenda
@@ -761,7 +767,7 @@ const NewMeetMins = () => {
             )}
           </div>
         </main>
-      </div>
+      </form>
     </GlobalLayout>
   );
 };
