@@ -153,7 +153,7 @@ const Navbar = () => {
           </span>
         </Link>
         <div className="my-4 bg-gray-600 h-[1px]"></div>
-        <Link
+        {/* <Link
           to="/projects"
           className="p-2.5 mt-3 flex items-center rounded px-4 duration-300 cursor-pointer hover:bg-[#33769B] text-white"
         >
@@ -161,9 +161,9 @@ const Navbar = () => {
           <span className="text-[15px] ml-4 text-gray-200 font-bold">
             Projects
           </span>
-        </Link>
+        </Link> */}
 
-        <div className="my-4 bg-gray-600 h-[1px]"></div>
+        {/* <div className="my-4 bg-gray-600 h-[1px]"></div> */}
 
         <div
           className="p-2.5 mt-3 flex items-center rounded px-4 duration-300 cursor-pointer hover:bg-[#33769B] text-white"
