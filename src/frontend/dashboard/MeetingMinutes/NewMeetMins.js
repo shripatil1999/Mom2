@@ -57,7 +57,6 @@ const NewMeetMins = () => {
   const alert = useAlert();
   const [isModalOpen, setModalOpen] = useState(false);
   const {
-    register,
     handleSubmit,
     control,
     formState: { errors },
@@ -289,6 +288,7 @@ const NewMeetMins = () => {
       startDate: row.startDate,
       targetDate: row.targetDate,
       meetCode: AutoMeetCode,
+      status: "Ongoing"
     };
   });
 
@@ -321,6 +321,7 @@ const NewMeetMins = () => {
             startDate: row.startDate,
             targetDate: row.targetDate,
             meetCode: AutoMeetCode,
+            status: "Ongoing"
           };
         }),
       };
@@ -747,7 +748,7 @@ const NewMeetMins = () => {
           </table>
           <div className="save-meet flex justify-end">
             <button
-              type="button"
+              type="submit"
               onClick={() => setModalOpen(true)}
               className="mt-3 rounded bg-[#252c48] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#252c48ce]"
             >

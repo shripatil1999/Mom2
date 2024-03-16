@@ -84,7 +84,7 @@ const Task = () => {
       </div>
       <p className="text-large">Department | Username </p>
       <main className="TaskMain mt-4 flex  flex-wrap justify-around ">
-        <div
+        <Link to="/taskdetails"
           style={{
             boxShadow:
               "rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px",
@@ -103,7 +103,7 @@ const Task = () => {
             <p className="">{TaskDetails.onGoing.length}</p>
             <p className="text-xl ">Ongoing</p>
           </div>
-          <div className="taskList w-full mt-5">
+          {/* <div className="taskList w-full mt-5">
             <div className="gray-back relative bg-gray-200 w-full py-4">
               <div
                 style={{
@@ -134,10 +134,10 @@ const Task = () => {
                 </>
               ))}
             </div>
-          </div>
-        </div>
+          </div> */}
+        </Link>
 
-        <div
+        <Link to="/overdueTasks"
           style={{
             boxShadow:
               "rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px",
@@ -156,7 +156,7 @@ const Task = () => {
             <p className="">{TaskDetails.overDue.length}</p>
             <p className="text-xl">Overdue</p>
           </div>
-          <div className="taskList w-full mt-5">
+          {/* <div className="taskList w-full mt-5">
             <div className="gray-back relative bg-gray-200 w-full py-4">
               <div
                 style={{
@@ -184,9 +184,9 @@ const Task = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-        <div
+          </div> */}
+        </Link>
+        <Link to="/completedTasks"
           style={{
             boxShadow:
               "rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px",
@@ -205,7 +205,7 @@ const Task = () => {
             <p className="">{TaskDetails.Completed.length}</p>
             <p className="text-xl">Completed</p>
           </div>
-          <div className="taskList w-full mt-5">
+          {/* <div className="taskList w-full mt-5">
             <div className="gray-back relative bg-gray-200 w-full py-4">
               <div
                 style={{
@@ -233,8 +233,8 @@ const Task = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
+          </div> */}
+        </Link>
       </main>
     </GlobalLayout>
   );

@@ -23,7 +23,11 @@ import HelpSupport from "./frontend/dashboard/HelpSupport";
 import Projects from "./frontend/dashboard/Projects";
 import Profile from "./frontend/dashboard/Profile";
 import NewProfile from "./frontend/dashboard/NewProfile";
+import CompletedTasks from "./frontend/dashboard/Tasks/completedTasks";
+
+
 import { auth } from "./firebase";
+import OverdueTasks from "./frontend/dashboard/Tasks/OverdueTask";
 
 function App() {
   const navigate = useNavigate();
@@ -70,6 +74,8 @@ function App() {
           <Route path="projects" element={<Projects />} />
           <Route path="profile" element={<Profile />} />
           <Route path="newProfile" element={<NewProfile />} />
+          <Route path="completedTasks" element={<CompletedTasks />} />
+          <Route path="overdueTasks" element={<OverdueTasks />} />
 
         </Route>
       </Routes>

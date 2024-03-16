@@ -12,7 +12,7 @@ import {
 } from "firebase/auth";
 import {
   getStorage, ref as sRef,
-  // uploadBytes,
+  uploadBytes,
   getDownloadURL, updateMetadata
 } from 'firebase/storage'
 
@@ -69,25 +69,34 @@ export async function upload(file, currentUser, setLoading) {
 
   setLoading(true);
 
-  // Set the content type to 'image/png'
-  const metadata = {
-    contentType: 'image/png'
-  };
+  try {
+    // Set the content type to 'image/png'
+    const metadata = {
+      contentType: 'image/.*'
+    };
 
-  // Update the metadata before uploading
-  await updateMetadata(fileRef, metadata);
+    // Update the metadata before uploading
+    await updateMetadata(fileRef, metadata);
 
-  // Upload the file
-  // const snapshot = await uploadBytes(fileRef, file);
-  const photoURL = await getDownloadURL(fileRef);
+    // Upload the file
+    await uploadBytes(fileRef, file);
 
-  // Update the user's profile with the new photoURL
-  updateProfile(currentUser, { photoURL });
-  setLoading(false);
-  alert('Uploaded..!!!!');
-  var profileFetched = true;
-  return photoURL && profileFetched;
+    // Get the download URL
+    const photoURL = await getDownloadURL(fileRef);
+
+    // Update the user's profile with the new photoURL
+    updateProfile(currentUser, { photoURL });
+
+    setLoading(false);
+    alert('Uploaded..!!!!');
+    var profileFetched = true;
+    return photoURL && profileFetched;
+  } catch (error) {
+    console.error('Error uploading profile picture:', error);
+    setLoading(false);
+    alert('Error uploading profile picture. Please try again.');
+    return null;
+  }
 }
-
 
 export { auth, db, storage, app, onAuthStateChanged, updateProfile };

@@ -64,8 +64,8 @@ const Profile = () => {
 
     // Set initial values for the form fields
     setValue("name", user.displayName || "");
-    setValue("about", ""); // Set default value for 'about' field
-    setValue("phone", ""); // Set default value for 'phone' field
+    setValue("about", "");
+    setValue("phone", "");
   }, [user, setValue]);
 
   //profile Pic update
@@ -106,6 +106,7 @@ const Profile = () => {
       });
       updateProfile(user, {
         displayName: data.name,
+        photoURL: photoURL,
       });
       console.log(user.displayName);
       alert.success("Profile updated successfully!");
@@ -339,7 +340,7 @@ const Profile = () => {
                       <div className="flex justify-center">
                         <button
                           className="py-2 px-3 rounded bg-[#252c48] font-medium text-white hover:bg-[#3a4675]"
-                          //  type="submit"
+                        //  type="submit"
                         >
                           Reset Password
                         </button>

@@ -10,6 +10,8 @@ import Attachment from "../../utils/elements/Attachment.js";
 import SubtaskForm from "../../utils/elements/SubtaskForm.js";
 import { FolderArrowDownIcon } from "@heroicons/react/24/solid";
 import { auth, db } from "../../../firebase.js";
+import { useAlert } from "react-alert";
+
 import {
   doc,
   // onSnapshot,
@@ -40,6 +42,10 @@ const TaskDetails = () => {
   const currentUser = auth.currentUser;
   const user = currentUser.displayName;
   // Function to add a new comment to the list
+
+  const alert = useAlert();
+
+
   const addComment = () => {
     // Check if the comment is not empty
     if (comment.trim() !== "") {
@@ -92,6 +98,7 @@ const TaskDetails = () => {
         const ids = tasksSnapshot.docs.map((doc) => doc.id);
         // Set the document IDs in the state
         setDocumentIds(ids);
+
       } catch (error) {
         console.error("Error fetching document IDs:", error);
       }
@@ -128,8 +135,8 @@ const TaskDetails = () => {
               // Filter tasks based on user
               const matchingTasks = tasks.filter((task) => {
                 return (
-                  task.actionBy === user ||
-                  (task.supporters && task.supporters.includes(user))
+                  (task.status && task.status === "Ongoing") && (task.actionBy === user ||
+                    (task.supporters && task.supporters.includes(user)))
                 );
               });
 
@@ -188,9 +195,11 @@ const TaskDetails = () => {
 
         await setDoc(taskDocumentRef, updatedTaskObject);
 
-        console.log(
-          `Task with ID ${taskId} successfully updated to status: ${status}, priority: ${priority}`
-        );
+        // console.log(
+        //   `Task with ID ${taskId} successfully updated to status: ${status}, priority: ${priority}`
+        // );
+        alert.success("Task updated successfully !");
+
       } else {
         console.error(`Task document not found for meetCode: ${meetCode}`);
       }
@@ -375,7 +384,7 @@ const TaskDetails = () => {
                         className="w-fit h-10 border-transparency focus:outline-none bg-white focus:border-black text-black rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
                       >
                         <option value="Ongoing">Ongoing</option>
-                        <option value="Overdue">Overdue</option>
+                        {/* <option value="Overdue">Overdue</option> */}
                         <option value="Completed">Completed</option>
                       </select>
                     </div>
